@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import config from "./config";
+import logger from "./utils/logger";
 const app = express();
 
 app.get("/test", (req: Request, res: Response) => {
@@ -12,5 +13,6 @@ app.get("/test", (req: Request, res: Response) => {
 const PORT = config.PORT;
 
 app.listen(PORT, () => {
-  console.log("server started");
+  logger.info(`Server listening on http://localhost:${PORT}`);
+  logger.info(`Test URI http://localhost:${PORT}/test`);
 });
