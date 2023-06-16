@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String @unique
+  hashedPassword String @db.VarChar(255)
+  role Role @default(TEAM)
+  verified Boolean @default(false)
+  refreshTokens RefreshToken[]
+  oneTimePasscode OneTimePasscode[]
+  active Boolean @default(true)
+}
+
+model RefreshToken {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hashedToken String
+  revoked Boolean @default(false)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId BigInt
+}
+
+model OneTimePasscode {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hashedOTP String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId BigInt @unique
+}
+
+model Category {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name String
+  newsPost NewsPost[]
+  active Boolean @default(true)
+}
+
+model Tag {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name String
+  newsPost NewsPost[]
+  active Boolean @default(true)
+}
+
+model Media {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  type MediaType
+  path String @db.VarChar(255)
+  newsPost NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
+  newsPostId BigInt?
+  newsPostSection NewsPostSection? @relation(fields: [newsPostSectionId], references: [id], onDelete: Cascade)
+  newsPostSectionId BigInt?
+  promotionaryPost PromotionaryPost? @relation(fields: [promotionaryPostId], references: [id], onDelete: Cascade)
+  promotionaryPostId BigInt?
+  testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+  testimonialId BigInt?
+}
+
+model NewsPostSection {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String? @db.VarChar(255)
+  content String
+  media Media[]
+  newsPost NewsPost @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
+  newsPostId BigInt
+}
+
+model NewsPost {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String @db.VarChar(255)
+  media Media[]
+  newsPostSection NewsPostSection[]
+  tag Tag[]
+  active Boolean @default(true)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId BigInt
+}
+
+model PromotionaryPost {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  priority Int
+  title String @db.VarChar(255)
+  content String
+  media Media[]
+  active Boolean @default(true)
+}
+
+model Testimonial {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quote String? @db.VarChar(255)
+  quoutedBy String?
+  media Media[]
+  active Boolean @default(true)
+}
+
+model SocialMedia {
+  id BigInt @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name String
+  link String @db.VarChar(255)
+  iconName String
+  color String
+  active Boolean @default(true)
+}
+
+enum Role {
+  TEAM
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
