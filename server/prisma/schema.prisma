@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email String @unique
@@ -27,105 +27,120 @@ model RefreshToken {
   hashedToken String
   revoked Boolean @default(false)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId BigInt
+  userId Int
 }
 
 model OneTimePasscode {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   hashedOTP String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId BigInt @unique
+  userId Int @unique
 }
 
 model Category {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  newsPost NewsPost[]
+  post Post[]
   active Boolean @default(true)
+  postViewCount PostViewCount[]
 }
 
 model Tag {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  newsPost NewsPost[]
+  post Post[]
   active Boolean @default(true)
 }
 
 model Media {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   type MediaType
   path String @db.VarChar(255)
-  newsPost NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
-  newsPostId BigInt?
-  newsPostSection NewsPostSection? @relation(fields: [newsPostSectionId], references: [id], onDelete: Cascade)
-  newsPostSectionId BigInt?
+  newsPost Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int?
+  postSection PostSection? @relation(fields: [postSectionId], references: [id], onDelete: Cascade)
+  postSectionId Int?
   promotionaryPost PromotionaryPost? @relation(fields: [promotionaryPostId], references: [id], onDelete: Cascade)
-  promotionaryPostId BigInt?
+  promotionaryPostId Int?
   testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
-  testimonialId BigInt?
+  testimonialId Int?
 }
 
-model NewsPostSection {
-  id BigInt @id @default(autoincrement())
+model PostSection {
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String? @db.VarChar(255)
   content String
+  sequence Int
   media Media[]
-  newsPost NewsPost @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
-  newsPostId BigInt
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
 }
 
-model NewsPost {
-  id BigInt @id @default(autoincrement())
+model Post {
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String @db.VarChar(255)
   media Media[]
-  newsPostSection NewsPostSection[]
+  postSection PostSection[]
   tag Tag[]
+  setAsBanner Boolean @default(false)
   active Boolean @default(true)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId BigInt
+  categoryId Int
+  postViewCount PostViewCount?
 }
 
 model PromotionaryPost {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   priority Int
   title String @db.VarChar(255)
   content String
   media Media[]
+  setAsBanner Boolean @default(false)
   active Boolean @default(true)
+  promotionaryPostViewCount PromotionaryPostViewCount?
+}
+
+model PromotionaryPostViewCount {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  count Int @default(0)
+  promotionaryPost PromotionaryPost @relation(fields: [promotionaryPostId], references: [id], onDelete: Cascade)
+  promotionaryPostId Int @unique
+}
+
+model PostViewCount {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  count Int @default(0)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int @unique
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
 }
 
 model Testimonial {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   quote String? @db.VarChar(255)
   quoutedBy String?
   media Media[]
-  active Boolean @default(true)
-}
-
-model SocialMedia {
-  id BigInt @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String
-  link String @db.VarChar(255)
-  iconName String
-  color String
   active Boolean @default(true)
 }
 
