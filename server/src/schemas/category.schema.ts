@@ -1,5 +1,4 @@
-import { StringDecoder } from "string_decoder";
-import { boolean, number, object, string, TypeOf } from "zod";
+import { boolean, object, string, TypeOf } from "zod";
 
 const payload = {
   body: object({
