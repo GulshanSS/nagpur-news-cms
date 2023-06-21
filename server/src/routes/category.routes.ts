@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import {
   createCategoryHandler,
   deleteCategoryByIdHandler,
@@ -13,8 +13,10 @@ import {
   getCategorySchema,
   updateCategorySchema,
 } from "../schemas/category.schema";
+import { isAuthenticated } from "../middleware/isAuthenticated";
+import { authorize } from "../middleware/authorize";
 
-const CategoryRouter: Router = express.Router();
+const CategoryRouter = Router();
 
 CategoryRouter.get("/", getAllCategoriesHandler);
 
@@ -26,18 +28,24 @@ CategoryRouter.get(
 
 CategoryRouter.post(
   "/create",
-  validateSchema(createCategorySchema),
+  [
+    isAuthenticated,
+    authorize("ADMIN", "TEAM"),
+    validateSchema(createCategorySchema),
+  ],
   createCategoryHandler
 );
 
 CategoryRouter.put(
   "/:categoryId/update",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   validateSchema(updateCategorySchema),
   updateCategoryByIdHandler
 );
 
 CategoryRouter.delete(
   "/:categoryId/delete",
+  [isAuthenticated, authorize("ADMIN")],
   validateSchema(deleteCategorySchema),
   deleteCategoryByIdHandler
 );
