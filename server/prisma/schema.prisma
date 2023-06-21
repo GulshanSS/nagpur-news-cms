@@ -12,7 +12,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email String @unique
-  hashedPassword String @db.VarChar(255)
+  password String @db.VarChar(255)
   role Role @default(TEAM)
   verified Boolean @default(false)
   refreshTokens RefreshToken[]
