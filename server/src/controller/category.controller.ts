@@ -19,7 +19,7 @@ export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const categories = await getAllCategories();
     if (categories.length === 0) {
-      next(
+      return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
           description: "No Categories Found",
@@ -43,7 +43,7 @@ export const getCategoryByIdHandler = asyncHandler(
     const categoryId = req.params.categoryId;
     const category = await getCategoryById(categoryId);
     if (!category) {
-      next(
+      return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
           description: `Category not found with id ${categoryId}`,
@@ -81,7 +81,7 @@ export const updateCategoryByIdHandler = asyncHandler(
     const categoryId = req.params.categoryId;
     const oldCategory = await getCategoryById(categoryId);
     if (!oldCategory) {
-      next(
+      return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
           description: `Category not found with id ${categoryId}`,
@@ -106,7 +106,7 @@ export const deleteCategoryByIdHandler = asyncHandler(
     const categoryId = req.params.categoryId;
     const category = await getCategoryById(categoryId);
     if (!category) {
-      next(
+      return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
           description: `Category not found with id ${categoryId}`,
