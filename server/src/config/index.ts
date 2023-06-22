@@ -17,4 +17,9 @@ export default {
   REFRESH_TOKEN_COOKIE_EXPIRE_TIME: parseInt(
     process.env.ACCESS_TOKEN_COOKIE_EXPIRE_TIME as string
   ),
+  MAIL_SERVICE: process.env.MAIL_SERVICE as string,
+  MAIl_HOST: process.env.MAIl_HOST as string,
+  MAIL_PORT: parseInt(process.env.MAIL_PORT as string),
+  MAIL_USERNAME: process.env.MAIL_USERNAME as string,
+  MAIL_PASSWORD: process.env.MAIL_PASSWORD as string,
 };
