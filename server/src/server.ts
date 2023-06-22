@@ -9,6 +9,7 @@ import errorMiddlerware from "./middleware/errorMiddleware";
 import AuthRouter from "./routes/auth.routes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import OtpRouter from "./routes/otp.routes";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get("/test", (_: Request, res: Response) => {
 });
 
 app.use("/api/v1", AuthRouter);
+app.use("/api/v1", OtpRouter);
 app.use("/api/v1/category", CategoryRouter);
 
 app.use(errorMiddlerware);
