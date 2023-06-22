@@ -11,9 +11,7 @@ import {
 } from "../service/otp.service";
 import { generateOtp } from "../utils/otp";
 import hashGivenString from "../utils/hashGivenString";
-import { v4 as uuidv4 } from "uuid";
-import { generateTokens } from "../utils/jwt";
-import { whiteListRefreshToken } from "../service/token.service";
+import { sendEmail } from "../utils/email";
 
 export const sendOtpHandler = asyncHandler(
   async (
@@ -43,9 +41,11 @@ export const sendOtpHandler = asyncHandler(
       await updateOtp(userId, otp);
     }
 
+    await sendEmail({ email: existingUser.email, otp });
+
     return res.status(HttpCode.CREATED).json({
       success: true,
-      otp,
+      message: `Otp sent to the registered email ${existingUser.email}`,
     });
   }
 );
@@ -93,15 +93,9 @@ export const verifyOtpHandler = asyncHandler(
     await updateUserById(userId, { verified: true });
     await deleteOtp(userId);
 
-    const jti: string = uuidv4();
-    const { accessToken, refreshToken } = generateTokens(existingUser, jti);
-
-    await whiteListRefreshToken({ refreshToken, jti, user: existingUser });
-
     return res.status(200).json({
       success: true,
-      accessToken,
-      refreshToken,
+      message: "Account Verified",
     });
   }
 );
