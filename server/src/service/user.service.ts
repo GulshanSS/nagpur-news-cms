@@ -1,4 +1,5 @@
-import { CreateUserInput, UpdateUserInput } from "../schemas/user.schema";
+import { User } from "@prisma/client";
+import { CreateUserInput } from "../schemas/user.schema";
 import db from "../utils/db.server";
 
 export const createUser = async (user: CreateUserInput["body"]) => {
@@ -7,10 +8,7 @@ export const createUser = async (user: CreateUserInput["body"]) => {
   });
 };
 
-export const updateUserById = async (
-  userId: string,
-  user: UpdateUserInput["body"]
-) => {
+export const updateUserById = async (userId: string, user: Partial<User>) => {
   return await db.user.update({
     where: {
       id: parseInt(userId),
