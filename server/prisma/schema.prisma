@@ -44,9 +44,9 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  post Post[]
+  article Article[]
   active Boolean @default(true)
-  postViewCount PostViewCount[]
+  articleViewCount ArticleViewCount[]
 }
 
 model Tag {
@@ -54,7 +54,7 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  post Post[]
+  article Article[]
   active Boolean @default(true)
 }
 
@@ -64,72 +64,73 @@ model Media {
   updatedAt DateTime @updatedAt
   type MediaType
   path String @db.VarChar(255)
-  newsPost Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int?
-  postSection PostSection? @relation(fields: [postSectionId], references: [id], onDelete: Cascade)
-  postSectionId Int?
-  promotionaryPost PromotionaryPost? @relation(fields: [promotionaryPostId], references: [id], onDelete: Cascade)
-  promotionaryPostId Int?
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int?
+  articleSection ArticleSection? @relation(fields: [articleSectionId], references: [id], onDelete: Cascade)
+  articleSectionId Int?
+  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
+  promotionaryArticleId Int?
   testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
   testimonialId Int?
 }
 
-model PostSection {
+model ArticleSection {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title String? @db.VarChar(255)
+  title String?
   content String
   sequence Int
   media Media[]
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
 }
 
-model Post {
+model Article {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title String @db.VarChar(255)
+  title String
   media Media[]
-  postSection PostSection[]
+  articleSection ArticleSection[]
   tag Tag[]
+  author String
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
-  postViewCount PostViewCount?
+  articleViewCount ArticleViewCount?
 }
 
-model PromotionaryPost {
+model PromotionaryArticle {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   priority Int
-  title String @db.VarChar(255)
-  content String
+  title String?
+  content String?
   media Media[]
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
-  promotionaryPostViewCount PromotionaryPostViewCount?
+  promotionaryArticleViewCount PromotionaryArticleViewCount?
 }
 
-model PromotionaryPostViewCount {
+model PromotionaryArticleViewCount {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   count Int @default(0)
-  promotionaryPost PromotionaryPost @relation(fields: [promotionaryPostId], references: [id], onDelete: Cascade)
-  promotionaryPostId Int @unique
+  promotionaryArticle PromotionaryArticle @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
+  promotionaryArticleId Int @unique
 }
 
-model PostViewCount {
+model ArticleViewCount {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   count Int @default(0)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int @unique
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int @unique
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
 }
@@ -138,7 +139,7 @@ model Testimonial {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  quote String? @db.VarChar(255)
+  quote String? 
   quoutedBy String?
   media Media[]
   active Boolean @default(true)
