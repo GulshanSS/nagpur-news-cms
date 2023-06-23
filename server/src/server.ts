@@ -10,6 +10,7 @@ import AuthRouter from "./routes/auth.routes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import OtpRouter from "./routes/otp.routes";
+import TagRouter from "./routes/tag.routes";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/test", (_: Request, res: Response) => {
 app.use("/api/v1", AuthRouter);
 app.use("/api/v1", OtpRouter);
 app.use("/api/v1/category", CategoryRouter);
+app.use("/api/v1/tag", TagRouter);
 
 app.use(errorMiddlerware);
 
