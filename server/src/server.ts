@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import OtpRouter from "./routes/otp.routes";
 import TagRouter from "./routes/tag.routes";
+import createSuperAdmin from "./middleware/createSuperAdmin";
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use(express.json());
 app.get("/test", (_: Request, res: Response) => {
   res.send("Nagpur News API");
 });
+
+app.use(createSuperAdmin);
 
 app.use("/api/v1", AuthRouter);
 app.use("/api/v1", OtpRouter);
