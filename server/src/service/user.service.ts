@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { CreateUserInput } from "../schemas/user.schema";
 import db from "../utils/db.server";
 
@@ -29,6 +29,14 @@ export const getUserByEmail = async (email: string) => {
   return await db.user.findUnique({
     where: {
       email,
+    },
+  });
+};
+
+export const getUserByRole = async (role: Role) => {
+  return await db.user.findMany({
+    where: {
+      role,
     },
   });
 };
