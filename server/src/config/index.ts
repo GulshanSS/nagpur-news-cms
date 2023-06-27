@@ -22,4 +22,7 @@ export default {
   MAIL_PORT: parseInt(process.env.MAIL_PORT as string),
   MAIL_USERNAME: process.env.MAIL_USERNAME as string,
   MAIL_PASSWORD: process.env.MAIL_PASSWORD as string,
+  ROLE: process.env.ROLE as string,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
 };
