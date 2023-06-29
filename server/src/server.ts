@@ -12,6 +12,7 @@ import cors from "cors";
 import OtpRouter from "./routes/otp.routes";
 import TagRouter from "./routes/tag.routes";
 import createSuperAdmin from "./middleware/createSuperAdmin";
+import UserRouter from "./routes/user.routes";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.get("/test", (_: Request, res: Response) => {
 app.use(createSuperAdmin);
 
 app.use("/api/v1", AuthRouter);
+app.use("/api/v1/user", UserRouter);
 app.use("/api/v1", OtpRouter);
 app.use("/api/v1/category", CategoryRouter);
 app.use("/api/v1/tag", TagRouter);
