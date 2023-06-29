@@ -82,12 +82,11 @@ export const loginUserHandler = asyncHandler(
     }
 
     if (!existingUser?.verified) {
-      return next(
-        new AppError({
-          httpCode: HttpCode.FORBIDDEN,
-          description: `Verify you account with ${existingUser!.email}`,
-        })
-      );
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        success: false,
+        userId: existingUser.id.toString(),
+        message: `Verify your account with ${existingUser.email}`,
+      });
     }
 
     const jti = uuidv4();
