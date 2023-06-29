@@ -1,11 +1,17 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import LoginPage from "./pages/LoginPage";
+import OTPPage from "./pages/OTPPage";
 
 function App() {
   return (
     <>
-      <div className="w-screen h-screen flex justify-center items-center">
-        <h1 className="text-3xl font-bold">Nagpur News CMS</h1>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/verify-otp" element={<OTPPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
