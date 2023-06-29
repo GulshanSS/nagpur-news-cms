@@ -5,7 +5,7 @@ import { sendOtpSchema, verifyOtpSchema } from "../schemas/otp.schema";
 
 const OtpRouter = Router();
 
-OtpRouter.get("/send-otp", validateSchema(sendOtpSchema), sendOtpHandler);
+OtpRouter.post("/send-otp", validateSchema(sendOtpSchema), sendOtpHandler);
 OtpRouter.post(
   "/verify-otp",
   validateSchema(verifyOtpSchema),
