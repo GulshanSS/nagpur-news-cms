@@ -1,16 +1,14 @@
 import { Controller, useFormContext } from "react-hook-form";
 
-const InputField = ({
-  label,
-  name,
-  type,
-  placeholder,
-}: {
+type Props = {
+  value?: string;
   label: string;
   name: string;
   type: string;
   placeholder: string;
-}) => {
+};
+
+const InputField = ({ value, label, name, type, placeholder }: Props) => {
   const { control } = useFormContext();
 
   return (
@@ -18,7 +16,7 @@ const InputField = ({
       <Controller
         name={name}
         control={control}
-        defaultValue=""
+        defaultValue={value || ""}
         render={({ field, fieldState }) => (
           <>
             <div className="mb-6">
@@ -36,7 +34,7 @@ const InputField = ({
                 placeholder={placeholder}
               />
               {fieldState.error ? (
-                <span className="flex justify-end font-bold text-[10px] text-red-600 mr-2">
+                <span className="flex justify-start font-bold text-[10px] text-red-600 mr-2">
                   {fieldState.error.message}
                 </span>
               ) : (
