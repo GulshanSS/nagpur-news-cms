@@ -12,7 +12,7 @@ import { Role } from "@prisma/client";
 
 export const getLoggedInUserHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId: string = res.locals.userId;
+    const userId: string = res.locals.payload.userId;
     const foundUser = await getUserById(userId);
     if (!foundUser) {
       return next(
