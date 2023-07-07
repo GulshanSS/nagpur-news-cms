@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError, HttpCode } from "../exceptions/AppError";
+import asyncHandler from "./asyncHandler";
 
 export const authorize = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -11,5 +12,7 @@ export const authorize = (...roles: string[]) => {
         })
       );
     }
+
+    next();
   };
 };
