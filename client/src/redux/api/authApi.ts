@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userApi } from "./userApi";
+import { LoginInput } from "../../validationSchema/LoginSchema";
+import { OTPInput } from "./types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
@@ -11,7 +13,7 @@ export const authApi = createApi({
   endpoints: (builder) => ({
     loginUser: builder.mutation<
       { success: boolean; access_token: string },
-      { email: string; password: string }
+      LoginInput
     >({
       query(data) {
         return {
@@ -24,7 +26,7 @@ export const authApi = createApi({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          await dispatch(userApi.endpoints.getUser.initiate(null));
+          await dispatch(userApi.endpoints.getUser.initiate());
         } catch (e: unknown) {
           if (e instanceof Error) console.log(e);
         }
@@ -35,7 +37,7 @@ export const authApi = createApi({
         success: boolean;
         message: string;
       },
-      { userId: string }
+      Pick<OTPInput, "userId">
     >({
       query(data) {
         return {
@@ -51,7 +53,7 @@ export const authApi = createApi({
         accesstoken: string;
         refreshtoken: string;
       },
-      { otp: string; userId: string }
+      OTPInput
     >({
       query(data) {
         return {
