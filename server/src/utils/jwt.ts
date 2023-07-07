@@ -12,15 +12,23 @@ export interface ITokenPayload {
 }
 
 export const generateAccessToken = (user: User): string => {
-  return jwt.sign({ userId: user.id }, config.JWT_ACCESS_TOKEN_SECRET, {
-    expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE_TIME,
-  });
+  return jwt.sign(
+    { userId: user.id, role: user.role },
+    config.JWT_ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE_TIME,
+    }
+  );
 };
 
 export const generateRefreshToken = (user: User, jti: string): string => {
-  return jwt.sign({ userId: user.id, jti }, config.JWT_REFRESH_TOKEN_SECRET, {
-    expiresIn: config.JWT_REFRESH_TOKEN_EXPIRE_TIME,
-  });
+  return jwt.sign(
+    { userId: user.id, role: user.role, jti },
+    config.JWT_REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: config.JWT_REFRESH_TOKEN_EXPIRE_TIME,
+    }
+  );
 };
 
 export const generateTokens = (
