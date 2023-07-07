@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setUser } from "../features/userSlice";
-import { IUser } from "./types";
+import { User } from "./types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
@@ -11,7 +11,7 @@ export const userApi = createApi({
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    getUser: builder.query<IUser, null>({
+    getUser: builder.query<User, void>({
       query() {
         return {
           url: "/me",
@@ -19,7 +19,7 @@ export const userApi = createApi({
           credentials: "include",
         };
       },
-      transformResponse: (result: { user: IUser }) => {
+      transformResponse: (result: { user: User }) => {
         return result.user;
       },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
