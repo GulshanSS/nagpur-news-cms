@@ -2,14 +2,14 @@ import InputField from "../FormComponents/InputField";
 import SubmitButton from "../FormComponents/SubmitButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginInput } from "../../validationSchema/LoginSchema";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../redux/api/authApi";
 import { useNavigate } from "react-router-dom";
+import { OTPErrorResponse } from "../../redux/api/types";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
-  const [loginError, setLoginError] = useState<string>("");
-
   const methods = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) });
 
   const [loginUser, { isLoading, isSuccess, error, isError }] =
@@ -25,19 +25,19 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Login Successfull");
+      toast.success("Login Successfully");
     }
 
     if (isError) {
-      if (error?.data?.userId) {
+      if ((error as OTPErrorResponse).data.userId !== undefined) {
         navigate("/verify-otp", {
           state: {
-            userId: error?.data?.userId,
-            message: error?.data?.message,
+            userId: (error as OTPErrorResponse).data.userId,
+            message: (error as OTPErrorResponse).data.message,
           },
         });
       }
-      setLoginError(error?.data?.message);
+      toast.error((error as OTPErrorResponse).data.message);
     }
   }, [isLoading]);
 
@@ -72,11 +72,6 @@ const LoginForm = () => {
             type="password"
             placeholder="Enter Password"
           />
-          {loginError !== "" && (
-            <span className="flex justify-center font-bold text-[10px] text-red-600 mb-6">
-              {loginError}
-            </span>
-          )}
           <SubmitButton label="Login" />
         </form>
       </FormProvider>

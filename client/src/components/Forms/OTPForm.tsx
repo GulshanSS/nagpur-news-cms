@@ -3,14 +3,19 @@ import InputField from "../FormComponents/InputField";
 import SubmitButton from "../FormComponents/SubmitButton";
 import { OTPInput, OTPSchema } from "../../validationSchema/OTPSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import {
   useSendOTPMutation,
   useVerifyOTPMutation,
 } from "../../redux/api/authApi";
 import { useLocation } from "react-router-dom";
+import { VerifiedContext } from "../../context/VerifiedContext";
+import { APIErrorResponse } from "../../redux/api/types";
+import { toast } from "react-toastify";
 
 const OTPForm = () => {
+  const { verified, setVerified } = useContext(VerifiedContext);
+
   const methods = useForm<OTPInput>({ resolver: zodResolver(OTPSchema) });
 
   const [sendOTP] = useSendOTPMutation();
@@ -28,11 +33,11 @@ const OTPForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Verified Successfully");
+      setVerified(true);
     }
 
     if (isError) {
-      console.log(error);
+      toast.error((error as APIErrorResponse).data.message);
     }
   }, [isLoading]);
 
@@ -54,17 +59,17 @@ const OTPForm = () => {
     <>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleVerifyOTP)} className="w-80 mx-2">
-          {location.state !== undefined && (
-            <span className="flex justify-center font-bold text-sm text-white">
-              {location.state.message}
-            </span>
-          )}
           <InputField
             label="OTP"
             name="otp"
             type="text"
             placeholder="Enter OTP"
           />
+          {location.state !== null && (
+            <span className="flex justify-start font-bold text-[10px] text-green-600 mb-6">
+              {location.state.message}
+            </span>
+          )}
           <SubmitButton label="Verify" />
         </form>
       </FormProvider>
