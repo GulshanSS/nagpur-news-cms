@@ -1,12 +1,10 @@
-const TextareaInputField = ({
-  label,
-  name,
-  placeholder,
-}: {
+type Props = {
   label: string;
   name: string;
   placeholder: string;
-}) => {
+};
+
+const TextareaInputField = ({ label, name, placeholder }: Props) => {
   return (
     <>
       <div className="mb-6">

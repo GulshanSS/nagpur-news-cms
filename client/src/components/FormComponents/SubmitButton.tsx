@@ -1,4 +1,8 @@
-const SubmitButton = ({ label }: { label: string }) => {
+type Props = {
+  label: string;
+};
+
+const SubmitButton = ({ label }: Props) => {
   return (
     <>
       <button
