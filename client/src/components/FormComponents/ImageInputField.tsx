@@ -1,4 +1,8 @@
-const ImageInputField = ({ name }: { name: string }) => {
+type Props = {
+  name: string;
+};
+
+const ImageInputField = ({ name }: Props) => {
   return (
     <>
       <div className="mb-6">
