@@ -16,6 +16,16 @@ export const getCategoryById = async (categoryId: string) => {
   });
 };
 
+export const getCategoryByName = async (searchParam: string) => {
+  return db.category.findMany({
+    where: {
+      name: {
+        contains: searchParam,
+      },
+    },
+  });
+};
+
 export const createCategory = async (
   createCategoryInput: CreateCategoryInput["body"]
 ) => {

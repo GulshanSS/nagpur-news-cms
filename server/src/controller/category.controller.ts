@@ -6,6 +6,7 @@ import {
   deleteCategoryById,
   getAllCategories,
   getCategoryById,
+  getCategoryByName,
   updateCategoryById,
 } from "../service/category.service";
 import {
@@ -53,6 +54,30 @@ export const getCategoryByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       category,
+    });
+  }
+);
+
+export const getCategoryByNameHandler = asyncHandler(
+  async (
+    req: Request<{ name: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const name = req.params.name;
+    const categories = await getCategoryByName(name);
+    if (categories.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `No Categories found containing ${name}`,
+        })
+      );
+    }
+    return res.status(HttpCode.OK).json({
+      success: true,
+      categories,
+      count: categories.length,
     });
   }
 );
