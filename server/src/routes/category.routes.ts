@@ -4,6 +4,7 @@ import {
   deleteCategoryByIdHandler,
   getAllCategoriesHandler,
   getCategoryByIdHandler,
+  getCategoryByNameHandler,
   updateCategoryByIdHandler,
 } from "../controller/category.controller";
 import validateSchema from "../middleware/validateSchema";
@@ -26,13 +27,12 @@ CategoryRouter.get(
   getCategoryByIdHandler
 );
 
+CategoryRouter.get("/search/:name", getCategoryByNameHandler);
+
 CategoryRouter.post(
   "/create",
-  [
-    isAuthenticated,
-    authorize("ADMIN", "TEAM"),
-    validateSchema(createCategorySchema),
-  ],
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  validateSchema(createCategorySchema),
   createCategoryHandler
 );
 
