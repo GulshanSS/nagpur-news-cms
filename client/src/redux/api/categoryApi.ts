@@ -12,7 +12,7 @@ export const categoryApi = createApi({
   tagTypes: ["Category"],
   endpoints: (builder) => ({
     getAllCategories: builder.query<
-      { success: boolean; count: string; categories: Category[] },
+      { success: boolean; count: number; categories: Category[] },
       void
     >({
       query: () => "/",
@@ -20,13 +20,13 @@ export const categoryApi = createApi({
     }),
     getCategory: builder.query<
       { success: boolean; category: Category },
-      string
+      number
     >({
       query: (id) => `/${id}`,
       providesTags: ["Category"],
     }),
     getCategoryByName: builder.query<
-      { success: boolean; count: string; categories: Category[] },
+      { success: boolean; count: number; categories: Category[] },
       string
     >({
       query: (name) => `/search/${name}`,
@@ -61,7 +61,7 @@ export const categoryApi = createApi({
     }),
     deleteCategory: builder.mutation<
       { success: boolean; message: string },
-      string
+      number
     >({
       query: (id) => ({
         url: `/${id}/delete`,
