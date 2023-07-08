@@ -6,6 +6,7 @@ import {
   deleteTagByIdHandler,
   getAllTagsHandler,
   getTagByIdHandler,
+  getTagByNameHandler,
   updateTagByIdHandler,
 } from "../controller/tag.controller";
 import validateSchema from "../middleware/validateSchema";
@@ -18,18 +19,11 @@ import {
 
 const TagRouter = Router();
 
-TagRouter.get(
-  "/",
-  [isAuthenticated, authorize("ADMIN", "TEAM")],
-  getAllTagsHandler
-);
+TagRouter.get("/", getAllTagsHandler);
 
-TagRouter.get(
-  "/:tagId",
-  [isAuthenticated, authorize("ADMIN", "TEAM")],
-  validateSchema(getTagSchema),
-  getTagByIdHandler
-);
+TagRouter.get("/:tagId", validateSchema(getTagSchema), getTagByIdHandler);
+
+TagRouter.get("/search/:name", getTagByNameHandler);
 
 TagRouter.post(
   "/create",
