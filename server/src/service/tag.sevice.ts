@@ -13,13 +13,26 @@ export const getAllTags = async () => {
   return await db.tag.findMany({});
 };
 
+export const getTagByName = async (name: string) => {
+  return await db.tag.findMany({
+    where: {
+      name: {
+        contains: name,
+      },
+    },
+  });
+};
+
 export const createTag = async (tag: CreateTagInput["body"]) => {
   return await db.tag.create({
     data: tag,
   });
 };
 
-export const updateTagById = async (tagId: string, tag: UpdateTagInput["body"]) => {
+export const updateTagById = async (
+  tagId: string,
+  tag: UpdateTagInput["body"]
+) => {
   return await db.tag.update({
     where: {
       id: parseInt(tagId),
@@ -27,7 +40,6 @@ export const updateTagById = async (tagId: string, tag: UpdateTagInput["body"]) 
     data: tag,
   });
 };
-
 
 export const deleteTagById = async (tagId: string) => {
   return await db.tag.delete({

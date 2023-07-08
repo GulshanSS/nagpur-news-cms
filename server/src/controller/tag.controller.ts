@@ -10,6 +10,7 @@ import {
   deleteTagById,
   getAllTags,
   getTagById,
+  getTagByName,
   updateTagById,
 } from "../service/tag.sevice";
 import asyncHandler from "../middleware/asyncHandler";
@@ -54,6 +55,30 @@ export const getTagByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       tag,
+    });
+  }
+);
+
+export const getTagByNameHandler = asyncHandler(
+  async (
+    req: Request<{ name: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const name = req.params.name;
+    const tags = await getTagByName(name);
+    if (tags.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `No tags found with ${name}`,
+        })
+      );
+    }
+    return res.status(HttpCode.OK).json({
+      success: true,
+      tags,
+      count: tags.length,
     });
   }
 );
