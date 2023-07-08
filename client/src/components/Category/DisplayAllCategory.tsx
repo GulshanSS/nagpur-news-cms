@@ -63,7 +63,7 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
           ? categoryByNameResult.categories.map((category: Category) => (
               <CategoryCard
                 key={category.id}
-                id={category.id.toString()}
+                id={category.id}
                 name={category.name}
                 active={category.active}
               />
@@ -71,7 +71,7 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
           : categoryResult?.categories.map((category: Category) => (
               <CategoryCard
                 key={category.id}
-                id={category.id.toString()}
+                id={category.id}
                 name={category.name}
                 active={category.active}
               />
