@@ -11,9 +11,10 @@ import CategoryForm from "../Forms/CategoryForm";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
+import Spinner from "../Spinner";
 
 type Props = {
-  id: string;
+  id: number;
 };
 
 const ViewCategory = ({ id }: Props) => {
@@ -28,7 +29,7 @@ const ViewCategory = ({ id }: Props) => {
   }
 
   if (isLoading) {
-    return <>loading...</>;
+    return <Spinner />;
   }
 
   return (
@@ -102,7 +103,7 @@ const ViewCategory = ({ id }: Props) => {
         <CategoryForm
           buttonLabel="Update"
           category={{
-            id,
+            id: data?.category.id,
             name: data?.category.name,
             active: data?.category.active,
           }}
