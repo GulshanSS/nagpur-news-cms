@@ -13,11 +13,11 @@ import {
   useUpdateCategoryMutation,
 } from "../../redux/api/categoryApi";
 import { toast } from "react-toastify";
-import { APIErrorResponse } from "../../redux/api/types";
+import { APIErrorResponse, Category } from "../../redux/api/types";
 
 type Props = {
   buttonLabel: string;
-  category?: any;
+  category?: Partial<Category>;
 };
 
 const CategoryForm = ({ buttonLabel, category }: Props) => {
@@ -38,7 +38,7 @@ const CategoryForm = ({ buttonLabel, category }: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Category Created");
+      toast.success("Category Created Successfully");
     }
 
     if (isError) {
@@ -77,7 +77,7 @@ const CategoryForm = ({ buttonLabel, category }: Props) => {
             placeholder="Enter Category Name"
           />
           <ToggleSwitch
-            value={category ? category.active : true}
+            value={category ? category.active! : true}
             name="active"
             label="Active"
           />
