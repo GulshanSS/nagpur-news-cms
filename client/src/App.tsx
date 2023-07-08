@@ -6,6 +6,7 @@ import CategoryPage from "./pages/CategoryPage";
 import TagPage from "./pages/TagPage";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import Layout from "./layout/Layout";
 
 function App() {
   return (
@@ -14,10 +15,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/verify-otp" element={<OTPPage />} />
-        </Routes>
-        <Routes>
-          <Route path="/category" element={<CategoryPage />} />
-          <Route path="/tag" element={<TagPage />} />
+          <Route element={<Layout />}>
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/tag" element={<TagPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer
