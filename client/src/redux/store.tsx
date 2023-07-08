@@ -4,12 +4,14 @@ import { authApi } from "./api/authApi";
 import { userApi } from "./api/userApi";
 import userReducer from "./features/userSlice";
 import { categoryApi } from "./api/categoryApi";
+import { tagApi } from "./api/tagApi";
 
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
+    [tagApi.reducerPath]: tagApi.reducer,
     userState: userReducer,
   },
   devTools: true,
@@ -18,6 +20,7 @@ export const store = configureStore({
       authApi.middleware,
       userApi.middleware,
       categoryApi.middleware,
+      tagApi.middleware,
     ]),
 });
 
