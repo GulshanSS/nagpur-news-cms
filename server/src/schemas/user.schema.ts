@@ -4,6 +4,7 @@ const Role = z.enum(["ADMIN", "TEAM"]);
 
 const payload = {
   body: object({
+    name: string().min(1, "Name is required"),
     email: string()
       .min(1, "Email is required")
       .email("Email address is invalid"),
@@ -30,7 +31,9 @@ const params = {
 };
 
 export const createUserSchema = object({ ...payload });
-export const loginUserSchema = object({ ...payload });
+export const loginUserSchema = object({
+  body: payload.body.omit({ name: true, role: true, active: true }),
+});
 export const updateUserSchema = object({ ...params, ...payload });
 export const getUserSchema = object({ ...params });
 export const deleteUserSchema = object({ ...params });
