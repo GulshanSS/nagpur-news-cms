@@ -17,6 +17,14 @@ export type Category = {
   updatedAt: Date;
 };
 
+export type Tag = {
+  id: number;
+  name: string;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type APIErrorResponse = {
   data: {
     success: boolean;
