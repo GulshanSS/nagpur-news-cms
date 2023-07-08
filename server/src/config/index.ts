@@ -25,4 +25,5 @@ export default {
   ROLE: process.env.ROLE as string,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
+  ADMIN_NAME: process.env.ADMIN_NAME as string,
 };
