@@ -11,6 +11,7 @@ model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  name String
   email String @unique
   password String @db.VarChar(255)
   role Role @default(TEAM)
@@ -95,6 +96,7 @@ model Article {
   articleSection ArticleSection[]
   tag Tag[]
   author String
+  publishedOn DateTime @default(now())
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
