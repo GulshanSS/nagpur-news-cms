@@ -2,11 +2,21 @@ import { Router } from "express";
 import {
   createUserHandler,
   deleteUserByIdHandler,
+  getAllUsersExceptAdminHandler,
   getLoggedInUserHandler,
   getUserByIdHandler,
+  getUsersExceptAdminByNameHandler,
+  resetPasswordHandler,
+  updateUserByIdHandler,
 } from "../controller/user.controller";
 import { authorize } from "../middleware/authorize";
 import { isAuthenticated } from "../middleware/isAuthenticated";
+import validateSchema from "../middleware/validateSchema";
+import {
+  createUserSchema,
+  resetPasswordSchema,
+  updateUserSchema,
+} from "../schemas/user.schema";
 
 const UserRouter = Router();
 
@@ -21,11 +31,34 @@ UserRouter.get(
   getUserByIdHandler
 );
 UserRouter.get(
-  "/create",
+  "/",
   [isAuthenticated, authorize("ADMIN")],
-  createUserHandler
+  getAllUsersExceptAdminHandler
 );
 UserRouter.get(
+  "/search/:name",
+  [isAuthenticated, authorize("ADMIN")],
+  getUsersExceptAdminByNameHandler
+);
+UserRouter.post(
+  "/create",
+  [isAuthenticated, authorize("ADMIN")],
+  validateSchema(createUserSchema),
+  createUserHandler
+);
+UserRouter.put(
+  "/:userId",
+  [isAuthenticated, authorize("ADMIN")],
+  validateSchema(updateUserSchema),
+  updateUserByIdHandler
+);
+UserRouter.patch(
+  "/reset-password",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  validateSchema(resetPasswordSchema),
+  resetPasswordHandler
+);
+UserRouter.delete(
   "/:userId/delete",
   [isAuthenticated, authorize("ADMIN")],
   deleteUserByIdHandler
