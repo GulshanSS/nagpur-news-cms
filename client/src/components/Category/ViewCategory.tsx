@@ -12,6 +12,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
 import Spinner from "../Spinner";
+import RequireAdmin from "../Auth/RequireAdmin";
 
 type Props = {
   id: number;
@@ -87,11 +88,13 @@ const ViewCategory = ({ id }: Props) => {
               Icon={<HiPencil />}
               color="blue"
             />
-            <ActionButton
-              onClick={() => deleteCategory(id)}
-              Icon={<MdDelete />}
-              color="red"
-            />
+            <RequireAdmin>
+              <ActionButton
+                onClick={() => deleteCategory(id)}
+                Icon={<MdDelete />}
+                color="red"
+              />
+            </RequireAdmin>
           </div>
         </div>
       </div>
