@@ -3,12 +3,6 @@ export type OTPInput = {
   userId: string;
 };
 
-export type User = {
-  id: number;
-  email: string;
-  verified: boolean;
-};
-
 export type Category = {
   id: number;
   name: string;
@@ -23,6 +17,17 @@ export type Tag = {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type User = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  name: string;
+  email: string;
+  role: string;
+  verified: boolean;
+  active: boolean;
 };
 
 export type APIErrorResponse = {
