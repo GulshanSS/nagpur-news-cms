@@ -25,6 +25,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      navigate("/me");
       toast.success("Login Successfully");
     }
 
