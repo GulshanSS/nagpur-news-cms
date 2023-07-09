@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
 import Spinner from "../Spinner";
 import TagForm from "../Forms/TagForm";
+import RequireAdmin from "../Auth/RequireAdmin";
 
 type Props = {
   id: number;
@@ -84,11 +85,13 @@ const ViewTag = ({ id }: Props) => {
               Icon={<HiPencil />}
               color="blue"
             />
-            <ActionButton
-              onClick={() => deleteTag(id)}
-              Icon={<MdDelete />}
-              color="red"
-            />
+            <RequireAdmin>
+              <ActionButton
+                onClick={() => deleteTag(id)}
+                Icon={<MdDelete />}
+                color="red"
+              />
+            </RequireAdmin>
           </div>
         </div>
       </div>
