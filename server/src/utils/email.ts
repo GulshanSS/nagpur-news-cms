@@ -13,12 +13,34 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = async (data: { email: string; otp: string }) => {
+export const OTPTemplate = (otp: string) => ({
+  subject: "Verify Account: Nagpur News CMS",
+  html: `<p>OTP:<b>${otp}</b></p>`,
+});
+
+export const AccountCreationTemplate = (email: string, password: string) => ({
+  subject: "Welcome: Nagpur News CMS",
+  html: `<p>Please find below assigned credentials</p><br>
+    <p>Email: <b>${email}</b></p><br>
+    <p>Password: <b>${password}</b></p><br>`,
+});
+
+export const sendEmail = async (
+  email: string,
+  data: string,
+  emailType: string
+) => {
+  let template = {};
+  if (emailType === config.EMAIL_TYPE_OTP) {
+    template = OTPTemplate(data);
+  } else if (emailType == config.EMAIL_TYPE_ACCOUNT_CREATION) {
+    template = AccountCreationTemplate(email, data);
+  }
+
   const mailOptions: SendMailOptions = {
     from: config.MAIL_USERNAME,
-    to: data.email,
-    subject: "Verify Account: Nagpur News CMS",
-    html: `<p>OTP:<b>${data.otp}</b></p>`,
+    to: email,
+    ...template,
   };
 
   await transporter.sendMail(mailOptions);
