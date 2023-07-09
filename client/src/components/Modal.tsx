@@ -22,7 +22,7 @@ const Modal = ({ id, children, close, setClose }: Props) => {
     <>
       <div
         id={id}
-        className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center backdrop-blur-sm z-50"
+        className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center backdrop-blur-sm z-50"
         onClick={(e) => handleOnClose(e)}
       >
         <div className="flex flex-col items-end">
