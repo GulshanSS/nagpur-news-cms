@@ -24,37 +24,6 @@ import { RefreshTokenInput } from "../schemas/refreshToken.schema";
 import config from "../config";
 import hashGivenString from "../utils/hashGivenString";
 
-export const registerUserHandler = asyncHandler(
-  async (
-    req: Request<{}, {}, CreateUserInput["body"]>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const { email, password } = req.body;
-    const existingUser = await getUserByEmail(email);
-    if (existingUser) {
-      return next(
-        new AppError({
-          httpCode: HttpCode.BAD_REQUEST,
-          description: `User with ${email} is already in use`,
-        })
-      );
-    }
-    const hashedPassword = await hash(password);
-    const data: CreateUserInput["body"] = {
-      ...req.body,
-      password: hashedPassword,
-    };
-
-    const user = await createUser(data);
-
-    return res.status(HttpCode.CREATED).json({
-      success: true,
-      message: `User created successfully with ${user.email}`,
-    });
-  }
-);
-
 export const loginUserHandler = asyncHandler(
   async (
     req: Request<{}, {}, LoginUserInput["body"]>,
