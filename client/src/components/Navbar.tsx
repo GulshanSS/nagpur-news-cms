@@ -1,11 +1,22 @@
 import { IoLogOut } from "react-icons/io5";
 import Logo from "../assets/logo.jpg";
+import { useLogoutUserMutation } from "../redux/api/authApi";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   children: JSX.Element;
 };
 
 const Navbar = ({ children }: Props) => {
+  const [logoutUser] = useLogoutUserMutation();
+
+  const navigate = useNavigate();
+
+  const handleLogoutUser = () => {
+    logoutUser();
+    navigate("/login");
+  };
+
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
@@ -50,9 +61,10 @@ const Navbar = ({ children }: Props) => {
                 <div>
                   <button
                     type="button"
-                    className="flex text-3xl bg-gray-200 rounded-full focus:outline-none"
+                    className="flex text-3xl text-slate-500 focus:outline-none"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown-user"
+                    onClick={handleLogoutUser}
                   >
                     <span className="sr-only">Open user menu</span>
                     <IoLogOut />
