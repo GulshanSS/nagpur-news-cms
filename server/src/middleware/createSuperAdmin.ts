@@ -13,7 +13,10 @@ const createSuperAdmin = asyncHandler(
     const users = await getUserByRole(role);
     logger.info("Checking if super admin exists");
     if (users.length === 0) {
-      const adminData: CreateUserInput["body"] = {
+      const adminData: CreateUserInput["body"] & {
+        password: string;
+        role: Role;
+      } = {
         name: config.ADMIN_NAME,
         email: config.ADMIN_EMAIL,
         password: await hash(config.ADMIN_PASSWORD),
