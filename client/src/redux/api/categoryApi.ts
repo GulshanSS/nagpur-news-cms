@@ -36,7 +36,7 @@ export const categoryApi = createApi({
       { success: boolean; category: Category },
       CategoryInput
     >({
-      query: (data: CategoryInput) => ({
+      query: (data) => ({
         url: "/create",
         method: "POST",
         body: data,
