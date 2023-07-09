@@ -1,7 +1,7 @@
 import { BinaryToTextEncoding } from "crypto";
 
 export default {
-  PORT: parseInt(process.env.PORT!) as Number,
+  PORT: parseInt(process.env.PORT!) as number,
   HASHING_ALOGITHM: process.env.HASHING_ALGORITHM as string,
   HASHING_DIGEST: process.env.HASHING_DIGEST as BinaryToTextEncoding,
   JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET as string,
@@ -26,4 +26,9 @@ export default {
   ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
   ADMIN_NAME: process.env.ADMIN_NAME as string,
+  EMAIL_TYPE_OTP: process.env.EMAIL_TYPE_OTP as string,
+  EMAIL_TYPE_ACCOUNT_CREATION: process.env
+    .EMAIL_TYPE_ACCOUNT_CREATION as string,
+  CHARACTERS: process.env.CHARACTERS as string,
+  PASSWORD_LENGTH: parseInt(process.env.PASSWORD_LENGTH!) as number,
 };
