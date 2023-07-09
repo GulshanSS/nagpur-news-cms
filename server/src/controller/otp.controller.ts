@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { SendOtpSchema, VerifyOtpSchema } from "../schemas/otp.schema";
 import asyncHandler from "../middleware/asyncHandler";
-import { getUserById, updateUserById } from "../service/user.service";
+import { getUserById, verifyUser } from "../service/user.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
 import {
   createOtp,
@@ -12,6 +12,7 @@ import {
 import { generateOtp } from "../utils/otp";
 import hashGivenString from "../utils/hashGivenString";
 import { sendEmail } from "../utils/email";
+import config from "../config";
 
 export const sendOtpHandler = asyncHandler(
   async (
@@ -41,7 +42,7 @@ export const sendOtpHandler = asyncHandler(
       await updateOtp(userId, otp);
     }
 
-    await sendEmail({ email: existingUser.email, otp });
+    await sendEmail(existingUser.email, otp, config.EMAIL_TYPE_OTP);
 
     return res.status(HttpCode.CREATED).json({
       success: true,
@@ -90,7 +91,7 @@ export const verifyOtpHandler = asyncHandler(
       );
     }
 
-    await updateUserById(userId, { verified: true });
+    await verifyUser(userId, true);
     await deleteOtp(userId);
 
     return res.status(200).json({
