@@ -8,6 +8,7 @@ import Modal from "../Modal";
 import ViewTag from "./ViewTag";
 import { useDeleteTagMutation } from "../../redux/api/tagApi";
 import TagForm from "../Forms/TagForm";
+import RequireAdmin from "../Auth/RequireAdmin";
 
 type Props = {
   id: number;
@@ -28,13 +29,9 @@ const TagCard = ({ id, name, active }: Props) => {
         <h1 className="text-xl font-bold mb-6">{name}</h1>
         <div className="flex justify-between items-center">
           <div className="flex gap-1">
-            {active ? (
-              <Status label="Active" colorVariant="green" />
-            ) : (
-              <Status label="Active" colorVariant="slate" />
-            )}
+            <Status label="Active" colorVariant={active ? "green" : "slate"} />
           </div>
-          <div className="flex">
+          <div className="flex gap-1">
             <ActionButton
               onClick={() => setClose(true)}
               Icon={<FaEye />}
@@ -45,11 +42,13 @@ const TagCard = ({ id, name, active }: Props) => {
               Icon={<HiPencil />}
               color="blue"
             />
-            <ActionButton
-              onClick={() => deleteTag(id)}
-              Icon={<MdDelete />}
-              color="red"
-            />
+            <RequireAdmin>
+              <ActionButton
+                onClick={() => deleteTag(id)}
+                Icon={<MdDelete />}
+                color="red"
+              />
+            </RequireAdmin>
           </div>
         </div>
       </div>
