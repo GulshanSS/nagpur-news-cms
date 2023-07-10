@@ -69,12 +69,6 @@ const MePage = () => {
           </div>
           <div className="w-full flex flex-col">
             <span className="w-28 text-[12px] font-bold text-slate-800">
-              ID
-            </span>
-            <span className="font-bold text-lg text-slate-500">{user?.id}</span>
-          </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
               Role
             </span>
             <span className="font-bold text-lg text-slate-500">
