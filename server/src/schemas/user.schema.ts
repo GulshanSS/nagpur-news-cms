@@ -47,7 +47,18 @@ export const updateUserSchema = object({
     .omit({ role: true, active: true, password: true })
     .optional(),
 });
+export const sendRestPasswordLinkSchema = object({
+  body: payload.body.pick({ email: true }),
+});
 export const resetPasswordSchema = object({
+  body: payload.body.pick({ password: true }),
+});
+export const resetPasswordByTokenSchema = object({
+  payload: object({
+    token: string({
+      required_error: "Reset Pass Key required",
+    }),
+  }),
   body: payload.body.pick({ password: true }),
 });
 export const getUserSchema = object({ ...params });
@@ -56,6 +67,12 @@ export const deleteUserSchema = object({ ...params });
 export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type LoginUserInput = TypeOf<typeof loginUserSchema>;
 export type UpdateUserInput = TypeOf<typeof updateUserSchema>;
+export type SendResetPasswordLinkInput = TypeOf<
+  typeof sendRestPasswordLinkSchema
+>;
+export type ResetPasswordByTokenInput = TypeOf<
+  typeof resetPasswordByTokenSchema
+>;
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type GetUserInput = TypeOf<typeof getUserSchema>;
 export type DeleteUserInput = TypeOf<typeof deleteUserSchema>;
