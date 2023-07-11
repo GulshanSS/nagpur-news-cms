@@ -111,7 +111,7 @@ const MePage = () => {
         </div>
       </div>
       <Modal id="resetPasswordForm" close={close} setClose={setClose}>
-        <ResetPasswordForm />
+        <ResetPasswordForm bg />
       </Modal>
     </>
   );
