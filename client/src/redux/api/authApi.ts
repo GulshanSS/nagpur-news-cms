@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userApi } from "./userApi";
 import { LoginInput } from "../../validationSchema/LoginSchema";
 import { OTPInput } from "./types";
+import { EmailInput } from "../../validationSchema/EmailSchema";
+import { ResetPasswordInput } from "../../validationSchema/ResetPasswordSchema";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
@@ -64,6 +66,26 @@ export const authApi = createApi({
         };
       },
     }),
+    sendResetPasswordLink: builder.mutation<
+      { success: boolean; message: string },
+      EmailInput
+    >({
+      query: (data) => ({
+        url: "/reset-password-link",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPasswordByToken: builder.mutation<
+      { success: boolean; message: string },
+      { token: string } & ResetPasswordInput
+    >({
+      query: (data) => ({
+        url: `/reset-password/${data.token}`,
+        method: "POST",
+        body: { password: data.password },
+      }),
+    }),
     logoutUser: builder.mutation<{ success: boolean; message: string }, void>({
       query() {
         return {
@@ -80,5 +102,7 @@ export const {
   useLoginUserMutation,
   useSendOTPMutation,
   useVerifyOTPMutation,
+  useSendResetPasswordLinkMutation,
+  useResetPasswordByTokenMutation,
   useLogoutUserMutation,
 } = authApi;
