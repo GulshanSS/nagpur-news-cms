@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^4.16.2",
     "@types/nodemailer": "^6.4.8",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
