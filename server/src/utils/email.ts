@@ -25,6 +25,13 @@ export const AccountCreationTemplate = (email: string, password: string) => ({
     <p>Password: <b>${password}</b></p><br>`,
 });
 
+export const SendResetPasswordLinkTemplate = (token: string) => ({
+  subject: "Reset Password: Nagpur News CMS",
+  html: `<a href=${config.CMS_URL}/reset-password/?token=${encodeURIComponent(
+    token
+  )}><button>Reset Password</button></a>`,
+});
+
 export const sendEmail = async (
   email: string,
   data: string,
@@ -35,6 +42,8 @@ export const sendEmail = async (
     template = OTPTemplate(data);
   } else if (emailType == config.EMAIL_TYPE_ACCOUNT_CREATION) {
     template = AccountCreationTemplate(email, data);
+  } else if (emailType == config.EMAIL_TYPE_SEND_RESET_PASSWORD_LINK) {
+    template = SendResetPasswordLinkTemplate(data);
   }
 
   const mailOptions: SendMailOptions = {
