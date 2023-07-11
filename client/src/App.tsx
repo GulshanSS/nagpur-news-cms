@@ -11,6 +11,8 @@ import UserPage from "./pages/UserPage";
 import MePage from "./pages/MePage";
 import UnAuthorizedPage from "./pages/UnAuthorizedPage";
 import RequireUser from "./components/Auth/RequireUser";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordByTokenPage from "./pages/ResetPasswordByTokenPage";
 
 function App() {
   return (
@@ -19,6 +21,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/verify-otp" element={<OTPPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route
+            path="/reset-password"
+            element={<ResetPasswordByTokenPage />}
+          />
           <Route element={<RequireUser allowedRoles={["ADMIN", "TEAM"]} />}>
             <Route element={<Layout />}>
               <Route path="/me" element={<MePage />} />
