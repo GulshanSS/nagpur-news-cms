@@ -31,4 +31,7 @@ export default {
     .EMAIL_TYPE_ACCOUNT_CREATION as string,
   CHARACTERS: process.env.CHARACTERS as string,
   PASSWORD_LENGTH: parseInt(process.env.PASSWORD_LENGTH!) as number,
+  CMS_URL: process.env.CMS_URL as string,
+  EMAIL_TYPE_SEND_RESET_PASSWORD_LINK: process.env
+    .EMAIL_TYPE_SEND_RESET_PASSWORD_LINK as string,
 };
