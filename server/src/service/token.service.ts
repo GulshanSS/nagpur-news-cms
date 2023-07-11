@@ -1,63 +1,38 @@
-import { User } from "@prisma/client";
 import db from "../utils/db.server";
 import hashGivenString from "../utils/hashGivenString";
 
-export const whiteListRefreshToken = async (data: {
-  refreshToken: string;
-  jti: string;
-  user: User;
-}) => {
-  return await db.refreshToken.create({
+export const getTokenByUserId = async (userId: number) => {
+  return db.token.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+};
+
+export const createToken = async (token: string, userId: number) => {
+  return db.token.create({
     data: {
-      id: data.jti,
-      hashedToken: hashGivenString(data.refreshToken),
-      userId: data.user.id,
+      hashedToken: hashGivenString(token),
+      userId,
     },
   });
 };
 
-export const getRefreshTokenById = async (refreshTokenId: string) => {
-  return await db.refreshToken.findUnique({
+export const updateToken = async (token: string, userId: number) => {
+  return db.token.update({
     where: {
-      id: refreshTokenId,
-    },
-  });
-};
-
-export const revokeRefreshTokenById = async (refreshTokenId: string) => {
-  return await db.refreshToken.update({
-    where: {
-      id: refreshTokenId,
+      userId,
     },
     data: {
-      revoked: true,
+      hashedToken: hashGivenString(token),
     },
   });
 };
 
-export const checkRefreshTokenAssignedToUser = async (userId: string) => {
-  return await db.refreshToken.findMany({
+export const deleteToken = async (id: number) => {
+  return db.token.delete({
     where: {
-      userId: parseInt(userId),
-    },
-  });
-};
-
-export const revokeAllRefreshTokenAssignedToUser = async (userId: string) => {
-  return await db.refreshToken.updateMany({
-    where: {
-      userId: parseInt(userId),
-    },
-    data: {
-      revoked: true,
-    },
-  });
-};
-
-export const deleteAllRefreshTokenAssginedToUser = async (userId: string) => {
-  return await db.refreshToken.deleteMany({
-    where: {
-      userId: parseInt(userId),
+      id,
     },
   });
 };
