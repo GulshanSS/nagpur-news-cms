@@ -1,21 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "../middleware/asyncHandler";
-import { CreateUserInput, LoginUserInput } from "../schemas/user.schema";
 import {
-  createUser,
+  LoginUserInput,
+  ResetPasswordByTokenInput,
+  SendResetPasswordLinkInput,
+} from "../schemas/user.schema";
+import {
   getUserByEmail,
   getUserById,
+  resetPassword,
 } from "../service/user.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
 import { compare, hash } from "../utils/bcrypt";
 import { v4 as uuidv4 } from "uuid";
-import { generateTokens, verifyToken } from "../utils/jwt";
+import { generateAccessToken, generateTokens, verifyToken } from "../utils/jwt";
 import {
   deleteAllRefreshTokenAssginedToUser,
   getRefreshTokenById,
   revokeRefreshTokenById,
   whiteListRefreshToken,
-} from "../service/token.service";
+} from "../service/refreshToken.service";
 import {
   accessTokenCookieOptions,
   refreshTokenCookieOptions,
@@ -23,6 +27,14 @@ import {
 import { RefreshTokenInput } from "../schemas/refreshToken.schema";
 import config from "../config";
 import hashGivenString from "../utils/hashGivenString";
+
+import { sendEmail } from "../utils/email";
+import {
+  createToken,
+  deleteToken,
+  getTokenByUserId,
+  updateToken,
+} from "../service/token.service";
 
 export const loginUserHandler = asyncHandler(
   async (
@@ -71,6 +83,45 @@ export const loginUserHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       accessToken,
+    });
+  }
+);
+
+export const sendRestPasswordLinkHandler = asyncHandler(
+  async (
+    req: Request<{}, {}, SendResetPasswordLinkInput["body"]>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const email = req.body.email;
+    const foundUser = await getUserByEmail(email);
+    if (!foundUser) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `User with ${email} not found`,
+        })
+      );
+    }
+
+    const existingToken = await getTokenByUserId(foundUser.id);
+    const accessToken = generateAccessToken(foundUser);
+
+    if (!existingToken) {
+      await createToken(accessToken, foundUser.id);
+    } else {
+      await updateToken(accessToken, foundUser.id);
+    }
+
+    await sendEmail(
+      foundUser.email,
+      accessToken,
+      config.EMAIL_TYPE_SEND_RESET_PASSWORD_LINK
+    );
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      message: `Reset Link sent to ${email}`,
     });
   }
 );
@@ -147,6 +198,67 @@ export const refreshTokenHandler = asyncHandler(
     return res.status(HttpCode.CREATED).json({
       success: true,
       accessToken,
+    });
+  }
+);
+
+export const resetPasswordByTokenHandler = asyncHandler(
+  async (
+    req: Request<
+      ResetPasswordByTokenInput["payload"],
+      {},
+      ResetPasswordByTokenInput["body"]
+    >,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const payload = verifyToken(
+      req.params.token,
+      config.JWT_ACCESS_TOKEN_SECRET
+    );
+    const userId = payload.userId;
+
+    const existingUser = await getUserById(userId);
+
+    if (!existingUser) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "User not found",
+        })
+      );
+    }
+
+    const token = await getTokenByUserId(existingUser.id);
+    if (!token) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.FORBIDDEN,
+          description: "Link Expired. Please try again!",
+        })
+      );
+    }
+
+    const hashedToken = hashGivenString(req.params.token);
+
+    if (hashedToken !== token?.hashedToken) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "Invalid Token",
+        })
+      );
+    }
+
+    const hashedPassword = await hash(req.body.password);
+
+    await resetPassword(userId, hashedPassword);
+
+    await deleteToken(token.id);
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      message: `Reset password for ${existingUser.email} successfully`,
     });
   }
 );
