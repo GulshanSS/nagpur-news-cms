@@ -13,6 +13,7 @@ import UnAuthorizedPage from "./pages/UnAuthorizedPage";
 import RequireUser from "./components/Auth/RequireUser";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordByTokenPage from "./pages/ResetPasswordByTokenPage";
+import TestimonialPage from "./pages/TestimonialPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/me" element={<MePage />} />
               <Route path="/category" element={<CategoryPage />} />
               <Route path="/tag" element={<TagPage />} />
+              <Route path="/testimonial" element={<TestimonialPage />} />
             </Route>
           </Route>
           <Route element={<RequireUser allowedRoles={["ADMIN"]} />}>
