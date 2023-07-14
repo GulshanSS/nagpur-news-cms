@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
-import { OTPErrorResponse } from "../../redux/api/types";
+import { APIErrorResponse, OTPErrorResponse } from "../../redux/api/types";
 import { toast } from "react-toastify";
 import { BsQuestionCircleFill } from "react-icons/bs";
 
@@ -39,7 +39,7 @@ const LoginForm = () => {
           },
         });
       }
-      toast.error((error as OTPErrorResponse).data.message);
+      toast.error((error as APIErrorResponse).data.message);
     }
   }, [isLoading]);
 
