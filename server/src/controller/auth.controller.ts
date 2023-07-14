@@ -56,14 +56,14 @@ export const loginUserHandler = asyncHandler(
     if (!matchPassword) {
       return next(
         new AppError({
-          httpCode: HttpCode.FORBIDDEN,
+          httpCode: HttpCode.BAD_REQUEST,
           description: "Incorrect password. Try again with different password",
         })
       );
     }
 
     if (!existingUser?.verified) {
-      return res.status(HttpCode.UNAUTHORIZED).json({
+      return res.status(HttpCode.BAD_REQUEST).json({
         success: false,
         userId: existingUser.id.toString(),
         message: `Verify your account with ${existingUser.email}`,
@@ -132,7 +132,7 @@ export const refreshTokenHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.cookies["refresh_token"];
     const payload = verifyToken(refreshToken, config.JWT_REFRESH_TOKEN_SECRET);
 
     if (!payload.jti || !payload.userId) {
