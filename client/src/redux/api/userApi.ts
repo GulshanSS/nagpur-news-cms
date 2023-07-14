@@ -1,11 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { setUser } from "../features/userSlice";
 import { User } from "./types";
 import { UserInput } from "../../validationSchema/UserSchema";
 import { ResetPasswordInput } from "../../validationSchema/ResetPasswordSchema";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const userApi = createApi({
   reducerPath: "userApi",

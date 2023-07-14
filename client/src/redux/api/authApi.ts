@@ -6,8 +6,6 @@ import { EmailInput } from "../../validationSchema/EmailSchema";
 import { ResetPasswordInput } from "../../validationSchema/ResetPasswordSchema";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL as string;
-
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: baseQueryWithReAuth,

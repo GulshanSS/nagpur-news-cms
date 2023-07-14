@@ -1,9 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import { TagInput } from "../../validationSchema/TagSchema";
 import { Tag } from "./types";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const tagApi = createApi({
   reducerPath: "tagApi",

@@ -1,9 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { CategoryInput } from "../../validationSchema/CategorySchema";
 import { Category } from "./types";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
