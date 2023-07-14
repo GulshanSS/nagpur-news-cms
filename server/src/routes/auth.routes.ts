@@ -24,11 +24,7 @@ AuthRouter.post(
   sendRestPasswordLinkHandler
 );
 AuthRouter.post("/reset-password/:token", resetPasswordByTokenHandler);
-AuthRouter.get(
-  "/refresh-token",
-  validateSchema(refreshTokenSchema),
-  refreshTokenHandler
-);
+AuthRouter.get("/refresh-token", refreshTokenHandler);
 AuthRouter.delete("/logout", logoutHandler);
 
 export default AuthRouter;
