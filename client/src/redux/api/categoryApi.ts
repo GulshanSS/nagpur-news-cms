@@ -1,35 +1,34 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { CategoryInput } from "../../validationSchema/CategorySchema";
 import { Category } from "./types";
+import baseQueryWithReAuth from "../baseQueryWithReAuth";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_URL}/api/v1/category`,
-  }),
+  baseQuery: baseQueryWithReAuth,
   tagTypes: ["Category"],
   endpoints: (builder) => ({
     getAllCategories: builder.query<
       { success: boolean; count: number; categories: Category[] },
       void
     >({
-      query: () => "/",
+      query: () => "/category",
       providesTags: ["Category"],
     }),
     getCategory: builder.query<
       { success: boolean; category: Category },
       number
     >({
-      query: (id) => `/${id}`,
+      query: (id) => `/category/${id}`,
       providesTags: ["Category"],
     }),
     getCategoryByName: builder.query<
       { success: boolean; count: number; categories: Category[] },
       string
     >({
-      query: (name) => `/search/${name}`,
+      query: (name) => `/category/search/${name}`,
       providesTags: ["Category"],
     }),
     createCategory: builder.mutation<
@@ -37,7 +36,7 @@ export const categoryApi = createApi({
       CategoryInput
     >({
       query: (data) => ({
-        url: "/create",
+        url: "/category/create",
         method: "POST",
         body: data,
         credentials: "include",
@@ -51,7 +50,7 @@ export const categoryApi = createApi({
       query: (data) => {
         const { id, ...rest } = data;
         return {
-          url: `/${id}/update`,
+          url: `/category/${id}/update`,
           method: "PUT",
           body: rest,
           credentials: "include",
@@ -64,7 +63,7 @@ export const categoryApi = createApi({
       number
     >({
       query: (id) => ({
-        url: `/${id}/delete`,
+        url: `/category/${id}/delete`,
         method: "DELETE",
         credentials: "include",
       }),

@@ -3,19 +3,18 @@ import { setUser } from "../features/userSlice";
 import { User } from "./types";
 import { UserInput } from "../../validationSchema/UserSchema";
 import { ResetPasswordInput } from "../../validationSchema/ResetPasswordSchema";
+import baseQueryWithReAuth from "../baseQueryWithReAuth";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_URL}/api/v1/user`,
-  }),
+  baseQuery: baseQueryWithReAuth,
   tagTypes: ["User"],
   endpoints: (builder) => ({
     getUser: builder.query<User, null>({
       query: () => ({
-        url: "/me",
+        url: "/user/me",
         method: "GET",
         credentials: "include",
       }),
@@ -33,7 +32,7 @@ export const userApi = createApi({
     }),
     getUserById: builder.query<{ success: boolean; user: User }, number>({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/user/${id}`,
         method: "GET",
         credentials: "include",
       }),
@@ -44,7 +43,7 @@ export const userApi = createApi({
       void
     >({
       query: () => ({
-        url: "/",
+        url: "/user",
         method: "GET",
         credentials: "include",
       }),
@@ -59,7 +58,7 @@ export const userApi = createApi({
       string
     >({
       query: (name) => ({
-        url: `/search/${name}`,
+        url: `/user/search/${name}`,
         method: "GET",
         credentials: "include",
       }),
@@ -70,7 +69,7 @@ export const userApi = createApi({
       UserInput
     >({
       query: (data) => ({
-        url: "/create",
+        url: "/user/create",
         method: "POST",
         body: data,
         credentials: "include",
@@ -82,7 +81,7 @@ export const userApi = createApi({
       ResetPasswordInput
     >({
       query: (data) => ({
-        url: "/reset-password",
+        url: "/user/reset-password",
         method: "PATCH",
         body: { password: data.password },
         credentials: "include",
@@ -90,7 +89,7 @@ export const userApi = createApi({
     }),
     deleteUser: builder.mutation<{ success: true; message: true }, number>({
       query: (id) => ({
-        url: `/${id}/delete`,
+        url: `/user/${id}/delete`,
         method: "DELETE",
         credentials: "include",
       }),

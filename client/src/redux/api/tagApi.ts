@@ -1,37 +1,36 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { TagInput } from "../../validationSchema/TagSchema";
 import { Tag } from "./types";
+import baseQueryWithReAuth from "../baseQueryWithReAuth";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const tagApi = createApi({
   reducerPath: "tagApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_URL}/api/v1/tag`,
-  }),
+  baseQuery: baseQueryWithReAuth,
   tagTypes: ["Tag"],
   endpoints: (builder) => ({
     getAllTags: builder.query<
       { success: boolean; count: number; tags: Tag[] },
       void
     >({
-      query: () => "/",
+      query: () => "/tag",
       providesTags: ["Tag"],
     }),
     getTag: builder.query<{ success: boolean; tag: Tag }, number>({
-      query: (id) => `/${id}`,
+      query: (id) => `/tag/${id}`,
       providesTags: ["Tag"],
     }),
     getTagByName: builder.query<
       { success: boolean; count: number; tags: Tag[] },
       string
     >({
-      query: (name) => `/search/${name}`,
+      query: (name) => `/tag/search/${name}`,
       providesTags: ["Tag"],
     }),
     createTag: builder.mutation<{ success: boolean; tag: Tag }, TagInput>({
       query: (data: TagInput) => ({
-        url: "/create",
+        url: "/tag/create",
         method: "POST",
         body: data,
         credentials: "include",
@@ -42,7 +41,7 @@ export const tagApi = createApi({
       query: (data) => {
         const { id, ...rest } = data;
         return {
-          url: `${id}/update`,
+          url: `/tag/${id}/update`,
           method: "PUT",
           body: rest,
           credentials: "include",
@@ -52,7 +51,7 @@ export const tagApi = createApi({
     }),
     deleteTag: builder.mutation<{ success: boolean; message: string }, number>({
       query: (id) => ({
-        url: `/${id}/delete`,
+        url: `/tag/${id}/delete`,
         method: "DELETE",
         credentials: "include",
       }),
