@@ -21,7 +21,7 @@ export const isAuthenticated = (
   if (access_token === undefined || access_token === "") {
     return next(
       new AppError({
-        httpCode: HttpCode.UNAUTHORIZED,
+        httpCode: HttpCode.FORBIDDEN,
         description: "User logged out. Please Login again",
       })
     );
