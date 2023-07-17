@@ -34,4 +34,8 @@ export default {
   CMS_URL: process.env.CMS_URL as string,
   EMAIL_TYPE_SEND_RESET_PASSWORD_LINK: process.env
     .EMAIL_TYPE_SEND_RESET_PASSWORD_LINK as string,
+  AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME as string,
+  AWS_BUCKET_REGION: process.env.AWS_BUCKET_REGION as string,
+  AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY as string,
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY as string,
 };
