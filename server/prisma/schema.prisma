@@ -73,16 +73,12 @@ model Media {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  type MediaType
-  path String @db.VarChar(255)
-  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId Int?
-  articleSection ArticleSection? @relation(fields: [articleSectionId], references: [id], onDelete: Cascade)
-  articleSectionId Int?
-  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
-  promotionaryArticleId Int?
-  testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
-  testimonialId Int?
+  type String
+  key String @db.VarChar(255)
+  articleSection ArticleSection[]
+  article Article[]
+  promotionaryArticle PromotionaryArticle[]
+  testimonial Testimonial[]
 }
 
 model ArticleSection {
@@ -121,7 +117,8 @@ model PromotionaryArticle {
   priority Int
   title String?
   content String?
-  media Media[]
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId Int @unique
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
   promotionaryArticleViewCount PromotionaryArticleViewCount?
@@ -152,17 +149,14 @@ model Testimonial {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   quote String? 
-  quoutedBy String?
-  media Media[]
+  quotedBy String?
+  designation String?
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId Int @unique
   active Boolean @default(true)
 }
 
 enum Role {
   TEAM
   ADMIN
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
 }
