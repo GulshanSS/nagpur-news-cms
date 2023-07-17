@@ -1,10 +1,12 @@
-import { TypeOf, boolean, object, string } from "zod";
+import { TypeOf, boolean, number, object, string } from "zod";
 
 const payload = {
   body: object({
     quote: string().optional(),
-    quotedBy: string().optional(),
-    active: boolean(),
+    quotedBy: string(),
+    designation: string().optional(),
+    mediaId: number(),
+    active: boolean().optional(),
   }),
 };
 
@@ -14,10 +16,10 @@ const params = {
   }),
 };
 
-const createTestimonialSchema = object({ ...payload });
-const updateTestimonialSchema = object({ ...params, ...payload });
-const getTestimonialSchema = object({ ...params });
-const deleteTestimonialSchema = object({ ...params });
+export const createTestimonialSchema = object({ ...payload });
+export const updateTestimonialSchema = object({ ...params, ...payload });
+export const getTestimonialSchema = object({ ...params });
+export const deleteTestimonialSchema = object({ ...params });
 
 export type CreateTestimonialInput = TypeOf<typeof createTestimonialSchema>;
 export type UpdateTestimonialInput = TypeOf<typeof updateTestimonialSchema>;
