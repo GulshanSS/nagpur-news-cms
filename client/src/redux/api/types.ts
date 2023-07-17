@@ -30,6 +30,26 @@ export type User = {
   active: boolean;
 };
 
+export type Media = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  type: string;
+  key: string;
+};
+
+export type Testimonial = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  quote?: string;
+  quotedBy?: string;
+  designation?: string;
+  media: Media;
+  mediaId: number;
+  active: boolean;
+};
+
 export type APIErrorResponse = {
   data: {
     success: boolean;
