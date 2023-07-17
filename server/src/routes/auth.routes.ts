@@ -11,9 +11,6 @@ import {
   loginUserSchema,
   sendRestPasswordLinkSchema,
 } from "../schemas/user.schema";
-import { refreshTokenSchema } from "../schemas/refreshToken.schema";
-import { isAuthenticated } from "../middleware/isAuthenticated";
-import { authorize } from "../middleware/authorize";
 
 const AuthRouter = Router();
 
