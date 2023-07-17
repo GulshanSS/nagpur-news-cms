@@ -5,13 +5,33 @@ import {
 import db from "../utils/db.server";
 
 export const getAllTestimonials = async () => {
-  return await db.testimonial.findMany({});
+  return await db.testimonial.findMany({
+    include: {
+      media: true,
+    },
+  });
 };
 
 export const getTestimonialById = async (testimonialId: string) => {
   return await db.testimonial.findUnique({
     where: {
       id: parseInt(testimonialId),
+    },
+    include: {
+      media: true,
+    },
+  });
+};
+
+export const getTestimonialByQuotedBy = async (quotedBy: string) => {
+  return await db.testimonial.findMany({
+    where: {
+      quotedBy: {
+        contains: quotedBy,
+      },
+    },
+    include: {
+      media: true,
     },
   });
 };
@@ -24,7 +44,7 @@ export const createTestimonial = async (
   });
 };
 
-export const updateTestimonial = async (
+export const updateTestimonialById = async (
   testimonialId: string,
   testimonial: UpdateTestimonialInput["body"]
 ) => {
@@ -36,7 +56,7 @@ export const updateTestimonial = async (
   });
 };
 
-export const deleteTestimonial = async (testimonialId: string) => {
+export const deleteTestimonialById = async (testimonialId: string) => {
   return await db.testimonial.delete({
     where: {
       id: parseInt(testimonialId),
