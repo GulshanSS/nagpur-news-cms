@@ -5,6 +5,8 @@ import { userApi } from "./api/userApi";
 import userReducer from "./features/userSlice";
 import { categoryApi } from "./api/categoryApi";
 import { tagApi } from "./api/tagApi";
+import { testimonialApi } from "./api/testimonialApi";
+import { fileUploadApi } from "./api/fileUploadApi";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
+    [fileUploadApi.reducerPath]: fileUploadApi.reducer,
+    [testimonialApi.reducerPath]: testimonialApi.reducer,
     userState: userReducer,
   },
   devTools: true,
@@ -21,6 +25,8 @@ export const store = configureStore({
       userApi.middleware,
       categoryApi.middleware,
       tagApi.middleware,
+      fileUploadApi.middleware,
+      testimonialApi.middleware,
     ]),
 });
 
