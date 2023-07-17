@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import ImageCard from "../ImageCard";
 
@@ -8,8 +8,17 @@ type Props = {
 };
 
 const ImageInputField = ({ name, label }: Props) => {
-  const { control } = useFormContext();
-  const [files, setFiles] = useState<FileList>();
+  const {
+    control,
+    formState: { isSubmitSuccessful },
+  } = useFormContext();
+  const [files, setFiles] = useState<File[]>();
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      setFiles([]);
+    }
+  }, [isSubmitSuccessful]);
 
   return (
     <>
@@ -22,25 +31,25 @@ const ImageInputField = ({ name, label }: Props) => {
             <div className="mb-6">
               <label
                 className="block mb-2 text-sm font-bold text-gray-900"
-                htmlFor="multiple_files"
+                htmlFor="file"
               >
                 {label}
               </label>
-              <label htmlFor="multiple_files">
+              <label htmlFor="file">
                 <div className="py-2.5 px-5 mr-2 mb-2 w-fit text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">
                   Browse
                 </div>
                 <input
-                  id="multiple_files"
+                  id="file"
                   {...field}
                   type="file"
-                  value={value.fileName}
                   onChange={(e) => {
-                    onChange(e.target.files);
-                    setFiles(e.target.files!);
+                    if (e.target.files) {
+                      onChange(Array.from(e.target.files).map((file) => file));
+                      setFiles(Array.from(e.target.files).map((file) => file));
+                    }
                   }}
                   className="hidden"
-                  multiple
                 />
                 {fieldState.error ? (
                   <span className="flex justify-start font-bold text-[10px] text-red-600 mr-2">
