@@ -13,8 +13,22 @@ export const getMediaById = async (mediaId: number) => {
   });
 };
 
-export const createMedia = async (data: Pick<Media, "type" | "key">) => {
+export const createMedia = async (
+  data: Pick<Media, "type" | "key" | "testimonialId">
+) => {
   return await db.media.create({
     data: data,
+  });
+};
+
+export const updateMedia = async (
+  mediaId: number,
+  data: Pick<Media, "key" | "type">
+) => {
+  return await db.media.update({
+    where: {
+      id: mediaId,
+    },
+    data,
   });
 };
