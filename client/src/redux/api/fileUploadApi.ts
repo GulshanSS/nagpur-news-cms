@@ -19,7 +19,19 @@ export const fileUploadApi = createApi({
       }),
       invalidatesTags: ["Image"],
     }),
+    updateMedia: builder.mutation<{ success: boolean; media: Media }, FormData>(
+      {
+        query: (data) => ({
+          url: "/media/update",
+          method: "PUT",
+          body: data,
+          credentials: "include",
+        }),
+        invalidatesTags: ["Image"],
+      }
+    ),
   }),
 });
 
-export const { useUploadSingleFileMutation } = fileUploadApi;
+export const { useUploadSingleFileMutation, useUpdateMediaMutation } =
+  fileUploadApi;
