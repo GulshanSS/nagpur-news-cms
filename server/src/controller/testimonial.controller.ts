@@ -36,7 +36,7 @@ export const createTestimonialHandler = asyncHandler(
 
     return res.status(HttpCode.CREATED).json({
       success: true,
-      message: "Testimonial Created Successfully",
+      testimonial,
     });
   }
 );
@@ -88,7 +88,9 @@ export const getAllTestimonialHandler = asyncHandler(
     }
 
     for (const testimonial of testimonials) {
-      testimonial.media.key = await getSignedUrlForMedia(testimonial.media.key);
+      testimonial.media!.key = await getSignedUrlForMedia(
+        testimonial.media!.key
+      );
     }
 
     return res.status(HttpCode.OK).json({
@@ -115,7 +117,7 @@ export const getTestimonialByIdHandler = asyncHandler(
       );
     }
 
-    testimonial.media.key = await getSignedUrlForMedia(testimonial.media.key);
+    testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
 
     return res.status(HttpCode.OK).json({
       success: true,
@@ -142,7 +144,9 @@ export const getTestimonialByQuotedByHandler = asyncHandler(
     }
 
     for (const testimonial of testimonials) {
-      testimonial.media.key = await getSignedUrlForMedia(testimonial.media.key);
+      testimonial.media!.key = await getSignedUrlForMedia(
+        testimonial.media!.key
+      );
     }
 
     return res.status(HttpCode.OK).json({
@@ -169,7 +173,7 @@ export const deleteTestimonialByIdHandler = asyncHandler(
       );
     }
 
-    const mediaKey = testimonial.media.key;
+    const mediaKey = testimonial.media!.key;
 
     await deleteFileByKey(mediaKey);
 
