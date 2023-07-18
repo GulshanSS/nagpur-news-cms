@@ -1,83 +1,70 @@
 import { FormProvider, useForm } from "react-hook-form";
-import {
-  TestimonialInput,
-  TestimonialSchema,
-} from "../../validationSchema/TestimonialSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import InputField from "../FormComponents/InputField";
 import ToggleSwitch from "../FormComponents/ToggleSwitch";
 import SubmitButton from "../FormComponents/SubmitButton";
 import ImageInputField from "../FormComponents/ImageInputField";
-import { useUploadSingleFileMutation } from "../../redux/api/fileUploadApi";
 import { toast } from "react-toastify";
 import { APIErrorResponse, Testimonial } from "../../redux/api/types";
-import { useCreateTestimonialMutation } from "../../redux/api/testimonialApi";
+import {
+  useCreateTestimonialMutation,
+  useUpdateTestimonialMutation,
+} from "../../redux/api/testimonialApi";
 import ImageCard from "../ImageCard";
+import { TypeOf, ZodSchema } from "zod";
 
 type Props = {
   buttonLabel: string;
   testimonial?: Partial<Testimonial>;
+  schema: ZodSchema;
 };
 
-const TestimonialForm = ({ buttonLabel, testimonial }: Props) => {
-  const methods = useForm<TestimonialInput>({
-    resolver: zodResolver(TestimonialSchema),
+const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
+  type SchemaType = TypeOf<typeof schema>;
+
+  const methods = useForm<SchemaType>({
+    resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, reset, getValues } = methods;
+  const {
+    handleSubmit,
+    reset,
+    formState: { isSubmitSuccessful },
+  } = methods;
 
-  const [
-    uploadSingleFile,
-    {
-      isLoading: isMediaUploadLoading,
-      isSuccess: isMediaUploadSuccess,
-      data: mediaData,
-      isError: isMediaUploadError,
-      error: mediaError,
-    },
-  ] = useUploadSingleFileMutation();
+  const [createTestimonial, { isLoading, isSuccess, isError, error }] =
+    useCreateTestimonialMutation();
 
-  const [
-    createTestimonial,
-    {
-      isLoading: isTestimonialLoading,
-      isSuccess: isTestimonialSuccess,
-      data: testimonialData,
-      isError: isTestimonialError,
-      error: testimonialError,
-    },
-  ] = useCreateTestimonialMutation();
+  const [updateTestimonial] = useUpdateTestimonialMutation();
 
   useEffect(() => {
-    if (isTestimonialSuccess) {
-      toast.success(testimonialData?.message);
+    if (isSuccess) {
+      toast.success("Testimonial created successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
+
+  const handleTestimonialSubmit = (values: SchemaType) => {
+    if (testimonial) {
+      updateTestimonial({
+        ...values,
+        testimonialId: testimonial.id,
+        mediaId: testimonial.media?.id,
+      });
+    } else {
+      createTestimonial(values);
+    }
+  };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
       reset();
     }
-
-    if (isTestimonialError) {
-      toast.error((testimonialError as APIErrorResponse).data.message);
-    }
-  }, [isTestimonialLoading]);
-
-  useEffect(() => {
-    if (isMediaUploadSuccess) {
-      const { media, ...rest } = getValues();
-      createTestimonial({ ...rest, mediaId: mediaData?.media.id! });
-    }
-
-    if (isMediaUploadError) {
-      toast.error((mediaError as APIErrorResponse).data.message);
-    }
-  }, [isMediaUploadLoading]);
-
-  const handleTestimonialSubmit = (values: TestimonialInput) => {
-    const formData = new FormData();
-    if (values.media?.length! > 0) {
-      values.media?.forEach((media) => formData.append("file", media));
-    }
-    uploadSingleFile(formData);
-  };
+  });
 
   return (
     <>
