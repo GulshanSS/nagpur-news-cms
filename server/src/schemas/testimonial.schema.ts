@@ -1,11 +1,10 @@
-import { TypeOf, boolean, number, object, string } from "zod";
+import { TypeOf, boolean, object, string } from "zod";
 
 const payload = {
   body: object({
     quote: string().optional(),
     quotedBy: string(),
     designation: string().optional(),
-    mediaId: number(),
     active: boolean().optional(),
   }),
 };
