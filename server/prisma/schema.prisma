@@ -57,7 +57,6 @@ model Category {
   name String
   article Article[]
   active Boolean @default(true)
-  articleViewCount ArticleViewCount[]
 }
 
 model Tag {
@@ -77,8 +76,10 @@ model Media {
   key String @db.VarChar(255)
   articleSection ArticleSection[]
   article Article[]
-  promotionaryArticle PromotionaryArticle[]
-  testimonial Testimonial[]
+  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryAticleId], references: [id], onDelete: Cascade)
+  promotionaryAticleId Int? @unique
+  testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade) 
+  testimonialId Int? @unique
 }
 
 model ArticleSection {
@@ -107,41 +108,21 @@ model Article {
   active Boolean @default(true)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
-  articleViewCount ArticleViewCount?
 }
 
 model PromotionaryArticle {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  priority Int
+  priority Int @default(0)
   title String?
   content String?
-  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  mediaId Int @unique
+  whatsAppLink String?
+  instagramLink String?
+  contact String? @db.VarChar(10)
+  media Media?
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
-  promotionaryArticleViewCount PromotionaryArticleViewCount?
-}
-
-model PromotionaryArticleViewCount {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  count Int @default(0)
-  promotionaryArticle PromotionaryArticle @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
-  promotionaryArticleId Int @unique
-}
-
-model ArticleViewCount {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  count Int @default(0)
-  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId Int @unique
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId Int
 }
 
 model Testimonial {
@@ -151,8 +132,7 @@ model Testimonial {
   quote String? 
   quotedBy String?
   designation String?
-  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  mediaId Int @unique
+  media Media?
   active Boolean @default(true)
 }
 
