@@ -36,6 +36,7 @@ export type Media = {
   updatedAt: Date;
   type: string;
   key: string;
+  testimonialId: string;
 };
 
 export type Testimonial = {
@@ -46,7 +47,6 @@ export type Testimonial = {
   quotedBy?: string;
   designation?: string;
   media: Media;
-  mediaId: number;
   active: boolean;
 };
 
