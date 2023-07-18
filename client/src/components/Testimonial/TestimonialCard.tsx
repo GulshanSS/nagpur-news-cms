@@ -10,6 +10,7 @@ import { useDeleteTestimonialMutation } from "../../redux/api/testimonialApi";
 import ViewTestimonial from "./ViewTestimonial";
 import Modal from "../Modal";
 import TestimonialForm from "../Forms/TestimonialForm";
+import { UpdateTestimonialSchema } from "../../validationSchema/TestimonialSchema";
 
 type Props = {
   testimonial: Testimonial;
@@ -85,7 +86,11 @@ const TestimonialCard = ({ testimonial }: Props) => {
           close={modalCloseForm}
           setClose={setModalCloseForm}
         >
-          <TestimonialForm buttonLabel="Update" testimonial={testimonial} />
+          <TestimonialForm
+            buttonLabel="Update"
+            testimonial={testimonial}
+            schema={UpdateTestimonialSchema}
+          />
         </Modal>
       </div>
     </>
