@@ -2,6 +2,7 @@ import { Router } from "express";
 import uploader from "../utils/multer";
 import {
   getAllMediaHandler,
+  updateMediaByIdHandler,
   uploadSingleFileHandler,
 } from "../controller/media.Controller";
 
@@ -14,5 +15,7 @@ MediaRouter.post(
   uploader.single("file"),
   uploadSingleFileHandler
 );
+
+MediaRouter.put("/update", uploader.single("file"), updateMediaByIdHandler);
 
 export default MediaRouter;
