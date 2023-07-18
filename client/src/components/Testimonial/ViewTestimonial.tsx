@@ -13,6 +13,7 @@ import Status from "../Status";
 import { HiPencil } from "react-icons/hi";
 import RequireAdmin from "../Auth/RequireAdmin";
 import TestimonialForm from "../Forms/TestimonialForm";
+import { UpdateTestimonialSchema } from "../../validationSchema/TestimonialSchema";
 
 type Props = {
   id: number;
@@ -130,7 +131,11 @@ const ViewTestimonial = ({ id }: Props) => {
         close={modalCloseForm}
         setClose={setModalCloseForm}
       >
-        <TestimonialForm buttonLabel="Update" testimonial={data?.testimonial} />
+        <TestimonialForm
+          buttonLabel="Update"
+          testimonial={data?.testimonial}
+          schema={UpdateTestimonialSchema}
+        />
       </Modal>
     </>
   );
