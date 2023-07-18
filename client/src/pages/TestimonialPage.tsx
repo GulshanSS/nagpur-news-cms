@@ -4,6 +4,7 @@ import Modal from "../components/Modal";
 import PageNav from "../components/PageNav";
 import AddResourceButton from "../components/AddResourceButton";
 import DisplayAllTestimonial from "../components/Testimonial/DisplayAllTestimonial";
+import { CreateTestimonialSchema } from "../validationSchema/TestimonialSchema";
 
 const TestimonialPage = () => {
   const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
@@ -24,7 +25,10 @@ const TestimonialPage = () => {
         close={modalCloseForm}
         setClose={setModalCloseForm}
       >
-        <TestimonialForm buttonLabel="Create" />
+        <TestimonialForm
+          buttonLabel="Create"
+          schema={CreateTestimonialSchema}
+        />
       </Modal>
       <AddResourceButton setModalCloseForm={setModalCloseForm} />
     </>
