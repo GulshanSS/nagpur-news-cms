@@ -5,6 +5,7 @@ import {
   getAllTestimonialHandler,
   getTestimonialByIdHandler,
   getTestimonialByQuotedByHandler,
+  updateTestimonialByIdHandler,
 } from "../controller/testimonial.controller";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { authorize } from "../middleware/authorize";
@@ -24,6 +25,8 @@ TestimonialRouter.get("/", getAllTestimonialHandler);
 TestimonialRouter.get("/:testimonialId", getTestimonialByIdHandler);
 
 TestimonialRouter.get("/search/:quotedBy", getTestimonialByQuotedByHandler);
+
+TestimonialRouter.put("/:testimonialId/update", updateTestimonialByIdHandler);
 
 TestimonialRouter.delete(
   "/:testimonialId/delete",
