@@ -14,7 +14,8 @@ export const getMediaById = async (mediaId: number) => {
 };
 
 export const createMedia = async (
-  data: Pick<Media, "type" | "key" | "testimonialId">
+  data: Pick<Media, "type" | "key"> &
+    Partial<Pick<Media, "promotionaryArticleId" | "testimonialId">>
 ) => {
   return await db.media.create({
     data: data,
