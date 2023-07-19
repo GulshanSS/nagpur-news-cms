@@ -34,7 +34,7 @@ export const getAllMediaHandler = asyncHandler(
   }
 );
 
-export const uploadSingleFileHandler = asyncHandler(
+export const uploadSingleFileForTestimonialHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const file = req.file as Express.Multer.File;
     if (!file) {
@@ -60,6 +60,40 @@ export const uploadSingleFileHandler = asyncHandler(
       type: file.mimetype,
       key: imageName,
       testimonialId: parseInt(testimonialId),
+    });
+    return res.status(HttpCode.CREATED).json({
+      success: true,
+      media,
+    });
+  }
+);
+
+export const uploadSingleFileForPromotionaryArticleHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const file = req.file as Express.Multer.File;
+    if (!file) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "File not provided",
+        })
+      );
+    }
+    const imageName = randomImageName();
+    const result = await uploadSingleFile(file, imageName);
+    if (!result) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "Error uploading File",
+        })
+      );
+    }
+    const promotionaryArticleId = req.body.promotionaryArticleId as string;
+    const media = await createMedia({
+      type: file.mimetype,
+      key: imageName,
+      promotionaryArticleId: parseInt(promotionaryArticleId),
     });
     return res.status(HttpCode.CREATED).json({
       success: true,
