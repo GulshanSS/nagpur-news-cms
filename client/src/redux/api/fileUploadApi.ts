@@ -7,12 +7,24 @@ export const fileUploadApi = createApi({
   baseQuery: baseQueryWithReAuth,
   tagTypes: ["Image"],
   endpoints: (builder) => ({
-    uploadSingleFile: builder.mutation<
+    uploadSingleFileForTestimonial: builder.mutation<
       { success: boolean; media: Media },
       FormData
     >({
       query: (data) => ({
-        url: "/media/upload/single",
+        url: "/media/upload/single/testimonial",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Image"],
+    }),
+    uploadSingleFileForPromotionaryArticle: builder.mutation<
+      { success: boolean; media: Media },
+      FormData
+    >({
+      query: (data) => ({
+        url: "/media/upload/single/promotionary-article",
         method: "POST",
         body: data,
         credentials: "include",
@@ -33,5 +45,8 @@ export const fileUploadApi = createApi({
   }),
 });
 
-export const { useUploadSingleFileMutation, useUpdateMediaMutation } =
-  fileUploadApi;
+export const {
+  useUploadSingleFileForTestimonialMutation,
+  useUploadSingleFileForPromotionaryArticleMutation,
+  useUpdateMediaMutation,
+} = fileUploadApi;
