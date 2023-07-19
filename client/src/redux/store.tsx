@@ -7,6 +7,7 @@ import { categoryApi } from "./api/categoryApi";
 import { tagApi } from "./api/tagApi";
 import { testimonialApi } from "./api/testimonialApi";
 import { fileUploadApi } from "./api/fileUploadApi";
+import { promotionaryArticleApi } from "./api/promotionaryArticleApi";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     [tagApi.reducerPath]: tagApi.reducer,
     [fileUploadApi.reducerPath]: fileUploadApi.reducer,
     [testimonialApi.reducerPath]: testimonialApi.reducer,
+    [promotionaryArticleApi.reducerPath]: promotionaryArticleApi.reducer,
     userState: userReducer,
   },
   devTools: true,
@@ -27,6 +29,7 @@ export const store = configureStore({
       tagApi.middleware,
       fileUploadApi.middleware,
       testimonialApi.middleware,
+      promotionaryArticleApi.middleware,
     ]),
 });
 
