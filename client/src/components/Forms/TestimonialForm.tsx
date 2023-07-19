@@ -71,7 +71,7 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(handleTestimonialSubmit)}
-          className="w-80 md:w-96 mx-2 bg-slate-200 px-3 py-5 rounded-md"
+          className="mx-2 h-[500px] md:h-full bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
           autoComplete="off"
           noValidate
         >
