@@ -33,7 +33,7 @@ export const testimonialApi = createApi({
             args.media?.forEach((media) => formData.append("file", media));
             formData.append("testimonialId", data.testimonial.id.toString());
             await dispatch(
-              fileUploadApi.endpoints.uploadSingleFile.initiate(formData)
+              fileUploadApi.endpoints.uploadSingleFileForTestimonial.initiate(formData)
             );
             dispatch(testimonialApi.util.invalidateTags(["Testimonial"]));
           }
