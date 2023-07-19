@@ -14,6 +14,7 @@ import RequireUser from "./components/Auth/RequireUser";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordByTokenPage from "./pages/ResetPasswordByTokenPage";
 import TestimonialPage from "./pages/TestimonialPage";
+import PromotionaryArticlePage from "./pages/PromotionaryArticlePage";
 
 function App() {
   return (
@@ -33,6 +34,10 @@ function App() {
               <Route path="/category" element={<CategoryPage />} />
               <Route path="/tag" element={<TagPage />} />
               <Route path="/testimonial" element={<TestimonialPage />} />
+              <Route
+                path="/promotionary-article"
+                element={<PromotionaryArticlePage />}
+              />
             </Route>
           </Route>
           <Route element={<RequireUser allowedRoles={["ADMIN"]} />}>
