@@ -3,7 +3,8 @@ import uploader from "../utils/multer";
 import {
   getAllMediaHandler,
   updateMediaByIdHandler,
-  uploadSingleFileHandler,
+  uploadSingleFileForPromotionaryArticleHandler,
+  uploadSingleFileForTestimonialHandler,
 } from "../controller/media.Controller";
 
 const MediaRouter = Router();
@@ -11,9 +12,15 @@ const MediaRouter = Router();
 MediaRouter.get("/", getAllMediaHandler);
 
 MediaRouter.post(
-  "/upload/single",
+  "/upload/single/testimonial",
   uploader.single("file"),
-  uploadSingleFileHandler
+  uploadSingleFileForTestimonialHandler
+);
+
+MediaRouter.post(
+  "/upload/single/promotionary-article",
+  uploader.single("file"),
+  uploadSingleFileForPromotionaryArticleHandler
 );
 
 MediaRouter.put("/update", uploader.single("file"), updateMediaByIdHandler);
