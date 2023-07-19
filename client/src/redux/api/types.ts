@@ -50,6 +50,21 @@ export type Testimonial = {
   active: boolean;
 };
 
+export type PromotionaryArticle = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  priority: number;
+  title: string;
+  content: string;
+  whatsAppLink: string;
+  instagramLink: string;
+  contact: string;
+  media: Media;
+  setAsBanner: boolean;
+  active: boolean;
+};
+
 export type APIErrorResponse = {
   data: {
     success: boolean;
