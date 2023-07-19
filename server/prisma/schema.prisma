@@ -76,8 +76,8 @@ model Media {
   key String @db.VarChar(255)
   articleSection ArticleSection[]
   article Article[]
-  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryAticleId], references: [id], onDelete: Cascade)
-  promotionaryAticleId Int? @unique
+  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
+  promotionaryArticleId Int? @unique
   testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade) 
   testimonialId Int? @unique
 }
