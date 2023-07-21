@@ -4,17 +4,13 @@ const payload = {
   body: object({
     priority: string()
       .trim()
-      .regex(new RegExp("/^[0-9]{1}$/"), "Please enter valid priority"),
+      .regex(new RegExp("\\d{1}"), "Please enter valid priority"),
     title: string().trim(),
     content: string().trim().optional(),
     whatsAppLink: string().trim().optional(),
     instagramLink: string().trim().optional(),
     contact: string()
-      .min(10, "Contact Number should be 10 digit long")
-      .regex(
-        new RegExp("/^[0-9]{10}$/"),
-        "Contact number should contain 0-9 digits"
-      )
+      .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
       .optional(),
     setAsBanner: boolean().optional(),
     active: boolean().optional(),
