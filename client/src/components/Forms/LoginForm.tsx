@@ -74,7 +74,7 @@ const LoginForm = () => {
             type="password"
             placeholder="Enter Password"
           />
-          <div className="w-full flex justify-end mb-6 text-blue-500 font-bold">
+          <div className="w-full flex justify-end mb-6 text-[#614E5C] font-bold">
             <Link to="/forgot-password">
               <div className="w-fit flex">
                 <span className="text-[12px]">Forgot Password</span>
