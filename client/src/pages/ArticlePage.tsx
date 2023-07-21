@@ -1,12 +1,31 @@
+import { useState } from "react";
 import ArticleForm from "../components/Forms/Article/ArticleForm";
+import { CreateArticleSchema } from "../validationSchema/ArticleSchema";
+import PageNav from "../components/PageNav";
+import Modal from "../components/Modal";
+import AddResourceButton from "../components/AddResourceButton";
 
 const ArticlePage = () => {
+  const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   return (
     <>
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
-        <h3 className="font-bold text-2xl mb-6">Article</h3>
-        <ArticleForm />
-      </div>
+      <>
+        <PageNav
+          setModalCloseForm={setModalCloseForm}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+        <div className="w-auto py-32"></div>
+        <Modal
+          id="articleForm"
+          close={modalCloseForm}
+          setClose={setModalCloseForm}
+        >
+          <ArticleForm buttonLabel="Publish" schema={CreateArticleSchema} />
+        </Modal>
+        <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      </>
     </>
   );
 };
