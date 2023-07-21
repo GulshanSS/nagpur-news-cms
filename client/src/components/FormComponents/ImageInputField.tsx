@@ -5,9 +5,10 @@ import ImageCard from "../ImageCard";
 type Props = {
   name: string;
   label: string;
+  multiple: boolean;
 };
 
-const ImageInputField = ({ name, label }: Props) => {
+const ImageInputField = ({ name, label, multiple }: Props) => {
   const {
     control,
     formState: { isSubmitSuccessful },
@@ -50,6 +51,7 @@ const ImageInputField = ({ name, label }: Props) => {
                     }
                   }}
                   className="hidden"
+                  multiple={multiple}
                 />
                 {fieldState.error ? (
                   <span className="flex justify-start font-bold text-[10px] text-red-600 mr-2">
