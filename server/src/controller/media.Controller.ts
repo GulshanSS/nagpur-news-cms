@@ -1,10 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "../middleware/asyncHandler";
-import { getSignedUrlForMedia, uploadSingleFile } from "../utils/s3";
+import {
+  deleteFileByKey,
+  getSignedUrlForMedia,
+  uploadSingleFile,
+} from "../utils/s3";
 import { AppError, HttpCode } from "../exceptions/AppError";
 import { randomImageName } from "../utils/imageName";
 import {
   createMedia,
+  deleteMediaById,
   getAllMedia,
   getMediaById,
   updateMedia,
@@ -102,6 +107,86 @@ export const uploadSingleFileForPromotionaryArticleHandler = asyncHandler(
   }
 );
 
+export const uploadMutipleFileForArticleHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const files = req.files as Express.Multer.File[];
+    if (files.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "File not provided",
+        })
+      );
+    }
+
+    const articleId = req.body.articleId as string;
+
+    for (const file of files) {
+      const imageName = randomImageName();
+      const result = await uploadSingleFile(file, imageName);
+      if (!result) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: "Error uploading File",
+          })
+        );
+      }
+
+      await createMedia({
+        type: file.mimetype,
+        key: imageName,
+        articleId: parseInt(articleId),
+      });
+    }
+
+    return res.status(HttpCode.CREATED).json({
+      success: true,
+      message: "Files uploaded successfully",
+    });
+  }
+);
+
+export const uploadMutipleFileForArticleSectionHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const files = req.files as Express.Multer.File[];
+    if (files.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "File not provided",
+        })
+      );
+    }
+
+    const articleSectionId = req.body.articleSectionId as string;
+
+    for (const file of files) {
+      const imageName = randomImageName();
+      const result = await uploadSingleFile(file, imageName);
+      if (!result) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: "Error uploading File",
+          })
+        );
+      }
+
+      await createMedia({
+        type: file.mimetype,
+        key: imageName,
+        articleSectionId: parseInt(articleSectionId),
+      });
+    }
+
+    return res.status(HttpCode.CREATED).json({
+      success: true,
+      message: "Files uploaded successfully",
+    });
+  }
+);
+
 export const updateMediaByIdHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const mediaId = req.body.mediaId as string;
@@ -148,14 +233,29 @@ export const updateMediaByIdHandler = asyncHandler(
   }
 );
 
-// export const uploadImageHandler = asyncHandler(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const files = req.files as Express.Multer.File[];
-//     if (files !== undefined) {
-//       files.map(async (file) => {
-//         const result = await uploadSingleFile(file);
-//         console.log(result);
-//       });
-//     }
-//   }
-// );
+export const deleteMediaByIdHandler = asyncHandler(
+  async (
+    req: Request<{ mediaId: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const mediaId = req.params.mediaId;
+    const media = await getMediaById(parseInt(mediaId));
+    if (!media) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Media Not Found",
+        })
+      );
+    }
+
+    await deleteFileByKey(media.key);
+    await deleteMediaById(parseInt(mediaId));
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      message: "Media deleted successfully",
+    });
+  }
+);

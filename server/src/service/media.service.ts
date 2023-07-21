@@ -15,7 +15,15 @@ export const getMediaById = async (mediaId: number) => {
 
 export const createMedia = async (
   data: Pick<Media, "type" | "key"> &
-    Partial<Pick<Media, "promotionaryArticleId" | "testimonialId">>
+    Partial<
+      Pick<
+        Media,
+        | "promotionaryArticleId"
+        | "testimonialId"
+        | "articleId"
+        | "articleSectionId"
+      >
+    >
 ) => {
   return await db.media.create({
     data: data,
@@ -31,5 +39,13 @@ export const updateMedia = async (
       id: mediaId,
     },
     data,
+  });
+};
+
+export const deleteMediaById = async (mediaId: number) => {
+  return await db.media.delete({
+    where: {
+      id: mediaId,
+    },
   });
 };
