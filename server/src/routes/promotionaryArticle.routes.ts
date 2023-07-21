@@ -9,12 +9,18 @@ import {
   updatePromotionaryArticleByIdHandler,
   deletePromotionaryArticleByIdHandler,
 } from "../controller/promotionaryArticle.controller";
+import validateSchema from "../middleware/validateSchema";
+import {
+  createPromotionaryArticleSchema,
+  updatePromotionaryArticleSchema,
+} from "../schemas/promotionaryArticle.schema";
 
 const PromotionaryArticleRouter = Router();
 
 PromotionaryArticleRouter.post(
   "/create",
   [isAuthenticated, authorize("ADMIN", "TEAM")],
+  validateSchema(createPromotionaryArticleSchema),
   createPromotionaryArticleHandler
 );
 
@@ -33,6 +39,7 @@ PromotionaryArticleRouter.get(
 PromotionaryArticleRouter.put(
   "/:promotionaryArticleId/update",
   [isAuthenticated, authorize("ADMIN", "TEAM")],
+  validateSchema(updatePromotionaryArticleSchema),
   updatePromotionaryArticleByIdHandler
 );
 
