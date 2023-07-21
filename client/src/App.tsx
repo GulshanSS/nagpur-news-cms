@@ -15,12 +15,15 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordByTokenPage from "./pages/ResetPasswordByTokenPage";
 import TestimonialPage from "./pages/TestimonialPage";
 import PromotionaryArticlePage from "./pages/PromotionaryArticlePage";
+import MainPage from "./pages/MainPage";
+import ArticlePage from "./pages/ArticlePage";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          <Route index element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/verify-otp" element={<OTPPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -38,6 +41,7 @@ function App() {
                 path="/promotionary-article"
                 element={<PromotionaryArticlePage />}
               />
+              <Route path="/article" element={<ArticlePage />} />
             </Route>
           </Route>
           <Route element={<RequireUser allowedRoles={["ADMIN"]} />}>
