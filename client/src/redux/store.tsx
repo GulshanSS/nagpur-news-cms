@@ -8,6 +8,7 @@ import { tagApi } from "./api/tagApi";
 import { testimonialApi } from "./api/testimonialApi";
 import { fileUploadApi } from "./api/fileUploadApi";
 import { promotionaryArticleApi } from "./api/promotionaryArticleApi";
+import { articleApi } from "./api/articleApi";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     [fileUploadApi.reducerPath]: fileUploadApi.reducer,
     [testimonialApi.reducerPath]: testimonialApi.reducer,
     [promotionaryArticleApi.reducerPath]: promotionaryArticleApi.reducer,
+    [articleApi.reducerPath]: articleApi.reducer,
     userState: userReducer,
   },
   devTools: true,
@@ -30,6 +32,7 @@ export const store = configureStore({
       fileUploadApi.middleware,
       testimonialApi.middleware,
       promotionaryArticleApi.middleware,
+      articleApi.middleware,
     ]),
 });
 
