@@ -22,7 +22,7 @@ const InputField = ({ value, label, name, type, placeholder }: Props) => {
             <div className="mb-6">
               <label
                 htmlFor={name}
-                className="block mb-2 text-sm font-semibold text-gray-900"
+                className="block mb-2 text-sm font-semibold text-[#614E5C]"
               >
                 {label}
               </label>
@@ -30,7 +30,7 @@ const InputField = ({ value, label, name, type, placeholder }: Props) => {
                 {...field}
                 type={type}
                 id={name}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 focus:outline-none"
+                className="bg-white bg-opacity-50 border border-gray-300 text-[#614E5C] text-sm rounded-lg focus:ring-[#614E5C] focus:border-[#614E5C] block w-full p-2.5 focus:outline-none"
                 placeholder={placeholder}
               />
               {fieldState.error ? (
