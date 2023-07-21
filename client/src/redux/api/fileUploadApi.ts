@@ -31,6 +31,30 @@ export const fileUploadApi = createApi({
       }),
       invalidatesTags: ["Image"],
     }),
+    uploadMutipleFileForArticle: builder.mutation<
+      { success: boolean; messsgae: string },
+      FormData
+    >({
+      query: (data) => ({
+        url: "/media/upload/multiple/article",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Image"],
+    }),
+    uploadMutipleFileForArticleSection: builder.mutation<
+      { success: boolean; messsgae: string },
+      FormData
+    >({
+      query: (data) => ({
+        url: "/media/upload/mutiple/article-section",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Image"],
+    }),
     updateMedia: builder.mutation<{ success: boolean; media: Media }, FormData>(
       {
         query: (data) => ({
@@ -48,5 +72,7 @@ export const fileUploadApi = createApi({
 export const {
   useUploadSingleFileForTestimonialMutation,
   useUploadSingleFileForPromotionaryArticleMutation,
+  useUploadMutipleFileForArticleMutation,
+  useUploadMutipleFileForArticleSectionMutation,
   useUpdateMediaMutation,
 } = fileUploadApi;
