@@ -161,7 +161,11 @@ const PromotionaryArticleForm = ({
               </div>
             </>
           )}
-          <ImageInputField label="Promotionary Article Media" name="media" />
+          <ImageInputField
+            label="Promotionary Article Media"
+            name="media"
+            multiple={false}
+          />
           <SubmitButton label={buttonLabel} />
         </form>
       </FormProvider>

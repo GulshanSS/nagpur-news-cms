@@ -113,7 +113,11 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
               </div>
             </>
           )}
-          <ImageInputField label="Testimonial Media" name="media" />
+          <ImageInputField
+            label="Testimonial Media"
+            name="media"
+            multiple={false}
+          />
           <SubmitButton label={buttonLabel} />
         </form>
       </FormProvider>
