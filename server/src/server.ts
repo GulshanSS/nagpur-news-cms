@@ -16,6 +16,8 @@ import UserRouter from "./routes/user.routes";
 import TestimonialRouter from "./routes/testimonial.routes";
 import MediaRouter from "./routes/media.routes";
 import PromotionaryArticleRouter from "./routes/promotionaryArticle.routes";
+import ArticleRouter from "./routes/article.routes";
+import ArticleSectionRouter from "./routes/articleSection.routes";
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use("/api/v1/category", CategoryRouter);
 app.use("/api/v1/tag", TagRouter);
 app.use("/api/v1/testimonial", TestimonialRouter);
 app.use("/api/v1/promotionary-article", PromotionaryArticleRouter);
+app.use("/api/v1/article", ArticleRouter);
+app.use("/api/v1/article-section", ArticleSectionRouter);
 app.use("/api/v1/media", MediaRouter);
 
 app.use(errorMiddlerware);
