@@ -37,6 +37,9 @@ export type Media = {
   type: string;
   key: string;
   testimonialId: string;
+  promotionaryArticleId: string;
+  articleId: string;
+  articleSectionId: string;
 };
 
 export type Testimonial = {
@@ -63,6 +66,35 @@ export type PromotionaryArticle = {
   media: Media;
   setAsBanner: boolean;
   active: boolean;
+};
+
+export type Article = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  content: string;
+  youtubeVideoUrl: string;
+  author: string;
+  publishedOn: Date;
+  state: string;
+  setAsBanner: boolean;
+  active: boolean;
+  media: Media[];
+  articleSection: ArticleSection[];
+  tag: Tag[];
+  category: Category[];
+};
+
+export type ArticleSection = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  content: string;
+  sequence: number;
+  media: Media[];
+  articleId: number;
 };
 
 export type APIErrorResponse = {
