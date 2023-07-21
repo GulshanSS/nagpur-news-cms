@@ -74,8 +74,10 @@ model Media {
   updatedAt DateTime @updatedAt
   type String
   key String @db.VarChar(255)
-  articleSection ArticleSection[]
-  article Article[]
+  articleSection ArticleSection? @relation(fields: [articleSectionId], references: [id], onDelete: Cascade)
+  articleSectionId Int? @unique
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int?
   promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
   promotionaryArticleId Int? @unique
   testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade) 
@@ -99,15 +101,17 @@ model Article {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
+  content String
+  youtubeVideoUrl String?
+  author String
+  publishedOn DateTime @default(now())
+  state String @default("DRAFT")
+  setAsBanner Boolean @default(false)
+  active Boolean @default(true)
   media Media[]
   articleSection ArticleSection[]
   tag Tag[]
-  author String
-  publishedOn DateTime @default(now())
-  setAsBanner Boolean @default(false)
-  active Boolean @default(true)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId Int
+  category Category[]
 }
 
 model PromotionaryArticle {
