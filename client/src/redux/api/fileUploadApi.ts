@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
 import { Media } from "./types";
+import { articleApi } from "./articleApi";
 
 export const fileUploadApi = createApi({
   reducerPath: "fileUploadApi",
@@ -66,6 +67,20 @@ export const fileUploadApi = createApi({
         invalidatesTags: ["Image"],
       }
     ),
+    deletMedia: builder.mutation<{ success: boolean; message: string }, number>(
+      {
+        query: (id) => ({
+          url: `/media/${id}/delete`,
+          method: "DELETE",
+          credentials: "include",
+        }),
+        async onQueryStarted(args, { dispatch, queryFulfilled }) {
+          await queryFulfilled;
+          dispatch(articleApi.util.invalidateTags(["Article"]));
+        },
+        invalidatesTags: ["Image"],
+      }
+    ),
   }),
 });
 
@@ -75,4 +90,5 @@ export const {
   useUploadMutipleFileForArticleMutation,
   useUploadMutipleFileForArticleSectionMutation,
   useUpdateMediaMutation,
+  useDeletMediaMutation,
 } = fileUploadApi;
