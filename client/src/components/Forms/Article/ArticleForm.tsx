@@ -11,17 +11,27 @@ import MultiSelectField from "../../FormComponents/MultiSelectField";
 import { useGetAllCategoriesQuery } from "../../../redux/api/categoryApi";
 import { useGetAllTagsQuery } from "../../../redux/api/tagApi";
 import TextAreaField from "../../FormComponents/TextAreaField";
-import { useCreateArticleMutation } from "../../../redux/api/articleApi";
+import {
+  useCreateArticleMutation,
+  useUpdateArticleMutation,
+} from "../../../redux/api/articleApi";
 import ActionButtonSubmit from "../../FormComponents/ActionButtonSubmit";
 import { toast } from "react-toastify";
+import ImageCard from "../../ImageCard";
 
 type Props = {
   buttonLabel: string;
+  actionButtonLabel: string;
   article?: Partial<Article>;
   schema: ZodSchema;
 };
 
-const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
+const ArticleForm = ({
+  buttonLabel,
+  actionButtonLabel,
+  article,
+  schema,
+}: Props) => {
   type SchemaType = TypeOf<typeof schema>;
 
   const method = useForm<SchemaType>({
@@ -33,6 +43,8 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
 
   const { data: categoryResult, isLoading: isCategoryLoading } =
     useGetAllCategoriesQuery();
+
+  const [updateArticle] = useUpdateArticleMutation();
 
   const { data: tagResult, isLoading: isTagLoading } = useGetAllTagsQuery();
 
@@ -58,7 +70,11 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
   }, [isLoading]);
 
   const handleArticleSubmit = (values: SchemaType) => {
-    createArticle({ ...values, state: "PUBLISHED" });
+    if (article) {
+      updateArticle({ ...values, articleId: article.id, state: "PUBLISHED" });
+    } else {
+      createArticle({ ...values, state: "PUBLISHED" });
+    }
   };
 
   useEffect(() => {
@@ -86,11 +102,13 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
               name="title"
               type="text"
               placeholder="Enter Title"
+              value={article ? article.title : ""}
             />
             <TextAreaField
               label="Content"
               name="content"
               placeholder="Enter Content"
+              value={article ? article.content : ""}
             />
             <div className="md:flex md:gap-2">
               <InputField
@@ -98,12 +116,14 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
                 name="youtubeVideoUrl"
                 type="text"
                 placeholder="Enter YouTube Video URL"
+                value={article ? article.youtubeVideoUrl : ""}
               />
               <InputField
                 label="Author"
                 name="author"
                 type="text"
                 placeholder="Enter Author"
+                value={article ? article.author : ""}
               />
             </div>
             <InputField
@@ -111,14 +131,22 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
               name="publishedOn"
               type="date"
               placeholder="Published On"
-              value={new Date().toISOString().slice(0, 10)}
+              value={
+                article
+                  ? new Date(article.publishedOn!).toISOString().slice(0, 10)
+                  : new Date().toISOString().slice(0, 10)
+              }
             />
             <div className="flex gap-2">
-              <ToggleSwitch label="Active" name="active" value={true} />
+              <ToggleSwitch
+                label="Active"
+                name="active"
+                value={article ? article.active! : true}
+              />
               <ToggleSwitch
                 label="Set As Banner"
                 name="setAsBanner"
-                value={true}
+                value={article ? article.setAsBanner! : true}
               />
             </div>
             <div className="w-full md:flex md:gap-2">
@@ -128,6 +156,7 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
                   isLoading={isCategoryLoading}
                   label="Category"
                   name="category"
+                  value={article ? article?.category! : []}
                 />
               </div>
               <div className="md:w-1/2">
@@ -136,22 +165,45 @@ const ArticleForm = ({ buttonLabel, article, schema }: Props) => {
                   isLoading={isTagLoading}
                   label="Tag"
                   name="tag"
+                  value={article ? article?.tag! : []}
                 />
               </div>
             </div>
-
+            {article && (
+              <>
+                <div className="text-[10px]">Already Uploaded File</div>
+                <div className="flex flex-wrap justify-start gap-2 mb-6">
+                  {article.media?.map((media) => (
+                    <ImageCard
+                      key={media!.id}
+                      id={media.id}
+                      name={article.title!}
+                      url={media!.key}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
             <ImageInputField
               label="Article Media"
               name="media"
               multiple={true}
             />
-            <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <SubmitButton label={buttonLabel} />
               <ActionButtonSubmit
-                label="Save As Draft"
-                onClick={(e) =>
-                  createArticle({ ...getValues(), state: "DRAFT" })
-                }
+                label={actionButtonLabel}
+                onClick={() => {
+                  if (article) {
+                    updateArticle({
+                      ...getValues(),
+                      articleId: article.id,
+                      state: "DRAFT",
+                    });
+                  } else {
+                    createArticle({ ...getValues(), state: "DRAFT" });
+                  }
+                }}
               />
             </div>
           </form>
