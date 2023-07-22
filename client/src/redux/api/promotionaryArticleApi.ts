@@ -40,12 +40,10 @@ export const promotionaryArticleApi = createApi({
                 formData
               )
             );
-            dispatch(
-              promotionaryArticleApi.util.invalidateTags([
-                "PromotionaryArticle",
-              ])
-            );
           }
+          dispatch(
+            promotionaryArticleApi.util.invalidateTags(["PromotionaryArticle"])
+          );
         } catch (e: unknown) {
           if (e instanceof Error) console.log(e);
         }
