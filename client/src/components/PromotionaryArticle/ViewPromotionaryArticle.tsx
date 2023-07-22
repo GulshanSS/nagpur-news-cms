@@ -37,7 +37,7 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
 
   return (
     <>
-      <div className="w-80 md:w-96 flex flex-col items-center bg-slate-100 rounded-md shadow-md h-[500px] md:h-full overflow-hidden overflow-y-scroll">
+      <div className="w-80 md:w-96 bg-slate-100 rounded-md shadow-md h-[500px] md:h-full overflow-hidden overflow-y-scroll">
         {data?.promotionaryArticle.media.type.startsWith("image/") && (
           <img
             alt={data.promotionaryArticle.title}
