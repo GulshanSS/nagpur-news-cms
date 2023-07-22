@@ -10,7 +10,7 @@ type Props = {
 const PageNav = ({ searchQuery, setSearchQuery, setModalCloseForm }: Props) => {
   return (
     <>
-      <div className="md:w-[calc(100%-200px)] w-full fixed top-16 md:top-14 bg-white">
+      <div className="md:w-[calc(100%-200px)] w-full fixed top-16 md:top-14 bg-white z-40">
         <div className="flex md:justify-between justify-center items-center px-2.5 py-2 border-b">
           <div className="hidden md:block">
             <button
