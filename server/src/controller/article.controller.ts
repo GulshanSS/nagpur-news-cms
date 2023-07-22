@@ -33,7 +33,6 @@ export const createArticleHandler = asyncHandler(
         })
       );
     }
-    console.log(article);
     return res.status(HttpCode.CREATED).json({
       success: true,
       article,
