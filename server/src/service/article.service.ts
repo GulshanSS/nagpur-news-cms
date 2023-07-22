@@ -29,6 +29,7 @@ export const updateArticleById = async (
     },
     data: {
       ...data,
+      publishedOn: new Date(data.publishedOn),
       category: {
         connect: data.category,
       },
