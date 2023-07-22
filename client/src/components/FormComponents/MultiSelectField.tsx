@@ -4,7 +4,7 @@ import { Category, Tag } from "../../redux/api/types";
 import { useEffect, useRef } from "react";
 
 type Props = {
-  value?: string;
+  value: Category[] | Tag[];
   label: string;
   name: string;
   isLoading: boolean;
@@ -29,6 +29,7 @@ const MultiSelectField = ({
   const selectInputRef = useRef<any>();
 
   let selectOptions = [] as any[];
+  let defaultOptions = [] as any[];
 
   if (options.category !== undefined) {
     options.category.map((option) =>
@@ -39,6 +40,12 @@ const MultiSelectField = ({
   if (options.tag !== undefined) {
     options.tag.map((option) =>
       selectOptions.push({ label: option.name, value: { id: option.id } })
+    );
+  }
+
+  if (value.length !== 0) {
+    value.map((option) =>
+      defaultOptions.push({ label: option.name, value: { id: option.id } })
     );
   }
 
@@ -53,6 +60,7 @@ const MultiSelectField = ({
       <Controller
         name={name}
         control={control}
+        defaultValue={defaultOptions}
         render={({ field: { onChange, onBlur, value, name }, fieldState }) => (
           <>
             <div className="mb-6">
