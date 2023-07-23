@@ -3,6 +3,7 @@ import asyncHandler from "../middleware/asyncHandler";
 import {
   deleteFileByKey,
   getSignedUrlForMedia,
+  invalidateCloudFrontCache,
   uploadSingleFile,
 } from "../utils/s3";
 import { AppError, HttpCode } from "../exceptions/AppError";
@@ -251,6 +252,7 @@ export const deleteMediaByIdHandler = asyncHandler(
     }
 
     await deleteFileByKey(media.key);
+    await invalidateCloudFrontCache(media.key);
     await deleteMediaById(parseInt(mediaId));
 
     return res.status(HttpCode.OK).json({

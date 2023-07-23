@@ -15,7 +15,11 @@ import {
   updatePromotionaryArticleById,
 } from "../service/promotionaryArticle.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey, getSignedUrlForMedia } from "../utils/s3";
+import {
+  deleteFileByKey,
+  getSignedUrlForMedia,
+  invalidateCloudFrontCache,
+} from "../utils/s3";
 
 export const createPromotionaryArticleHandler = asyncHandler(
   async (
@@ -188,6 +192,8 @@ export const deletePromotionaryArticleByIdHandler = asyncHandler(
     const mediaKey = promotionaryArticle.media!.key;
 
     await deleteFileByKey(mediaKey);
+
+    await invalidateCloudFrontCache(mediaKey);
 
     await deletePromotionaryArticleById(promotionaryArticleId);
 

@@ -14,7 +14,11 @@ import {
   updateArticleSectionById,
 } from "../service/articleSection.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey, getSignedUrlForMedia } from "../utils/s3";
+import {
+  deleteFileByKey,
+  getSignedUrlForMedia,
+  invalidateCloudFrontCache,
+} from "../utils/s3";
 
 export const createArticleSectionHandler = asyncHandler(
   async (
@@ -161,6 +165,7 @@ export const deleteArticleSectionByIdHandler = asyncHandler(
     if (articleSection.media.length > 0) {
       for (const media of articleSection.media) {
         await deleteFileByKey(media.key);
+        await invalidateCloudFrontCache(media.key);
       }
     }
 

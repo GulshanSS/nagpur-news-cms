@@ -15,7 +15,11 @@ import {
   updateTestimonialById,
 } from "../service/testimonial.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey, getSignedUrlForMedia } from "../utils/s3";
+import {
+  deleteFileByKey,
+  getSignedUrlForMedia,
+  invalidateCloudFrontCache,
+} from "../utils/s3";
 
 export const createTestimonialHandler = asyncHandler(
   async (
@@ -176,6 +180,8 @@ export const deleteTestimonialByIdHandler = asyncHandler(
     const mediaKey = testimonial.media!.key;
 
     await deleteFileByKey(mediaKey);
+
+    await invalidateCloudFrontCache(mediaKey);
 
     await deleteTestimonialById(testimonialId);
 
