@@ -45,12 +45,10 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
-          {
-            (
-              (categoryError as APIErrorResponse) ||
-              (categoryByNameError as APIErrorResponse)
-            ).data.message
-          }
+          {(
+            (categoryError as APIErrorResponse) ||
+            (categoryByNameError as APIErrorResponse)
+          ).data.message || "Please enter valid search term"}
         </span>
       </div>
     );

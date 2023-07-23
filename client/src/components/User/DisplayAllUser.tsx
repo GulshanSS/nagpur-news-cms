@@ -40,12 +40,10 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
-          {
-            (
-              (userError as APIErrorResponse) ||
-              (userByNameError as APIErrorResponse)
-            ).data.message
-          }
+          {(
+            (userError as APIErrorResponse) ||
+            (userByNameError as APIErrorResponse)
+          ).data.message || "Please enter valid search term"}
         </span>
       </div>
     );

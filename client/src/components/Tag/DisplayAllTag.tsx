@@ -40,12 +40,10 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
-          {
-            (
-              (tagError as APIErrorResponse) ||
-              (tagByNameError as APIErrorResponse)
-            ).data.message
-          }
+          {(
+            (tagError as APIErrorResponse) ||
+            (tagByNameError as APIErrorResponse)
+          ).data.message || "Please enter valid search term"}
         </span>
       </div>
     );

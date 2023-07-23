@@ -45,12 +45,10 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
-          {
-            (
-              (promotionaryArticleError as APIErrorResponse) ||
-              (promotionaryArticleByTitleError as APIErrorResponse)
-            ).data.message
-          }
+          {(
+            (promotionaryArticleError as APIErrorResponse) ||
+            (promotionaryArticleByTitleError as APIErrorResponse)
+          ).data.message || "Please enter valid search term"}
         </span>
       </div>
     );

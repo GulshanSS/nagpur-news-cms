@@ -45,12 +45,10 @@ const DisplayAllTestimonial = ({ searchQuery }: Props) => {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
-          {
-            (
-              (testimonialError as APIErrorResponse) ||
-              (testimonialByQuotedByError as APIErrorResponse)
-            ).data.message
-          }
+          {(
+            (testimonialError as APIErrorResponse) ||
+            (testimonialByQuotedByError as APIErrorResponse)
+          ).data.message || "Please enter valid search term"}
         </span>
       </div>
     );
