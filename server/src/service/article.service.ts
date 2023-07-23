@@ -19,11 +19,29 @@ export const createArticle = async (data: CreateArticleInput["body"]) => {
   });
 };
 
+export const disconnectCategoryAndTagFromArticle = async (
+  articleId: string
+) => {
+  return await db.article.update({
+    where: {
+      id: parseInt(articleId),
+    },
+    data: {
+      category: {
+        set: [],
+      },
+      tag: {
+        set: [],
+      },
+    },
+  });
+};
+
 export const updateArticleById = async (
   articleId: string,
   data: UpdateArticleInput["body"]
 ) => {
-  return db.article.update({
+  return await db.article.update({
     where: {
       id: parseInt(articleId),
     },
