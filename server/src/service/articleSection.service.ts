@@ -11,7 +11,7 @@ export const createArticleSection = async (
     data: {
       ...data,
       sequence: parseInt(data.sequence),
-      articleId: parseInt(data.articleId),
+      articleId: data.articleId,
     },
   });
 };
@@ -27,7 +27,7 @@ export const updateArticleSectionById = async (
     data: {
       ...data,
       sequence: parseInt(data.sequence),
-      articleId: parseInt(data.articleId),
+      articleId: data.articleId,
     },
   });
 };
