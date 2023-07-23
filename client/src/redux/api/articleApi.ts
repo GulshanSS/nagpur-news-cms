@@ -31,8 +31,8 @@ export const articleApi = createApi({
       },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
+          const { data } = await queryFulfilled;
           if (args.media.length > 0) {
-            const { data } = await queryFulfilled;
             const formData = new FormData();
             args.media.forEach((media) => formData.append("files", media));
             formData.append("articleId", data.article.id.toString());
@@ -41,8 +41,8 @@ export const articleApi = createApi({
                 formData
               )
             );
-            dispatch(articleApi.util.invalidateTags(["Article"]));
           }
+          dispatch(articleApi.util.invalidateTags(["Article"]));
         } catch (e: unknown) {
           if (e instanceof Error) console.log(e);
         }
