@@ -77,6 +77,18 @@ const ArticleForm = ({
     }
   };
 
+  const handleArticleSubmitAsDraft = () => {
+    if (article) {
+      updateArticle({
+        ...getValues(),
+        articleId: article.id,
+        state: "DRAFT",
+      });
+    } else {
+      createArticle({ ...getValues(), state: "DRAFT" });
+    }
+  };
+
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
@@ -193,17 +205,7 @@ const ArticleForm = ({
               <SubmitButton label={buttonLabel} />
               <ActionButtonSubmit
                 label={actionButtonLabel}
-                onClick={() => {
-                  if (article) {
-                    updateArticle({
-                      ...getValues(),
-                      articleId: article.id,
-                      state: "DRAFT",
-                    });
-                  } else {
-                    createArticle({ ...getValues(), state: "DRAFT" });
-                  }
-                }}
+                onClick={handleSubmit(handleArticleSubmitAsDraft)}
               />
             </div>
           </form>
