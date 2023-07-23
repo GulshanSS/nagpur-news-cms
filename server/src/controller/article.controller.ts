@@ -9,6 +9,7 @@ import {
 import {
   createArticle,
   deleteArticleById,
+  disconnectCategoryAndTagFromArticle,
   getAllArticles,
   getArticleById,
   getArticleByTitle,
@@ -58,7 +59,7 @@ export const updateArticleByIdHandler = asyncHandler(
     }
 
     const data = req.body;
-
+    await disconnectCategoryAndTagFromArticle(articleId);
     await updateArticleById(articleId, data);
 
     return res.status(HttpCode.OK).json({
