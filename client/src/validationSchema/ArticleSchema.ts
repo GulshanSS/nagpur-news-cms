@@ -40,10 +40,10 @@ export const CreateArticleSchema = z.object({
   content: z.string().trim().min(1, "Content is required"),
   category: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
-    .nonempty("Category is required"),
+    .min(1, "Category is required"),
   tag: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
-    .nonempty("Tag is required"),
+    .min(1, "Tag is required"),
   youtubeVideoUrl: z.string().trim().optional(),
   author: z.string().trim().min(1, "Author is required"),
   publishedOn: z.string({
@@ -82,10 +82,10 @@ export const UpdateArticleSchema = z.object({
   content: z.string().trim().min(1, "Content is required"),
   category: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
-    .nonempty("Category is required"),
+    .min(1, "Category is required"),
   tag: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
-    .nonempty("Tag is required"),
+    .min(1, "Tag is required"),
   youtubeVideoUrl: z.string().trim().optional(),
   author: z.string().trim().min(1, "Author is required"),
   publishedOn: z.string({
