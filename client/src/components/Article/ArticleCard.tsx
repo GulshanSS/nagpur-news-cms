@@ -90,7 +90,7 @@ const ArticleCard = ({ article }: Props) => {
           </div>
         </div>
         <Modal
-          id="promotionaryArticleDetails"
+          id="articleDetails"
           close={close}
           setClose={setClose}
         >
