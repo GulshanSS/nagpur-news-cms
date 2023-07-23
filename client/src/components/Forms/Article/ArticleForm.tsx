@@ -1,5 +1,5 @@
 import { TypeOf, ZodSchema } from "zod";
-import { Article } from "../../../redux/api/types";
+import { APIErrorResponse, Article } from "../../../redux/api/types";
 import InputField from "../../FormComponents/InputField";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,7 @@ import {
 import ActionButtonSubmit from "../../FormComponents/ActionButtonSubmit";
 import { toast } from "react-toastify";
 import ImageCard from "../../ImageCard";
+import ArticleSection from "../../ArticleSection/ArticleSection";
 
 type Props = {
   buttonLabel: string;
@@ -65,7 +66,7 @@ const ArticleForm = ({
     }
 
     if (isError) {
-      console.log(error);
+      toast.error((error as APIErrorResponse).data.message);
     }
   }, [isLoading]);
 
@@ -99,7 +100,7 @@ const ArticleForm = ({
     <>
       {data?.article.state === "DRAFT" ? (
         <>
-          <h1>Article saved as draft</h1>
+          <ArticleSection articleId={data.article.id} />
         </>
       ) : (
         <FormProvider {...method}>
