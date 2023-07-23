@@ -9,6 +9,7 @@ import {
 import {
   createArticleSection,
   deleteArticleSectionById,
+  getAllArticleSectionByArticleId,
   getArticleSectionById,
   updateArticleSectionById,
 } from "../service/articleSection.service";
@@ -73,6 +74,38 @@ export const updateArticleSectionByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articleSection,
+    });
+  }
+);
+
+export const getAllArticleSectionByArticleIdHandler = asyncHandler(
+  async (
+    req: Request<{ articleId: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const articleId = req.params.articleId;
+    const articleSections = await getAllArticleSectionByArticleId(articleId);
+    if (articleSections.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Sections linked to the article",
+        })
+      );
+    }
+
+    for (const articleSection of articleSections) {
+      if (articleSection.media.length > 0) {
+        for (const media of articleSection.media) {
+          media.key = await getSignedUrlForMedia(media.key);
+        }
+      }
+    }
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      articleSections,
     });
   }
 );
