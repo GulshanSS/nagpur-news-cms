@@ -70,8 +70,8 @@ export const articleApi = createApi({
       },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
+          await queryFulfilled;
           if (args.media.length > 0) {
-            await queryFulfilled;
             const formData = new FormData();
             args.media.forEach((media) => formData.append("files", media));
             formData.append("articleId", args.articleId.toString());
