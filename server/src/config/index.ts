@@ -38,4 +38,8 @@ export default {
   AWS_BUCKET_REGION: process.env.AWS_BUCKET_REGION as string,
   AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY as string,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY as string,
+  CLOUDFRONT_URL: process.env.CLOUDFRONT_URL as string,
+  CLOUDFRONT_PRIVATE_KEY: process.env.CLOUDFRONT_PRIVATE_KEY as string,
+  CLOUDFRONT_KEY_PAIR_ID: process.env.CLOUDFRONT_KEY_PAIR_ID as string,
+  CLOUDFRONT_DISTRIBUTION_ID: process.env.CLOUDFRONT_DISTRIBUTION_ID as string,
 };
