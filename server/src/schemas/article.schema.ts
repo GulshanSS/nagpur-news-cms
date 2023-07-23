@@ -19,7 +19,7 @@ const params = {
   params: object({
     articleId: string({
       required_error: "Article Id is required",
-    }),
+    }).regex(new RegExp("^\\d+$"), "Article Id should contain only numbers"),
   }),
 };
 

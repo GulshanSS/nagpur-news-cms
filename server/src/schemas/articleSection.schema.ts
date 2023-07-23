@@ -1,4 +1,4 @@
-import { TypeOf, object, string } from "zod";
+import { TypeOf, number, object, string } from "zod";
 
 const payload = {
   body: object({
@@ -7,7 +7,7 @@ const payload = {
     sequence: string()
       .trim()
       .regex(new RegExp("\\d{1}"), "Sequence should contain 0-9 number"),
-    articleId: string({
+    articleId: number({
       required_error: "Article Id is required",
     }),
   }),
@@ -17,7 +17,10 @@ const params = {
   params: object({
     articleSectionId: string({
       required_error: "Article Section Id is required",
-    }),
+    }).regex(
+      new RegExp("^\\d+$"),
+      "Article Section Id should contain only numbers"
+    ),
   }),
 };
 

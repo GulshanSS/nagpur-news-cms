@@ -13,7 +13,7 @@ const params = {
   params: object({
     categoryId: string({
       required_error: "Category Id is required",
-    }),
+    }).regex(new RegExp("^\\d+$"), "Category Id should contain only numbers"),
   }),
 };
 

@@ -9,7 +9,9 @@ const payload = {
 
 const params = {
   params: object({
-    tagId: string().min(1, "TagId is required"),
+    tagId: string()
+      .min(1, "TagId is required")
+      .regex(new RegExp("^\\d+$"), "Article Id should contain only numbers"),
   }),
 };
 

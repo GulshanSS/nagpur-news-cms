@@ -21,7 +21,10 @@ const params = {
   params: object({
     promotionaryArticleId: string({
       required_error: "Promotionary Article Id is required",
-    }),
+    }).regex(
+      new RegExp("^\\d+$"),
+      "Promotionary Article Id should contain only numbers"
+    ),
   }),
 };
 

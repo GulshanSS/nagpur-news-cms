@@ -11,7 +11,9 @@ const payload = {
 
 const params = {
   params: object({
-    testimonialId: string().min(1, "Testimonial ID is required"),
+    testimonialId: string()
+      .min(1, "Testimonial ID is required")
+      .regex(new RegExp("^\\d+$"), "Testimonial Id should contain only numbers"),
   }),
 };
 

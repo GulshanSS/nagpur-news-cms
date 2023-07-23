@@ -26,7 +26,7 @@ const params = {
   params: object({
     userId: string({
       required_error: "User Id is required",
-    }),
+    }).regex(new RegExp("^\\d+$"), "User Id should contain only numbers"),
   }),
 };
 
