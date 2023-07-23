@@ -13,6 +13,7 @@ import validateSchema from "../middleware/validateSchema";
 import {
   CreateArticleSchema,
   DeleteArticleSchema,
+  GetArticleSchema,
   UpdateArticleSchema,
 } from "../schemas/article.schema";
 
@@ -20,7 +21,11 @@ const ArticleRouter = Router();
 
 ArticleRouter.get("/", getAllArticleHandler);
 
-ArticleRouter.get("/:articleId", getArticleByIdHandler);
+ArticleRouter.get(
+  "/:articleId",
+  validateSchema(GetArticleSchema),
+  getArticleByIdHandler
+);
 
 ArticleRouter.post(
   "/create",
