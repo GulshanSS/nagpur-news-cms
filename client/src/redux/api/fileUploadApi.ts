@@ -49,7 +49,7 @@ export const fileUploadApi = createApi({
       FormData
     >({
       query: (data) => ({
-        url: "/media/upload/mutiple/article-section",
+        url: "/media/upload/multiple/article-section",
         method: "POST",
         body: data,
         credentials: "include",
