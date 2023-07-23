@@ -14,6 +14,7 @@ import { isAuthenticated } from "../middleware/isAuthenticated";
 import validateSchema from "../middleware/validateSchema";
 import {
   createUserSchema,
+  getUserSchema,
   resetPasswordSchema,
   updateUserSchema,
 } from "../schemas/user.schema";
@@ -28,6 +29,7 @@ UserRouter.get(
 UserRouter.get(
   "/:userId",
   [isAuthenticated, authorize("ADMIN")],
+  validateSchema(getUserSchema),
   getUserByIdHandler
 );
 UserRouter.get(
