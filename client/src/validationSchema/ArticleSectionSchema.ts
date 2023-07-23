@@ -14,7 +14,6 @@ const ACCEPTED_VIDEO_TYPES = ["video/mp4", "video/webm", "video/ogg"];
 export const CreateArticleSectionSchema = z.object({
   media: z
     .array(z.custom<File>())
-    .length(1, "File is required")
     .refine(
       (files) => {
         return files.every((file) => file instanceof File);
