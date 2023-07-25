@@ -17,7 +17,7 @@ const DisplayAllArticleSection = ({ articleId }: Props) => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center bg-red-100 py-2">
+      <div className="w-full flex justify-center items-center bg-red-100 py-2">
         <span className="text-red-500 font-bold">
           {(error as APIErrorResponse).data.message}
         </span>
@@ -27,7 +27,7 @@ const DisplayAllArticleSection = ({ articleId }: Props) => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
+      <div className="w-full flex flex-wrap justify-center gap-2 mb-6">
         {data?.articleSections &&
           data.articleSections.map((articleSection: ArticleSection) => (
             <ArticleSectionCard
