@@ -64,6 +64,7 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
+  setAsCategory Boolean @default(false)
   article Article[]
   active Boolean @default(true)
 }
@@ -102,6 +103,7 @@ model Article {
   updatedAt DateTime @updatedAt
   title String
   content String
+  location String
   youtubeVideoUrl String?
   author String
   publishedOn DateTime @default(now())
@@ -121,8 +123,10 @@ model PromotionaryArticle {
   priority Int @default(0)
   title String?
   content String?
+  websiteLink String?
   whatsAppLink String?
   instagramLink String?
+  address String?
   contact String? @db.VarChar(10)
   media Media?
   setAsBanner Boolean @default(false)
