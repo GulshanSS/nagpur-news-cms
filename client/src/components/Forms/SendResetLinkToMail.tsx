@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../FormComponents/InputField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { EmailInput, EmailSchema } from "../../validationSchema/EmailSchema";
 import SubmitButton from "../FormComponents/SubmitButton";
 import { useSendResetPasswordLinkMutation } from "../../redux/api/authApi";
@@ -51,31 +51,35 @@ const SendResetLinkToMail = () => {
   return (
     <>
       {isSuccess ? (
-        <div className="flex flex-col justify-center items-center">
-          <div className="w-20 h-20 flex justify-center items-center bg-green-500 text-white rounded-full text-6xl mb-6">
+        <div className="flex flex-col justify-center items-center ">
+          <div className="w-20 h-20 flex justify-center items-center bg-green-500 text-custom-50 rounded-full text-6xl mb-6">
             <TiTick />
           </div>
-          <span>Password reset link sent to registered email</span>
+          <span className="text-clip font-bold text-sm text-custom-800">
+            Password reset link sent to registered email
+          </span>
         </div>
       ) : (
         <>
-          <FormProvider {...methods}>
-            <h3 className="font-bold text-2xl mb-6 text-clip">
-              Get Password Reset Link
-            </h3>
-            <form
-              onSubmit={handleSubmit(handleSendResetLinkToEmailSubmit)}
-              className="w-80 mx-2"
-            >
-              <InputField
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="Enter Registered Email"
-              />
-              <SubmitButton label="Send" />
-            </form>
-          </FormProvider>
+          <div className="px-2.5 py-6 rounded-2xl text-custom-800">
+            <FormProvider {...methods}>
+              <h3 className="font-bold text-2xl text-center mb-6 text-clip">
+                Get Password Reset Link
+              </h3>
+              <form
+                onSubmit={handleSubmit(handleSendResetLinkToEmailSubmit)}
+                className="w-80 mx-2"
+              >
+                <InputField
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="Enter Registered Email"
+                />
+                <SubmitButton label="Send" />
+              </form>
+            </FormProvider>
+          </div>
         </>
       )}
     </>

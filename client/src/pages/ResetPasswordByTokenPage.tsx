@@ -8,8 +8,8 @@ const ResetPasswordByTokenPage = () => {
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
-        <ResetPasswordForm bg={false} token={token!} />
+      <div className="w-screen h-screen flex flex-col justify-center items-center bg-custom-50">
+        <ResetPasswordForm token={token!} />
       </div>
     </>
   );

@@ -25,7 +25,7 @@ const TagCard = ({ id, name, active }: Props) => {
 
   return (
     <>
-      <div className="w-80 rounded-md bg-slate-100 px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+      <div className="w-80 rounded-md bg-custom-50 border border-custom-600 text-custom-800  px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         <h1 className="text-xl font-bold mb-6">{name}</h1>
         <div className="flex justify-between items-center">
           <div className="flex gap-1">

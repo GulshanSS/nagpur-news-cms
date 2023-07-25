@@ -51,7 +51,7 @@ const UserForm = ({ buttonLabel }: Props) => {
     <>
       <FormProvider {...methods}>
         <form
-          className="w-80 md:w-96 mx-2 bg-slate-200 px-3 py-5 rounded-md"
+          className="w-80 md:w-96 mx-2 bg-custom-50 px-3 py-5 rounded-md"
           onSubmit={handleSubmit(handleUserSubmit)}
           noValidate
           autoComplete="off"

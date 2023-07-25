@@ -66,7 +66,7 @@ const OTPForm = () => {
             placeholder="Enter OTP"
           />
           {location.state !== null && (
-            <span className="flex justify-start font-bold text-[10px] text-green-600 mb-6">
+            <span className="flex justify-start font-bold text-[14px] text-green-400 mb-6">
               {location.state.message}
             </span>
           )}

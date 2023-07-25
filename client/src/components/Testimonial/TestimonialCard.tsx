@@ -24,8 +24,16 @@ const TestimonialCard = ({ testimonial }: Props) => {
   const [deleteTestimonial] = useDeleteTestimonialMutation();
   return (
     <>
-      <div className="w-80 flex justify-between rounded-md bg-slate-100 px-2.5 py-5 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
-        <div className="w-full flex flex-col justify-center items-center">
+      <div className="w-80 flex flex-col justify-between rounded-md bg-custom-50 border border-custom-600 text-custom-800 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+        {testimonial.media.type.startsWith("video/") && (
+          <video
+            className="h-[200px] bg-black"
+            src={testimonial.media.key}
+            controls={true}
+            autoPlay={false}
+          />
+        )}
+        <div className="w-full flex flex-col px-2.5 py-5 justify-center items-center">
           {testimonial.media.type.startsWith("image/") && (
             <img
               alt={testimonial.quotedBy}
@@ -35,17 +43,17 @@ const TestimonialCard = ({ testimonial }: Props) => {
           )}
           <div>
             {testimonial.quote && (
-              <p className="w-full text-[14px] text-slate-600 italic text-center my-6">
+              <p className="w-full text-[14px] italic text-center my-6">
                 "{testimonial.quote}"
               </p>
             )}
             {testimonial.quotedBy && (
-              <p className="w-full font-extrabold text-[14px] uppercase text-slate-600 text-center">
+              <p className="w-full font-extrabold text-[14px] uppercase text-center">
                 {testimonial.quotedBy}
               </p>
             )}
             {testimonial.designation && (
-              <p className="w-full font-bold text-[12px] uppercase text-slate-600 text-center">
+              <p className="w-full font-bold text-[12px] uppercase text-center">
                 ({testimonial.designation})
               </p>
             )}

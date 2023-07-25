@@ -1,11 +1,14 @@
 import LoginForm from "../components/Forms/LoginForm";
+import Logo from "../assets/logo.jpg";
 
 function LoginPage() {
   return (
     <>
-      <div className="w-screen h-screen flex flex-col justify-center items-center bg-[#FEF9D5]">
-        <div className="bg-white bg-opacity-60 px-2.5 py-6 rounded-2xl shadow-md text-[#614E5C]">
-          <h3 className="font-bold text-3xl mb-6 text-center">Login</h3>
+      <div className="min-w-screen min-h-screen flex flex-col justify-center items-center bg-custom-50 p-2.5">
+        <div className="bg-custom-50 px-2.5 py-6 rounded-2xl text-custom-50">
+          <div className="flex justify-center">
+            <img className="w-[100px] mb-12 md:mb-2 rounded-full" src={Logo} />
+          </div>
           <LoginForm />
         </div>
       </div>

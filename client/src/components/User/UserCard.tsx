@@ -19,7 +19,7 @@ const UserCard = ({ user }: Props) => {
 
   return (
     <>
-      <div className="w-80 rounded-md bg-slate-100 px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+      <div className="w-80 rounded-md bg-custom-50 border border-custom-600 text-custom-800 px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         <h1 className="text-xl font-bold mb-2">{user.name}</h1>
         <h1 className="text-sm font-bold mb-6">{user.email}</h1>
         <div className="flex justify-between items-center">
