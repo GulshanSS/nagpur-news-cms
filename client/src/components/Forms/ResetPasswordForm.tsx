@@ -16,11 +16,10 @@ import LinkButton from "../LinkButton";
 import { useSearchParams } from "react-router-dom";
 
 type Props = {
-  bg: boolean;
   token?: string;
 };
 
-const ResetPasswordForm = ({ bg, token }: Props) => {
+const ResetPasswordForm = ({ token }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const methods = useForm<ResetPasswordInput>({
@@ -92,46 +91,48 @@ const ResetPasswordForm = ({ bg, token }: Props) => {
 
   return (
     <>
-      <div
-        className={`w-80 md:w-96 mx-2 ${
-          bg && "bg-slate-100"
-        } px-3 py-5 rounded-md`}
-      >
+      <div className="w-80 md:w-96 mx-2 rounded-md">
         {(resetPasswordByTokenResult || resetPasswordResult)?.success ? (
           <div className="flex flex-col justify-center items-center my-6">
-            <div className="w-20 h-20 flex justify-center items-center bg-green-500 text-white rounded-full text-6xl mb-6">
+            <div className="w-20 h-20 flex justify-center items-center bg-green-500 text-custom-100 rounded-full text-6xl mb-6">
               <TiTick />
             </div>
-            <span>Password Reset Successfully</span>
+            <span className="ext-clip font-bold text-sm text-custom-800">
+              Password Reset Successfully
+            </span>
             {resetPasswordByTokenResult && (
               <LinkButton to="/login" label="Back to Login" />
             )}
           </div>
         ) : (
-          <FormProvider {...methods}>
-            {token && (
-              <h3 className="font-bold text-2xl mb-6">Reset Password</h3>
-            )}
-            <form
-              onSubmit={handleSubmit(handleResetPasswordSubmit)}
-              noValidate
-              autoComplete="off"
-            >
-              <InputField
-                label="Password"
-                name="password"
-                type="password"
-                placeholder="Enter password"
-              />
-              <InputField
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                placeholder="Enter Confirm Password"
-              />
-              <SubmitButton label="Reset" />
-            </form>
-          </FormProvider>
+          <div className="bg-custom-50 px-5 py-6 rounded-2xl text-custom-800">
+            <FormProvider {...methods}>
+              {token && (
+                <h3 className="font-bold text-center text-2xl mb-6">
+                  Reset Password
+                </h3>
+              )}
+              <form
+                onSubmit={handleSubmit(handleResetPasswordSubmit)}
+                noValidate
+                autoComplete="off"
+              >
+                <InputField
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter password"
+                />
+                <InputField
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Enter Confirm Password"
+                />
+                <SubmitButton label="Reset" />
+              </form>
+            </FormProvider>
+          </div>
         )}
       </div>
     </>
