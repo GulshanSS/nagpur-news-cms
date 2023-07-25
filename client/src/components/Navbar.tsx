@@ -2,12 +2,20 @@ import { IoLogOut } from "react-icons/io5";
 import Logo from "../assets/logo.jpg";
 import { useLogoutUserMutation } from "../redux/api/authApi";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { BiSolidCategory } from "react-icons/bi";
+import { CgProfile } from "react-icons/cg";
+import NavItem from "./NavItem";
+import { BsFillTagFill } from "react-icons/bs";
+import { MdArticle, MdReviews } from "react-icons/md";
+import { HiSpeakerphone, HiUserGroup } from "react-icons/hi";
 
 type Props = {
   children: JSX.Element;
 };
 
 const Navbar = ({ children }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [logoutUser] = useLogoutUserMutation();
 
   const navigate = useNavigate();
@@ -19,16 +27,14 @@ const Navbar = ({ children }: Props) => {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
+      <nav className="fixed top-0 z-50 w-full bg-custom-50 border-b border-custom-600">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
               <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
+                onClick={() => setIsOpen(!isOpen)}
                 type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="inline-flex items-center p-2 text-sm text-custom-500 sm:hidden rounded-lg hover:bg-custom-800 focus:outline-none focus:ring-2 focus:ring-custom-100"
               >
                 <span className="sr-only">Open sidebar</span>
                 <svg
@@ -48,7 +54,7 @@ const Navbar = ({ children }: Props) => {
               <a href="#" className="flex ml-2 md:mr-24">
                 <img
                   src={Logo}
-                  className="h-8 mr-3 rounded-full"
+                  className="h-8 mr-3 rounded-full border border-custom-800 ring-custom-800"
                   alt="NagpurNews"
                 />
                 <span className="self-center font-semibold text-2xl whitespace-nowrap">
@@ -61,9 +67,7 @@ const Navbar = ({ children }: Props) => {
                 <div>
                   <button
                     type="button"
-                    className="flex text-3xl text-slate-500 focus:outline-none"
-                    aria-expanded="false"
-                    data-dropdown-toggle="dropdown-user"
+                    className="flex text-3xl text-custom-800 focus:outline-none"
                     onClick={handleLogoutUser}
                   >
                     <span className="sr-only">Open user menu</span>
@@ -78,52 +82,39 @@ const Navbar = ({ children }: Props) => {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-[200px] h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
-        aria-label="Sidebar"
+        className={`fixed top-0 left-0 z-40 w-[200px] ${
+          isOpen ? "-translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 h-screen pt-20 transition-transform  bg-custom-50 border-r border-custom-600`}
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
-          <ul className="space-y-2 font-medium">
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                </svg>
-                <span className="ml-3">Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                </svg>
-                <span className="ml-3">Category</span>
-              </a>
-            </li>
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-custom-50">
+          <ul
+            className="space-y-2 font-bold"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <NavItem icon={<CgProfile />} text="Profile" to="me" />
+            <NavItem icon={<BiSolidCategory />} text="Category" to="category" />
+            <NavItem icon={<BsFillTagFill />} text="Tag" to="tag" />
+            <NavItem icon={<MdArticle />} text="Article" to="article" />
+            <NavItem icon={<MdReviews />} text="Testimonial" to="testimonial" />
+            <NavItem
+              icon={<HiSpeakerphone />}
+              text="Promotion"
+              to="promotionary-article"
+            />
+            <NavItem icon={<HiUserGroup />} text="Users" to="user" />
+          </ul>
+          <ul className="pt-4 mt-4 space-y-2 font-bold border-t border-custom-600">
+            <NavItem
+              onClick={logoutUser}
+              icon={<IoLogOut />}
+              text="Logout"
+              to="login"
+            />
           </ul>
         </div>
       </aside>
 
-      <div className="sm:ml-[200px]">{children}</div>
+      <div className="md:ml-[200px]">{children}</div>
     </>
   );
 };
