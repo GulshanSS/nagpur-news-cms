@@ -52,6 +52,9 @@ const ViewArticle = ({ id }: Props) => {
           {data?.article.title && (
             <ViewItem label="Title" value={data!.article.title} />
           )}
+          {data?.article.location && (
+            <ViewItem label="Location" value={data!.article.location} />
+          )}
           {data?.article.content && (
             <div className="w-full flex flex-col">
               <span className="w-28 text-[12px] font-bold text-custom-800">

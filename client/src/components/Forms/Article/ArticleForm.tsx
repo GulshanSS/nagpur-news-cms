@@ -140,6 +140,13 @@ const ArticleForm = ({
               />
             </div>
             <InputField
+              label="Location"
+              name="location"
+              type="text"
+              placeholder="Enter Location"
+              value={article ? article.location : ""}
+            />
+            <InputField
               label="Published On"
               name="publishedOn"
               type="date"

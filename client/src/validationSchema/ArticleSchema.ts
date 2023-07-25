@@ -38,6 +38,7 @@ export const CreateArticleSchema = z.object({
     ),
   title: z.string().trim().min(1, "Title is required"),
   content: z.string().trim().min(1, "Content is required"),
+  location: z.string().trim().min(1, "Location is required"),
   category: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
     .min(1, "Category is required"),
@@ -80,6 +81,7 @@ export const UpdateArticleSchema = z.object({
     ),
   title: z.string().trim().min(1, "Title is required"),
   content: z.string().trim().min(1, "Content is required"),
+  location: z.string().trim().min(1, "Location is required"),
   category: z
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
     .min(1, "Category is required"),

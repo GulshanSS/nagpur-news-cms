@@ -4,6 +4,7 @@ const payload = {
   body: object({
     title: string().trim().min(1, "Title is required"),
     content: string().trim().min(1, "Content is required"),
+    location: string().trim().min(1, "Location is required"),
     category: array(object({ id: number() })).min(1, "Category is required"),
     tag: array(object({ id: number() })).min(1, "Tag is required"),
     youtubeVideoUrl: string().trim().optional(),
