@@ -13,10 +13,11 @@ import RequireAdmin from "../Auth/RequireAdmin";
 type Props = {
   id: number;
   name: string;
+  setAsCategory: boolean;
   active: boolean;
 };
 
-const TagCard = ({ id, name, active }: Props) => {
+const TagCard = ({ id, name, active, setAsCategory }: Props) => {
   const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
 
   const [close, setClose] = useState<boolean>(false);
@@ -28,8 +29,12 @@ const TagCard = ({ id, name, active }: Props) => {
       <div className="w-80 rounded-md bg-custom-50 border border-custom-600 text-custom-800  px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         <h1 className="text-xl font-bold mb-6">{name}</h1>
         <div className="flex justify-between items-center">
-          <div className="flex gap-1">
+          <div className="flex gap-2">
             <Status label="Active" colorVariant={active ? "green" : "slate"} />
+            <Status
+              label="Category"
+              colorVariant={setAsCategory ? "green" : "slate"}
+            />
           </div>
           <div className="flex gap-1">
             <ActionButton

@@ -53,12 +53,15 @@ const ViewTag = ({ id }: Props) => {
           }).format(new Date(data!.tag.updatedAt))}
         />
         <div className="w-full flex justify-between items-center gap-1">
-          <div>
-            {data?.tag.active ? (
-              <Status label="Active" colorVariant="green" />
-            ) : (
-              <Status label="Active" colorVariant="slate" />
-            )}
+          <div className="flex gap-2">
+            <Status
+              label="Category"
+              colorVariant={data?.tag.setAsCategory ? "green" : "slate"}
+            />
+            <Status
+              label="Active"
+              colorVariant={data?.tag.active ? "green" : "slate"}
+            />
           </div>
           <div className="flex">
             <ActionButton

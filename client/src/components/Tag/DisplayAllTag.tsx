@@ -58,6 +58,7 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
                 key={tag.id}
                 id={tag.id}
                 name={tag.name}
+                setAsCategory={tag.setAsCategory}
                 active={tag.active}
               />
             ))
@@ -66,6 +67,7 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
                 key={tag.id}
                 id={tag.id}
                 name={tag.name}
+                setAsCategory={tag.setAsCategory}
                 active={tag.active}
               />
             ))}
