@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import InputField from "../FormComponents/InputField";
 import ToggleSwitch from "../FormComponents/ToggleSwitch";
 import SubmitButton from "../FormComponents/SubmitButton";
-import ImageInputField from "../FormComponents/ImageInputField";
 import { toast } from "react-toastify";
 import { APIErrorResponse, Testimonial } from "../../redux/api/types";
 import {
   useCreateTestimonialMutation,
   useUpdateTestimonialMutation,
 } from "../../redux/api/testimonialApi";
-import ImageCard from "../ImageCard";
 import { TypeOf, ZodSchema } from "zod";
+import MediaCard from "../MediaCard";
+import MediaInputField from "../FormComponents/MediaInputField";
 
 type Props = {
   buttonLabel: string;
@@ -71,7 +71,7 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(handleTestimonialSubmit)}
-          className="mx-2 h-[500px] md:h-full bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+          className="mx-2 h-[500px] md:h-full bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
           autoComplete="off"
           noValidate
         >
@@ -103,17 +103,20 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
           />
           {testimonial && (
             <>
-              <div className="text-[10px]">Already Uploaded File</div>
+              <div className="text-[10px] text-custom-800 font-bold">
+                Already Uploaded File
+              </div>
               <div className="flex flex-wrap justify-start gap-2 mb-6">
-                <ImageCard
-                  key={testimonial.media?.id}
+                <MediaCard
+                  key={testimonial.media!.id}
                   name={testimonial.quotedBy!}
-                  url={testimonial.media?.key!}
+                  url={testimonial.media!.key}
+                  type={testimonial.media!.type}
                 />
               </div>
             </>
           )}
-          <ImageInputField
+          <MediaInputField
             label="Testimonial Media"
             name="media"
             multiple={false}

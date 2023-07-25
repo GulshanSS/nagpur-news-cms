@@ -2,7 +2,6 @@ import { TypeOf, ZodSchema } from "zod";
 import { APIErrorResponse, PromotionaryArticle } from "../../redux/api/types";
 import InputField from "../FormComponents/InputField";
 import ToggleSwitch from "../FormComponents/ToggleSwitch";
-import ImageInputField from "../FormComponents/ImageInputField";
 import SubmitButton from "../FormComponents/SubmitButton";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +11,9 @@ import {
   useUpdatePromotionaryArticleMutation,
 } from "../../redux/api/promotionaryArticleApi";
 import { toast } from "react-toastify";
-import ImageCard from "../ImageCard";
+import MediaCard from "../MediaCard";
+import MediaInputField from "../FormComponents/MediaInputField";
+import ContentField from "../FormComponents/ContentField";
 
 type Props = {
   buttonLabel: string;
@@ -75,7 +76,7 @@ const PromotionaryArticleForm = ({
       <FormProvider {...method}>
         <form
           onSubmit={handleSubmit(handlePromotionaryArticleSubmit)}
-          className="mx-2 h-[500px] md:h-full bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+          className="mx-2 h-[500px] md:max-h-[700px] bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
           autoComplete="off"
           noValidate
         >
@@ -89,13 +90,6 @@ const PromotionaryArticleForm = ({
                 placeholder="Enter Title"
               />
               <InputField
-                label="Content"
-                name="content"
-                type="text"
-                value={promotionaryArticle ? promotionaryArticle.content : ""}
-                placeholder="Enter content"
-              />
-              <InputField
                 label="Priority"
                 name="priority"
                 type="text"
@@ -106,6 +100,24 @@ const PromotionaryArticleForm = ({
                 }
                 placeholder="Set Priority 0-9"
               />
+              <div className="flex gap-2">
+                <ToggleSwitch
+                  label="Active"
+                  name="active"
+                  value={
+                    promotionaryArticle ? promotionaryArticle.active! : true
+                  }
+                />
+                <ToggleSwitch
+                  label="Set As Banner"
+                  name="setAsBanner"
+                  value={
+                    promotionaryArticle
+                      ? promotionaryArticle.setAsBanner!
+                      : true
+                  }
+                />
+              </div>
             </div>
             <div className="flex flex-col">
               <InputField
@@ -135,33 +147,28 @@ const PromotionaryArticleForm = ({
               />
             </div>
           </div>
-          <div className="flex gap-2">
-            <ToggleSwitch
-              label="Active"
-              name="active"
-              value={promotionaryArticle ? promotionaryArticle.active! : true}
-            />
-            <ToggleSwitch
-              label="Set As Banner"
-              name="setAsBanner"
-              value={
-                promotionaryArticle ? promotionaryArticle.setAsBanner! : true
-              }
-            />
-          </div>
+          <ContentField
+            label="Content"
+            name="content"
+            value={promotionaryArticle ? promotionaryArticle.content : ""}
+            placeholder="Enter content"
+          />
           {promotionaryArticle && (
             <>
-              <div className="text-[10px]">Already Uploaded File</div>
+              <div className="text-[10px] text-custom-800 font-bold">
+                Already Uploaded File
+              </div>
               <div className="flex flex-wrap justify-start gap-2 mb-6">
-                <ImageCard
+                <MediaCard
                   key={promotionaryArticle.media!.id}
                   name={promotionaryArticle.title!}
                   url={promotionaryArticle.media!.key}
+                  type={promotionaryArticle.media!.type}
                 />
               </div>
             </>
           )}
-          <ImageInputField
+          <MediaInputField
             label="Promotionary Article Media"
             name="media"
             multiple={false}

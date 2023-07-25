@@ -1,5 +1,4 @@
 import { TypeOf, ZodSchema } from "zod";
-import ImageInputField from "../../FormComponents/ImageInputField";
 import InputField from "../../FormComponents/InputField";
 import SubmitButton from "../../FormComponents/SubmitButton";
 import { FormProvider, useForm } from "react-hook-form";
@@ -11,8 +10,9 @@ import {
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { APIErrorResponse, ArticleSection } from "../../../redux/api/types";
-import ImageCard from "../../ImageCard";
-import TextAreaField from "../../FormComponents/TextAreaField";
+import MediaCard from "../../MediaCard";
+import MediaInputField from "../../FormComponents/MediaInputField";
+import ContentField from "../../FormComponents/ContentField";
 
 type Props = {
   buttonLabel: string;
@@ -77,7 +77,7 @@ const ArticleSectionForm = ({
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(handlerArticleSectionSubmit)}
-          className="mx-2 bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+          className="mx-2 bg-custom-50 px-3 py-5 rounded-md w-80 md:w-[500px] h-[500px] md:h-fit md:max-h-[700px] overflow-hidden overflow-y-scroll"
           autoComplete="off"
           noValidate
         >
@@ -88,7 +88,7 @@ const ArticleSectionForm = ({
             placeholder="Enter Title"
             value={articleSection ? articleSection.title : ""}
           />
-          <TextAreaField
+          <ContentField
             label="Content"
             name="content"
             placeholder="Enter Content"
@@ -106,17 +106,18 @@ const ArticleSectionForm = ({
               <div className="text-[10px]">Already Uploaded File</div>
               <div className="flex flex-wrap justify-start gap-2 mb-6">
                 {articleSection.media?.map((media) => (
-                  <ImageCard
+                  <MediaCard
                     key={media!.id}
                     id={media.id}
                     name={media.id!.toString()}
                     url={media!.key}
+                    type={media!.type}
                   />
                 ))}
               </div>
             </>
           )}
-          <ImageInputField label="Article Media" name="media" multiple={true} />
+          <MediaInputField label="Article Media" name="media" multiple={true} />
           <SubmitButton label={buttonLabel} />
         </form>
       </FormProvider>

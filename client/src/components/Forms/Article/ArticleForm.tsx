@@ -6,19 +6,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import ToggleSwitch from "../../FormComponents/ToggleSwitch";
 import SubmitButton from "../../FormComponents/SubmitButton";
-import ImageInputField from "../../FormComponents/ImageInputField";
 import MultiSelectField from "../../FormComponents/MultiSelectField";
 import { useGetAllCategoriesQuery } from "../../../redux/api/categoryApi";
 import { useGetAllTagsQuery } from "../../../redux/api/tagApi";
-import TextAreaField from "../../FormComponents/TextAreaField";
 import {
   useCreateArticleMutation,
   useUpdateArticleMutation,
 } from "../../../redux/api/articleApi";
 import ActionButtonSubmit from "../../FormComponents/ActionButtonSubmit";
 import { toast } from "react-toastify";
-import ImageCard from "../../ImageCard";
 import ArticleSection from "../../ArticleSection/ArticleSection";
+import MediaCard from "../../MediaCard";
+import MediaInputField from "../../FormComponents/MediaInputField";
+import ContentField from "../../FormComponents/ContentField";
 
 type Props = {
   buttonLabel: string;
@@ -106,7 +106,7 @@ const ArticleForm = ({
         <FormProvider {...method}>
           <form
             onSubmit={handleSubmit(handleArticleSubmit)}
-            className="mx-2 h-[500px] md:h-[700px] bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+            className="mx-2 h-[500px] md:h-[700px] bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
             autoComplete="off"
             noValidate
           >
@@ -117,7 +117,7 @@ const ArticleForm = ({
               placeholder="Enter Title"
               value={article ? article.title : ""}
             />
-            <TextAreaField
+            <ContentField
               label="Content"
               name="content"
               placeholder="Enter Content"
@@ -187,17 +187,18 @@ const ArticleForm = ({
                 <div className="text-[10px]">Already Uploaded File</div>
                 <div className="flex flex-wrap justify-start gap-2 mb-6">
                   {article.media?.map((media) => (
-                    <ImageCard
+                    <MediaCard
                       key={media!.id}
                       id={media.id}
                       name={article.title!}
                       url={media!.key}
+                      type={media!.type}
                     />
                   ))}
                 </div>
               </>
             )}
-            <ImageInputField
+            <MediaInputField
               label="Article Media"
               name="media"
               multiple={true}
