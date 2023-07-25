@@ -25,24 +25,26 @@ const ArticleSectionCard = ({ articleSection }: Props) => {
 
   return (
     <>
-      <div className="w-80 h-fit rounded-md bg-slate-100 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+      <div className="w-72 md:w-80 h-fit rounded-md bg-custom-50 border border-custom-600 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         {articleSection.media.length > 0 && (
           <Carousel slides={articleSection.media} heightVariant="normal" />
         )}
-        <div className="w-full flex flex-col justify-between items-center px-2.5 p-3">
+        <div className="w-full flex flex-col justify-between items-center px-2.5 p-3 text-custom-800">
           <div>
-            {articleSection.title && (
-              <span className="text-[18px] font-bold text-slate-600 italic">
-                {articleSection.title}
+            {articleSection.sequence && (
+              <span className="text-[18px] font-bold italic">
+                {articleSection.sequence}.
+                {articleSection.title && articleSection.title}
               </span>
             )}
             {articleSection.content && (
-              <p className="text-[12px] text-slate-600 line-clamp-2">
-                {articleSection.content}
-              </p>
+              <div
+                className="text-[12px] line-clamp-2"
+                dangerouslySetInnerHTML={{ __html: articleSection.content }}
+              ></div>
             )}
           </div>
-          <div className="w-full flex justify-center items-center gap-1">
+          <div className="w-full flex justify-center items-center gap-1 mt-4">
             <ActionButton
               onClick={() => setClose(true)}
               Icon={<FaEye />}
