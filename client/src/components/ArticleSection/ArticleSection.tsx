@@ -14,9 +14,12 @@ const ArticleSection = ({ articleId }: Props) => {
 
   return (
     <>
-      <div className="w-80 md:w-[500px] bg-slate-200 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll">
+      <div className="w-80 md:w-[700px] bg-custom-50 flex flex-col justify-between items-center px-3 py-5 rounded-md overflow-hidden max-h-[500px] h-fit md:max-h-[700px] overflow-y-scroll">
         <DisplayAllArticleSection articleId={articleId} />
-        <ArticleSectionButton setModalCloseForm={setModalCloseForm} />
+        <ArticleSectionButton
+          label="Add Sub Section"
+          setModalCloseForm={setModalCloseForm}
+        />
       </div>
       <Modal
         id="articleSectionForm"
