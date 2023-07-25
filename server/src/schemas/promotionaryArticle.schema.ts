@@ -7,8 +7,10 @@ const payload = {
       .regex(new RegExp("\\d{1}"), "Please enter valid priority"),
     title: string().trim(),
     content: string().trim().optional(),
+    websiteLink: string().trim().optional(),
     whatsAppLink: string().trim().optional(),
     instagramLink: string().trim().optional(),
+    address: string().trim().optional(),
     contact: string()
       .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
       .optional(),

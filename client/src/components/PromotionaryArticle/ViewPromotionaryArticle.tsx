@@ -56,7 +56,7 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
             />
           </div>
         )}
-        <div className="w-full flex gap-2 flex-col items-start p-5">
+        <div className="w-full flex gap-4 flex-col items-start p-5">
           <ViewItem
             label="ID"
             value={data!.promotionaryArticle.id.toString()}
@@ -83,7 +83,12 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
               value={data!.promotionaryArticle.priority.toString()}
             />
           )}
-
+          {data?.promotionaryArticle.websiteLink && (
+            <ViewItem
+              label="Website Link"
+              value={data!.promotionaryArticle.websiteLink}
+            />
+          )}
           {data?.promotionaryArticle.whatsAppLink && (
             <ViewItem
               label="WhatsApp Link"
@@ -96,10 +101,16 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
               value={data!.promotionaryArticle.instagramLink}
             />
           )}
+          {data?.promotionaryArticle.address && (
+            <ViewItem
+              label="Address"
+              value={data!.promotionaryArticle.address}
+            />
+          )}
           {data?.promotionaryArticle.contact && (
             <ViewItem
-              label="WhatsApp Link"
-              value={data!.promotionaryArticle.whatsAppLink}
+              label="Contact"
+              value={data!.promotionaryArticle.contact}
             />
           )}
           <ViewItem

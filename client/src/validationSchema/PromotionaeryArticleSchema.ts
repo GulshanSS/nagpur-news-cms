@@ -42,8 +42,10 @@ export const CreatePromotionaryArticleSchema = z.object({
     .regex(new RegExp("\\d{1}"), "Please enter valid priority"),
   title: z.string().trim().min(1, "Title is required"),
   content: z.string().trim().optional(),
+  websiteLink: z.string().trim().optional(),
   whatsAppLink: z.string().trim().optional(),
   instagramLink: z.string().trim().optional(),
+  address: z.string().trim().optional(),
   contact: z
     .string()
     .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
@@ -82,8 +84,10 @@ export const UpdatePromotionaryArticleSchema = z.object({
     .regex(new RegExp("\\d{1}"), "Please enter valid priority"),
   title: z.string().trim().min(1, "Title is required"),
   content: z.string().trim().optional(),
+  websiteLink: z.string().trim().optional(),
   whatsAppLink: z.string().trim().optional(),
   instagramLink: z.string().trim().optional(),
+  address: z.string().trim().optional(),
   contact: z
     .string()
     .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")

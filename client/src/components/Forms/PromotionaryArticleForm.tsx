@@ -100,6 +100,15 @@ const PromotionaryArticleForm = ({
                 }
                 placeholder="Set Priority 0-9"
               />
+              <InputField
+                label="Website Link"
+                name="websiteLink"
+                type="text"
+                value={
+                  promotionaryArticle ? promotionaryArticle.websiteLink : ""
+                }
+                placeholder="Enter Website Link"
+              />
               <div className="flex gap-2">
                 <ToggleSwitch
                   label="Active"
@@ -137,6 +146,13 @@ const PromotionaryArticleForm = ({
                   promotionaryArticle ? promotionaryArticle.instagramLink : ""
                 }
                 placeholder="Enter Instagram Link"
+              />
+              <InputField
+                label="Address"
+                name="address"
+                type="text"
+                value={promotionaryArticle ? promotionaryArticle.address : ""}
+                placeholder="Enter Address"
               />
               <InputField
                 label="Contact Details"
