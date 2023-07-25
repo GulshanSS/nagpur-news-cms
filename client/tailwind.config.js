@@ -4,8 +4,18 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        Poppins: ["Poppins", "sans-serif"]
-      }
+        Poppins: ["Poppins", "sans-serif"],
+      },
+      colors: {
+        custom: {
+          50: "#fffdf2",
+          100: "#fefadd",
+          500: "#989580",
+          600: "#cbc7aa",
+          800: "#4c4b40",
+          900: "#191915",
+        },
+      },
     },
   },
   plugins: [],
