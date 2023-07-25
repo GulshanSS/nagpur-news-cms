@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import baseQueryWithReAuth from "../baseQueryWithReAuth";
 import { Media } from "./types";
 import { articleApi } from "./articleApi";
+import { articleSectionApi } from "./articleSectionApi";
 
 export const fileUploadApi = createApi({
   reducerPath: "fileUploadApi",
@@ -77,6 +78,7 @@ export const fileUploadApi = createApi({
         async onQueryStarted(args, { dispatch, queryFulfilled }) {
           await queryFulfilled;
           dispatch(articleApi.util.invalidateTags(["Article"]));
+          dispatch(articleSectionApi.util.invalidateTags(["ArticleSection"]));
         },
         invalidatesTags: ["Image"],
       }
