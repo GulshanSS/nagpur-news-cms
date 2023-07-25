@@ -15,6 +15,7 @@ export type Tag = {
   id: number;
   name: string;
   active: boolean;
+  setAsCategory: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -60,8 +61,10 @@ export type PromotionaryArticle = {
   priority: number;
   title: string;
   content: string;
+  websiteLink: string;
   whatsAppLink: string;
   instagramLink: string;
+  address: string;
   contact: string;
   media: Media;
   setAsBanner: boolean;
@@ -74,6 +77,7 @@ export type Article = {
   updatedAt: Date;
   title: string;
   content: string;
+  location: string;
   youtubeVideoUrl: string;
   author: string;
   publishedOn: Date;
