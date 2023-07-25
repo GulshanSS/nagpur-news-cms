@@ -1,6 +1,6 @@
 import { TypeOf, z } from "zod";
 
-const MAX_FILE_SIZE = 2000000;
+const MAX_FILE_SIZE = 50000000;
 
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpg",
