@@ -26,19 +26,19 @@ const ArticleCard = ({ article }: Props) => {
 
   return (
     <>
-      <div className="w-80 h-fit rounded-md bg-slate-100 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+      <div className="w-80 h-fit rounded-md bg-custom-50 border border-custom-600 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         {article.media.length > 0 && (
           <Carousel slides={article.media} heightVariant="normal" />
         )}
-        <div className="w-full flex flex-col justify-between items-center px-2.5 p-3">
+        <div className="w-full flex flex-col justify-between items-center px-2.5 p-3 text-custom-800">
           <div>
             {article.title && (
               <>
                 <div className="flex justify-between items-center">
-                  <span className="text-[18px] font-bold text-slate-600 italic">
+                  <span className="text-[14px] font-bold italic">
                     {article.title}
                   </span>
-                  <span className="text-[12px] font-bold text-slate-600">
+                  <span className="text-[12px] font-bold">
                     {new Intl.DateTimeFormat("en-GB", {
                       year: "numeric",
                       month: "long",
@@ -49,12 +49,18 @@ const ArticleCard = ({ article }: Props) => {
               </>
             )}
             {article.content && (
-              <p className="text-[12px] text-slate-600 line-clamp-2">
-                {article.content}
-              </p>
+              <div
+                className="text-[12px] line-clamp-2"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              ></div>
             )}
             <div className="mt-6">
-              <Status label={article.state} colorVariant="slate" />
+              <Status
+                label={article.state}
+                colorVariant={
+                  article.state === "PUBLISHED" ? "orange" : "slate"
+                }
+              />
             </div>
           </div>
           <div className="w-full flex justify-between items-center">
@@ -89,11 +95,7 @@ const ArticleCard = ({ article }: Props) => {
             </div>
           </div>
         </div>
-        <Modal
-          id="articleDetails"
-          close={close}
-          setClose={setClose}
-        >
+        <Modal id="articleDetails" close={close} setClose={setClose}>
           <ViewArticle id={article.id} />
         </Modal>
         <Modal
