@@ -14,6 +14,7 @@ import RequireAdmin from "../Auth/RequireAdmin";
 import Modal from "../Modal";
 import PromotionaryArticleForm from "../Forms/PromotionaryArticleForm";
 import { UpdatePromotionaryArticleSchema } from "../../validationSchema/PromotionaeryArticleSchema";
+import ViewItem from "../ViewItem";
 
 type Props = {
   id: number;
@@ -37,7 +38,7 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
 
   return (
     <>
-      <div className="w-80 md:w-96 bg-slate-100 rounded-md shadow-md h-[500px] md:h-full overflow-hidden overflow-y-scroll">
+      <div className="w-80 md:w-[500px] bg-custom-50 rounded-md shadow-md h-[500px] md:h-[700px] overflow-hidden overflow-y-scroll">
         {data?.promotionaryArticle.media.type.startsWith("image/") && (
           <img
             alt={data.promotionaryArticle.title}
@@ -45,100 +46,78 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
             src={data.promotionaryArticle.media.key}
           />
         )}
-        <div className="w-full flex gap-2 flex-col items-center p-5">
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              ID
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {data?.promotionaryArticle.id}
-            </span>
+        {data?.promotionaryArticle.media.type.startsWith("video/") && (
+          <div className="w-full flex justify-center rounded-t-md">
+            <video
+              className="h-[300px] w-full mb-6 rounded-t-md bg-black"
+              src={data.promotionaryArticle.media.key}
+              controls={true}
+              autoPlay={false}
+            />
           </div>
+        )}
+        <div className="w-full flex gap-2 flex-col items-start p-5">
+          <ViewItem
+            label="ID"
+            value={data!.promotionaryArticle.id.toString()}
+          />
           {data?.promotionaryArticle.title && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Title
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.title}
-              </span>
-            </div>
+            <ViewItem label="Title" value={data!.promotionaryArticle.title} />
           )}
           {data?.promotionaryArticle.content && (
             <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
                 Content
               </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.content}
-              </span>
+              <div
+                className=""
+                dangerouslySetInnerHTML={{
+                  __html: data?.promotionaryArticle.content,
+                }}
+              ></div>
             </div>
           )}
           {data?.promotionaryArticle.priority.toString() && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Priority
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.priority.toString()}
-              </span>
-            </div>
+            <ViewItem
+              label="Priority"
+              value={data!.promotionaryArticle.priority.toString()}
+            />
           )}
 
           {data?.promotionaryArticle.whatsAppLink && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                WhatsApp Link
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.whatsAppLink}
-              </span>
-            </div>
+            <ViewItem
+              label="WhatsApp Link"
+              value={data!.promotionaryArticle.whatsAppLink}
+            />
           )}
           {data?.promotionaryArticle.instagramLink && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Instagram Link
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.instagramLink}
-              </span>
-            </div>
+            <ViewItem
+              label="Instagram Link"
+              value={data!.promotionaryArticle.instagramLink}
+            />
           )}
           {data?.promotionaryArticle.contact && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Contact
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.promotionaryArticle.contact}
-              </span>
-            </div>
+            <ViewItem
+              label="WhatsApp Link"
+              value={data!.promotionaryArticle.whatsAppLink}
+            />
           )}
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Created At
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {new Intl.DateTimeFormat("en-GB", {
-                year: "numeric",
-                month: "long",
-                day: "2-digit",
-              }).format(new Date(data?.promotionaryArticle.createdAt!))}
-            </span>
-          </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Updated At
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {new Intl.DateTimeFormat("en-GB", {
-                year: "numeric",
-                month: "long",
-                day: "2-digit",
-              }).format(new Date(data?.promotionaryArticle.updatedAt!))}
-            </span>
-          </div>
+          <ViewItem
+            label="Created At"
+            value={new Intl.DateTimeFormat("en-GB", {
+              year: "numeric",
+              month: "long",
+              day: "2-digit",
+            }).format(new Date(data!.promotionaryArticle.createdAt))}
+          />
+          <ViewItem
+            label="Updated At"
+            value={new Intl.DateTimeFormat("en-GB", {
+              year: "numeric",
+              month: "long",
+              day: "2-digit",
+            }).format(new Date(data!.promotionaryArticle.updatedAt))}
+          />
           <div className="w-full flex justify-between items-center gap-1">
             <div className="flex gap-1">
               <Status

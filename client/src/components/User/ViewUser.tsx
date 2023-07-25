@@ -8,6 +8,7 @@ import Status from "../Status";
 import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
 import Spinner from "../Spinner";
+import ViewItem from "../ViewItem";
 
 type Props = {
   id: number;
@@ -28,61 +29,27 @@ const ViewUser = ({ id }: Props) => {
 
   return (
     <>
-      <div className="w-80 md:w-96 flex gap-4 flex-col items-center bg-slate-100 rounded-md p-5 shadow-md">
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">ID</span>
-          <span className="font-bold text-lg text-slate-500">
-            {data?.user.id}
-          </span>
-        </div>
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">
-            Name
-          </span>
-          <span className="font-bold text-lg text-slate-500">
-            {data?.user.name}
-          </span>
-        </div>
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">
-            Email
-          </span>
-          <span className="font-bold text-md text-slate-500">
-            {data?.user.email}
-          </span>
-        </div>
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">
-            Role
-          </span>
-          <span className="font-bold text-lg text-slate-500">
-            {data?.user.role}
-          </span>
-        </div>
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">
-            Created At
-          </span>
-          <span className="font-bold text-lg text-slate-500">
-            {new Intl.DateTimeFormat("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "2-digit",
-            }).format(new Date(data?.user.createdAt!))}
-          </span>
-        </div>
-        <div className="w-full flex flex-col">
-          <span className="w-28 text-[12px] font-bold text-slate-800">
-            Updated At
-          </span>
-          <span className="font-bold text-lg text-slate-500">
-            {new Intl.DateTimeFormat("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "2-digit",
-            }).format(new Date(data?.user.updatedAt!))}
-          </span>
-        </div>
+      <div className="w-80 md:w-96 flex gap-4 flex-col items-start bg-custom-50 rounded-md p-5 shadow-md">
+        <ViewItem label="ID" value={data!.user.id.toString()} />
+        <ViewItem label="Name" value={data!.user.name} />
+        <ViewItem label="Email" value={data!.user.email} />
+        <ViewItem label="Role" value={data!.user.role} />
+        <ViewItem
+          label="Created At"
+          value={new Intl.DateTimeFormat("en-GB", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+          }).format(new Date(data!.user.createdAt))}
+        />
+        <ViewItem
+          label="Updated At"
+          value={new Intl.DateTimeFormat("en-GB", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+          }).format(new Date(data!.user.updatedAt))}
+        />
         <div className="w-full flex justify-between items-center gap-1">
           <div className="flex gap-1">
             <Status

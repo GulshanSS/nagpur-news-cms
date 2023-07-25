@@ -6,6 +6,7 @@ import { APIErrorResponse } from "../redux/api/types";
 import { useGetUserQuery } from "../redux/api/userApi";
 import { BiSolidUser } from "react-icons/bi";
 import ResetPasswordForm from "../components/Forms/ResetPasswordForm";
+import ViewItem from "../components/ViewItem";
 
 const MePage = () => {
   const [close, setClose] = useState<boolean>(false);
@@ -35,14 +36,14 @@ const MePage = () => {
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
-        <div className="w-80 md:w-96 flex gap-4 flex-col items-center bg-slate-100 rounded-md p-5 shadow-md">
-          <div className="w-full flex justify-between items-center border-b border-slate-400 pb-2">
+        <div className="w-80 md:w-96 flex gap-4 flex-col items-center bg-custom-50 rounded-md p-5 border border-custom-600">
+          <div className="w-full flex justify-between items-center border-b border-custom-600 pb-2">
             <div className="flex flex-col justify-center items-center text-center gap-2">
-              <div className="w-20 h-20 rounded-full text-6xl text-slate-500 bg-slate-200 flex justify-center items-center">
+              <div className="w-20 h-20 rounded-full border border-custom-600 text-6xl text-custom-500 bg-custom-50 flex justify-center items-center">
                 <BiSolidUser />
               </div>
               <div className="w-full flex flex-col">
-                <span className="font-bold text-sm text-slate-500">
+                <span className="font-bold text-sm text-custom-800">
                   {user?.name}
                 </span>
               </div>
@@ -59,7 +60,7 @@ const MePage = () => {
                 />
               </div>
               <button
-                className="p-2 bg-blue-500 font-bold text-sm text-white rounded-md shadow-md"
+                className="p-2 bg-custom-100 font-bold text-sm border border-custom-600 text-custom-800 rounded-md"
                 type="button"
                 onClick={() => setClose(true)}
               >
@@ -67,51 +68,30 @@ const MePage = () => {
               </button>
             </div>
           </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Role
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {user?.role}
-            </span>
-          </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Email
-            </span>
-            <span className="font-bold text-md text-slate-500">
-              {user?.email}
-            </span>
-          </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Created At
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {new Intl.DateTimeFormat("en-GB", {
+          <div className="w-full flex flex-col items-start gap-4">
+            <ViewItem label="ID" value={user!.id.toString()} />
+            <ViewItem label="Email" value={user!.email} />
+            <ViewItem
+              label="Created At"
+              value={new Intl.DateTimeFormat("en-GB", {
                 year: "numeric",
                 month: "long",
                 day: "2-digit",
-              }).format(new Date(user?.createdAt!))}
-            </span>
-          </div>
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Updated At
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {new Intl.DateTimeFormat("en-GB", {
+              }).format(new Date(user!.createdAt))}
+            />
+            <ViewItem
+              label="Updated At"
+              value={new Intl.DateTimeFormat("en-GB", {
                 year: "numeric",
                 month: "long",
                 day: "2-digit",
-              }).format(new Date(user?.updatedAt!))}
-            </span>
+              }).format(new Date(user!.updatedAt))}
+            />
           </div>
-          <div className="w-full flex justify-between items-center gap-1"></div>
         </div>
       </div>
       <Modal id="resetPasswordForm" close={close} setClose={setClose}>
-        <ResetPasswordForm bg />
+        <ResetPasswordForm />
       </Modal>
     </>
   );

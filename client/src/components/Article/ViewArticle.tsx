@@ -15,6 +15,9 @@ import { MdDelete } from "react-icons/md";
 import Modal from "../Modal";
 import ArticleForm from "../Forms/Article/ArticleForm";
 import { UpdateArticleSchema } from "../../validationSchema/ArticleSchema";
+import ViewItem from "../ViewItem";
+import ArticleSectionButton from "../Forms/Article/ArticleSectionButton";
+import ArticleSection from "../ArticleSection/ArticleSection";
 
 type Props = {
   id: number;
@@ -22,6 +25,9 @@ type Props = {
 
 const ViewArticle = ({ id }: Props) => {
   const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
+
+  const [modalArticleSection, setModalArticleSection] =
+    useState<boolean>(false);
 
   const { data, isLoading, isError, error } = useGetArticleQuery(id);
 
@@ -37,42 +43,40 @@ const ViewArticle = ({ id }: Props) => {
 
   return (
     <>
-      <div className="w-80 md:w-[700px] bg-slate-100 rounded-md shadow-md h-[500px] md:h-[700px] overflow-hidden overflow-y-scroll">
+      <div className="w-80 md:w-[700px] bg-custom-50 rounded-md shadow-md h-[500px] md:h-[700px] overflow-hidden overflow-y-scroll">
         {data?.article.media.length! > 0 && (
           <Carousel slides={data?.article!.media!} heightVariant="large" />
         )}
-        <div className="w-full flex gap-2 flex-col items-center p-5">
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              ID
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {data?.article.id}
-            </span>
-          </div>
+        <div className="w-full flex gap-4 flex-col p-5">
+          <ViewItem label="ID" value={data!.article.id.toString()} />
           {data?.article.title && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Title
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.article.title}
-              </span>
-            </div>
+            <ViewItem label="Title" value={data!.article.title} />
           )}
           {data?.article.content && (
             <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
                 Content
               </span>
-              <span className="font-bold text-sm text-slate-500 text-justify">
-                {data?.article.content}
-              </span>
+              <div
+                className=""
+                dangerouslySetInnerHTML={{ __html: data?.article.content }}
+              ></div>
             </div>
           )}
+          <div className="w-full flex flex-col">
+            <span className="w-28 text-[12px] font-bold text-custom-800">
+              Sub Sections
+            </span>
+            <div className="flex mt-2">
+              <ArticleSectionButton
+                setModalCloseForm={setModalArticleSection}
+                label="View Sub Sections"
+              />
+            </div>
+          </div>
           {data?.article.category.length! > 0 && (
             <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
                 Categories
               </span>
               <div className="flex gap-1 mt-2">
@@ -86,9 +90,10 @@ const ViewArticle = ({ id }: Props) => {
               </div>
             </div>
           )}
+
           {data?.article.tag.length! > 0 && (
             <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
                 Tags
               </span>
               <div className="flex gap-1 mt-2">
@@ -99,72 +104,42 @@ const ViewArticle = ({ id }: Props) => {
             </div>
           )}
           {data?.article.youtubeVideoUrl && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                YouTube URL
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.article.youtubeVideoUrl}
-              </span>
-            </div>
+            <ViewItem
+              label="YouTube Video URL"
+              value={data!.article.youtubeVideoUrl}
+            />
           )}
           {data?.article.author && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Author
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.article.author}
-              </span>
-            </div>
+            <ViewItem label="Author" value={data!.article.author} />
           )}
           {data?.article.state && (
-            <div className="w-full flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                State
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {data?.article.state}
-              </span>
-            </div>
+            <ViewItem label="State" value={data!.article.state} />
           )}
-          <div className="w-full flex flex-col">
-            <span className="w-28 text-[12px] font-bold text-slate-800">
-              Published On
-            </span>
-            <span className="font-bold text-lg text-slate-500">
-              {new Intl.DateTimeFormat("en-GB", {
+          <ViewItem
+            label="Published On"
+            value={new Intl.DateTimeFormat("en-GB", {
+              year: "numeric",
+              month: "long",
+              day: "2-digit",
+            }).format(new Date(data!.article.publishedOn))}
+          />
+          <div className="w-full flex gap-2">
+            <ViewItem
+              label="Created At"
+              value={new Intl.DateTimeFormat("en-GB", {
                 year: "numeric",
                 month: "long",
                 day: "2-digit",
-              }).format(new Date(data?.article.publishedOn!))}
-            </span>
-          </div>
-          <div className="w-full flex gap-2">
-            <div className="flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Created At
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {new Intl.DateTimeFormat("en-GB", {
-                  year: "numeric",
-                  month: "long",
-                  day: "2-digit",
-                }).format(new Date(data?.article.createdAt!))}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="w-28 text-[12px] font-bold text-slate-800">
-                Updated At
-              </span>
-              <span className="font-bold text-lg text-slate-500">
-                {new Intl.DateTimeFormat("en-GB", {
-                  year: "numeric",
-                  month: "long",
-                  day: "2-digit",
-                }).format(new Date(data?.article.updatedAt!))}
-              </span>
-            </div>
+              }).format(new Date(data!.article.createdAt))}
+            />
+            <ViewItem
+              label="Updated At"
+              value={new Intl.DateTimeFormat("en-GB", {
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+              }).format(new Date(data!.article.updatedAt))}
+            />
           </div>
           <div className="w-full flex justify-between items-center gap-1">
             <div className="flex gap-1">
@@ -205,6 +180,13 @@ const ViewArticle = ({ id }: Props) => {
           article={data?.article}
           schema={UpdateArticleSchema}
         />
+      </Modal>
+      <Modal
+        id="articleSection"
+        close={modalArticleSection}
+        setClose={setModalArticleSection}
+      >
+        <ArticleSection articleId={id} />
       </Modal>
     </>
   );
