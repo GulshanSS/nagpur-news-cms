@@ -25,12 +25,20 @@ const PromotionaryArticleCard = ({ promotionaryArticle }: Props) => {
 
   return (
     <>
-      <div className="w-80 flex flex-col justify-between rounded-md bg-slate-100 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
+      <div className="w-80 flex flex-col justify-between rounded-md bg-custom-50 border border-custom-600 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         {promotionaryArticle.media.type.startsWith("image/") && (
           <img
             alt={promotionaryArticle.title}
             className="object-cover h-[250px] mb-6 rounded-t-md"
             src={promotionaryArticle.media.key}
+          />
+        )}
+        {promotionaryArticle.media.type.startsWith("video/") && (
+          <video
+            className="h-[250px] bg-black mb-6 rounded-t-md"
+            src={promotionaryArticle.media.key}
+            controls={true}
+            autoPlay={false}
           />
         )}
         <div className="w-full flex flex-col justify-center items-center px-2.5 pb-3">
