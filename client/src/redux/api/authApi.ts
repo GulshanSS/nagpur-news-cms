@@ -1,14 +1,17 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userApi } from "./userApi";
 import { LoginInput } from "../../validationSchema/LoginSchema";
 import { OTPInput } from "./types";
 import { EmailInput } from "../../validationSchema/EmailSchema";
 import { ResetPasswordInput } from "../../validationSchema/ResetPasswordSchema";
-import baseQueryWithReAuth from "../baseQueryWithReAuth";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: baseQueryWithReAuth,
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${BASE_URL}/api/v1`,
+  }),
   endpoints: (builder) => ({
     loginUser: builder.mutation<
       { success: boolean; access_token: string },
@@ -86,7 +89,7 @@ export const authApi = createApi({
     logoutUser: builder.mutation<{ success: boolean; message: string }, void>({
       query() {
         return {
-          url: "logout",
+          url: "/logout",
           method: "delete",
           credentials: "include",
         };
