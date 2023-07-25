@@ -15,6 +15,11 @@ const Status = ({ label, colorVariant }: Props) => {
       border: "border-slate-300",
       text: "text-slate-400",
     },
+    orange: {
+      bg: "bg-orange-200",
+      border: "border-orange-600",
+      text: "text-orange-600",
+    },
   };
   return (
     <>
