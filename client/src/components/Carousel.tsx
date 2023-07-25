@@ -10,6 +10,7 @@ type Props = {
 
 const Carousel = ({ slides, heightVariant }: Props) => {
   const variant: any = {
+    small: "h-[100px]",
     large: "h-[400px]",
     normal: "h-[200px]",
   };
@@ -30,22 +31,37 @@ const Carousel = ({ slides, heightVariant }: Props) => {
 
   return (
     <>
-      <div className={`w-full relative group`}>
-        <div
-          style={{ backgroundImage: `url(${slides[currentIndex].key})` }}
-          className={`${variant[heightVariant]} bg-center group bg-cover rounded-t-md duration-500`}
-        ></div>
+      <div className="w-full relative group">
+        <div className={`${variant[heightVariant]} flex justify-center bg-black rounded-t-md`}>
+          {slides[currentIndex].type.startsWith("image/") && (
+            <img
+              alt={slides[currentIndex].articleId}
+              className="h-full object-cover rounded-t-md duration-500"
+              src={slides[currentIndex].key}
+            />
+          )}
+          {slides[currentIndex].type.startsWith("video/") && (
+            <div className="w-full bg-black rounded-t-md flex justify-center">
+              <video
+                className={`${variant[heightVariant]}`}
+                src={slides[currentIndex].key}
+                controls={true}
+                autoPlay={false}
+              />
+            </div>
+          )}
+        </div>
         {slides.length > 1 && (
           <>
             <div
               onClick={prevSlide}
-              className="md:hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-70%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+              className="md:hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-70%] left-5 text-2xl rounded-full p-2 bg-custom-800 bg-opacity-20 text-custom-50 cursor-pointer"
             >
               <BsChevronCompactLeft size={30} />
             </div>
             <div
               onClick={nextSlide}
-              className="md:hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-70%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+              className="md:hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-70%] right-5 text-2xl rounded-full p-2 bg-custom-800 bg-opacity-20 text-custom-50 cursor-pointer"
             >
               <BsChevronCompactRight size={30} />
             </div>
@@ -57,7 +73,7 @@ const Carousel = ({ slides, heightVariant }: Props) => {
             <div
               className="text-xl cursor-pointer"
               key={slide.id}
-              onClick={(e) => setCurrentIndex(slideIndex)}
+              onClick={() => setCurrentIndex(slideIndex)}
             >
               <RxDotFilled />
             </div>
