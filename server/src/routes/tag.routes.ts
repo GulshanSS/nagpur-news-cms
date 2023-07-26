@@ -19,11 +19,24 @@ import {
 
 const TagRouter = Router();
 
-TagRouter.get("/", getAllTagsHandler);
+TagRouter.get(
+  "/",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getAllTagsHandler
+);
 
-TagRouter.get("/:tagId", validateSchema(getTagSchema), getTagByIdHandler);
+TagRouter.get(
+  "/:tagId",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  validateSchema(getTagSchema),
+  getTagByIdHandler
+);
 
-TagRouter.get("/search/:name", getTagByNameHandler);
+TagRouter.get(
+  "/search/:name",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getTagByNameHandler
+);
 
 TagRouter.post(
   "/create",

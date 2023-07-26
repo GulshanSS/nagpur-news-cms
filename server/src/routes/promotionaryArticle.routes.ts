@@ -24,15 +24,21 @@ PromotionaryArticleRouter.post(
   createPromotionaryArticleHandler
 );
 
-PromotionaryArticleRouter.get("/", getAllPromotionaryArticleHandler);
+PromotionaryArticleRouter.get(
+  "/",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getAllPromotionaryArticleHandler
+);
 
 PromotionaryArticleRouter.get(
   "/:promotionaryArticleId",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   getPromotionaryArticleByIdHandler
 );
 
 PromotionaryArticleRouter.get(
   "/search/:title",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   getPromotionaryArticleByTitleHandler
 );
 

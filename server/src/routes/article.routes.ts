@@ -19,10 +19,15 @@ import {
 
 const ArticleRouter = Router();
 
-ArticleRouter.get("/", getAllArticleHandler);
+ArticleRouter.get(
+  "/",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getAllArticleHandler
+);
 
 ArticleRouter.get(
   "/:articleId",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   validateSchema(GetArticleSchema),
   getArticleByIdHandler
 );
@@ -41,7 +46,11 @@ ArticleRouter.put(
   updateArticleByIdHandler
 );
 
-ArticleRouter.get("/search/:title", getArticleByTitleHandler);
+ArticleRouter.get(
+  "/search/:title",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getArticleByTitleHandler
+);
 
 ArticleRouter.delete(
   "/:articleId/delete",

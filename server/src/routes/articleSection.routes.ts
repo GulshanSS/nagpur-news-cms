@@ -17,10 +17,15 @@ import { authorize } from "../middleware/authorize";
 
 const ArticleSectionRouter = Router();
 
-ArticleSectionRouter.get("/:articleSectionId", getArticleSectionByIdHandler);
+ArticleSectionRouter.get(
+  "/:articleSectionId",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getArticleSectionByIdHandler
+);
 
 ArticleSectionRouter.get(
   "/:articleId/article",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   getAllArticleSectionByArticleIdHandler
 );
 

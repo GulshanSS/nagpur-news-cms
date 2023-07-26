@@ -20,13 +20,29 @@ TestimonialRouter.post(
   createTestimonialHandler
 );
 
-TestimonialRouter.get("/", getAllTestimonialHandler);
+TestimonialRouter.get(
+  "/",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getAllTestimonialHandler
+);
 
-TestimonialRouter.get("/:testimonialId", getTestimonialByIdHandler);
+TestimonialRouter.get(
+  "/:testimonialId",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getTestimonialByIdHandler
+);
 
-TestimonialRouter.get("/search/:quotedBy", getTestimonialByQuotedByHandler);
+TestimonialRouter.get(
+  "/search/:quotedBy",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getTestimonialByQuotedByHandler
+);
 
-TestimonialRouter.put("/:testimonialId/update", updateTestimonialByIdHandler);
+TestimonialRouter.put(
+  "/:testimonialId/update",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  updateTestimonialByIdHandler
+);
 
 TestimonialRouter.delete(
   "/:testimonialId/delete",

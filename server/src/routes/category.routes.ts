@@ -19,15 +19,24 @@ import { authorize } from "../middleware/authorize";
 
 const CategoryRouter = Router();
 
-CategoryRouter.get("/", getAllCategoriesHandler);
+CategoryRouter.get(
+  "/",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getAllCategoriesHandler
+);
 
 CategoryRouter.get(
   "/:categoryId",
   validateSchema(getCategorySchema),
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
   getCategoryByIdHandler
 );
 
-CategoryRouter.get("/search/:name", getCategoryByNameHandler);
+CategoryRouter.get(
+  "/search/:name",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getCategoryByNameHandler
+);
 
 CategoryRouter.post(
   "/create",
