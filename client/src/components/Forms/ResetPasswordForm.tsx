@@ -93,7 +93,7 @@ const ResetPasswordForm = ({ token }: Props) => {
     <>
       <div className="w-80 md:w-96 mx-2 rounded-md">
         {(resetPasswordByTokenResult || resetPasswordResult)?.success ? (
-          <div className="flex flex-col justify-center items-center my-6">
+          <div className="flex flex-col bg-custom-50 rounded-md py-6 justify-center items-center">
             <div className="w-20 h-20 flex justify-center items-center bg-green-500 text-custom-100 rounded-full text-6xl mb-6">
               <TiTick />
             </div>

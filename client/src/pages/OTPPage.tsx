@@ -8,7 +8,7 @@ function OTPPage() {
   const [verified, setVerified] = useState<boolean>(false);
   return (
     <>
-      <div className="w-screen h-screen flex flex-col justify-center items-center bg-custom-100">
+      <div className="w-screen h-screen flex flex-col justify-center items-center bg-custom-50">
         <VerifiedContext.Provider value={{ verified, setVerified }}>
           {verified ? (
             <>
@@ -22,7 +22,7 @@ function OTPPage() {
             </>
           ) : (
             <>
-              <div className="bg-custom-800 px-2.5 py-6 rounded-2xl shadow-md text-custom-100">
+              <div className="bg-custom-50 border border-custom-600 px-2.5 py-6 rounded-2xl shadow-md text-custom-800">
                 <h3 className="font-bold text-2xl text-center mb-6">
                   OTP Verfication
                 </h3>

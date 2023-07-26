@@ -27,7 +27,7 @@ const TestimonialCard = ({ testimonial }: Props) => {
       <div className="w-80 flex flex-col justify-between rounded-md bg-custom-50 border border-custom-600 text-custom-800 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         {testimonial.media.type.startsWith("video/") && (
           <video
-            className="h-[200px] bg-black"
+            className="h-[200px] bg-black rounded-t-md"
             src={testimonial.media.key}
             controls={true}
             autoPlay={false}

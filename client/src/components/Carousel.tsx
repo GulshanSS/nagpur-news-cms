@@ -32,7 +32,9 @@ const Carousel = ({ slides, heightVariant }: Props) => {
   return (
     <>
       <div className="w-full relative group">
-        <div className={`${variant[heightVariant]} flex justify-center bg-black rounded-t-md`}>
+        <div
+          className={`${variant[heightVariant]} flex justify-center bg-black rounded-t-md`}
+        >
           {slides[currentIndex].type.startsWith("image/") && (
             <img
               alt={slides[currentIndex].articleId}
@@ -41,14 +43,12 @@ const Carousel = ({ slides, heightVariant }: Props) => {
             />
           )}
           {slides[currentIndex].type.startsWith("video/") && (
-            <div className="w-full bg-black rounded-t-md flex justify-center">
-              <video
-                className={`${variant[heightVariant]}`}
-                src={slides[currentIndex].key}
-                controls={true}
-                autoPlay={false}
-              />
-            </div>
+            <video
+              className={`${variant[heightVariant]} w-full`}
+              src={slides[currentIndex].key}
+              controls={true}
+              autoPlay={false}
+            />
           )}
         </div>
         {slides.length > 1 && (

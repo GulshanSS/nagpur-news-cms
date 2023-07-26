@@ -58,7 +58,7 @@ const OTPForm = () => {
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(handleVerifyOTP)} className="w-80 mx-2">
+        <form onSubmit={handleSubmit(handleVerifyOTP)} className="w-80 mx-2 bg-inherit">
           <InputField
             label="OTP"
             name="otp"
@@ -66,7 +66,7 @@ const OTPForm = () => {
             placeholder="Enter OTP"
           />
           {location.state !== null && (
-            <span className="flex justify-start font-bold text-[14px] text-green-400 mb-6">
+            <span className="flex justify-start font-bold text-[14px] text-green-600 mb-6">
               {location.state.message}
             </span>
           )}
