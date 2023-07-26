@@ -65,6 +65,14 @@ export const getAllArticles = async () => {
       tag: true,
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 
@@ -94,6 +102,14 @@ export const getArticleByTitle = async (title: string) => {
       tag: true,
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

@@ -74,6 +74,14 @@ export const getAllUsers = async () => {
     where: {
       role: "TEAM",
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 
@@ -85,6 +93,14 @@ export const getUsersByName = async (name: string) => {
         contains: name,
       },
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

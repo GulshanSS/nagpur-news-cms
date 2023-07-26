@@ -9,6 +9,14 @@ export const getAllTestimonials = async () => {
     include: {
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 
@@ -33,6 +41,14 @@ export const getTestimonialByQuotedBy = async (quotedBy: string) => {
     include: {
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

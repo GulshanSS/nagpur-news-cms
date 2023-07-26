@@ -10,7 +10,16 @@ export const getTagById = async (tagId: string) => {
 };
 
 export const getAllTags = async () => {
-  return await db.tag.findMany({});
+  return await db.tag.findMany({
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
+  });
 };
 
 export const getTagByName = async (name: string) => {
@@ -20,6 +29,14 @@ export const getTagByName = async (name: string) => {
         contains: name,
       },
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

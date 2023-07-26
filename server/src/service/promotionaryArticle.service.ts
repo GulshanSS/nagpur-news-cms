@@ -9,6 +9,14 @@ export const getAllPromotionaryArticles = async () => {
     include: {
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 
@@ -35,6 +43,14 @@ export const getPromotionaryArticleByTitle = async (title: string) => {
     include: {
       media: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

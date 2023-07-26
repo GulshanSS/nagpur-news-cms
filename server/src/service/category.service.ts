@@ -5,7 +5,16 @@ import {
 } from "../schemas/category.schema";
 
 export const getAllCategories = async () => {
-  return db.category.findMany({});
+  return db.category.findMany({
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
+  });
 };
 
 export const getCategoryById = async (categoryId: string) => {
@@ -23,6 +32,14 @@ export const getCategoryByName = async (searchParam: string) => {
         contains: searchParam,
       },
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 

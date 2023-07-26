@@ -40,6 +40,9 @@ export const getAllArticleSectionByArticleId = async (articleId: string) => {
     include: {
       media: true,
     },
+    orderBy: {
+      sequence: "desc",
+    },
   });
 };
 
