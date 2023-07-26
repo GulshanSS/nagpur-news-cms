@@ -18,6 +18,11 @@ import MediaRouter from "./routes/media.routes";
 import PromotionaryArticleRouter from "./routes/promotionaryArticle.routes";
 import ArticleRouter from "./routes/article.routes";
 import ArticleSectionRouter from "./routes/articleSection.routes";
+import PublicCategoryRouter from "./public/category/category.routes";
+import PublicTagRouter from "./public/tag/tag.routes";
+import PublicArticleRouter from "./public/article/article.routes";
+import PublicTestimonialRouter from "./public/testimonial/testimonial.route";
+import PublicPromotionaryArticleRouter from "./public/promotionaryArticle/promotionartArticle.routes";
 
 const app = express();
 
@@ -36,6 +41,7 @@ app.get("/test", (_: Request, res: Response) => {
 
 app.use(createSuperAdmin);
 
+//-------------Admin Routes---------------//
 app.use("/api/v1", AuthRouter);
 app.use("/api/v1/user", UserRouter);
 app.use("/api/v1", OtpRouter);
@@ -46,6 +52,13 @@ app.use("/api/v1/promotionary-article", PromotionaryArticleRouter);
 app.use("/api/v1/article", ArticleRouter);
 app.use("/api/v1/article-section", ArticleSectionRouter);
 app.use("/api/v1/media", MediaRouter);
+
+//-------------Public Routes-------------//
+app.use("/api/v1/public/category", PublicCategoryRouter);
+app.use("/api/vi/public/tag", PublicTagRouter);
+app.use("/api/v1/public/article", PublicArticleRouter);
+app.use("/api/v1/public/testimonial", PublicTestimonialRouter);
+app.use("/api/v1/public/promotionary-article", PublicPromotionaryArticleRouter);
 
 app.use(errorMiddlerware);
 
