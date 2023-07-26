@@ -9,6 +9,7 @@ import NavItem from "./NavItem";
 import { BsFillTagFill } from "react-icons/bs";
 import { MdArticle, MdReviews } from "react-icons/md";
 import { HiSpeakerphone, HiUserGroup } from "react-icons/hi";
+import RequireAdmin from "./Auth/RequireAdmin";
 
 type Props = {
   children: JSX.Element;
@@ -101,7 +102,9 @@ const Navbar = ({ children }: Props) => {
               text="Promotion"
               to="promotionary-article"
             />
-            <NavItem icon={<HiUserGroup />} text="Users" to="user" />
+            <RequireAdmin>
+              <NavItem icon={<HiUserGroup />} text="Users" to="user" />
+            </RequireAdmin>
           </ul>
           <ul className="pt-4 mt-4 space-y-2 font-bold border-t border-custom-600">
             <NavItem
