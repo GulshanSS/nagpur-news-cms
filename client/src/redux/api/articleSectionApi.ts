@@ -92,14 +92,22 @@ export const articleSectionApi = createApi({
       { success: boolean; articleSections: ArticleSection[] },
       number
     >({
-      query: (id) => `/article-section/${id}/article`,
+      query: (id) => ({
+        url: `/article-section/${id}/article`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["ArticleSection"],
     }),
     getArticleSection: builder.query<
       { success: boolean; articleSection: ArticleSection },
       number
     >({
-      query: (id) => `/article-section/${id}`,
+      query: (id) => ({
+        url: `/article-section/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["ArticleSection"],
     }),
     deleteArticleSection: builder.mutation<

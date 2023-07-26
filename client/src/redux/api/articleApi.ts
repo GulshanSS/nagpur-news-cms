@@ -91,18 +91,26 @@ export const articleApi = createApi({
       { success: boolean; articles: Article[] },
       void
     >({
-      query: () => "/article",
+      query: () => ({ url: "/article", method: "GET", credentials: "include" }),
       providesTags: ["Article"],
     }),
     getArticle: builder.query<{ success: boolean; article: Article }, number>({
-      query: (id) => `/article/${id}`,
+      query: (id) => ({
+        url: `/article/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Article"],
     }),
     getArticleByTitle: builder.query<
       { success: boolean; articles: Article[] },
       string
     >({
-      query: (title) => `/article/search/${title}`,
+      query: (title) => ({
+        url: `/article/search/${title}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Article"],
     }),
     deleteArticle: builder.mutation<

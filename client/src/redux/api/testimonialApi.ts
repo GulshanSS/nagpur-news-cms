@@ -33,7 +33,9 @@ export const testimonialApi = createApi({
             args.media?.forEach((media) => formData.append("file", media));
             formData.append("testimonialId", data.testimonial.id.toString());
             await dispatch(
-              fileUploadApi.endpoints.uploadSingleFileForTestimonial.initiate(formData)
+              fileUploadApi.endpoints.uploadSingleFileForTestimonial.initiate(
+                formData
+              )
             );
             dispatch(testimonialApi.util.invalidateTags(["Testimonial"]));
           }
@@ -79,14 +81,22 @@ export const testimonialApi = createApi({
       },
       void
     >({
-      query: () => "/testimonial",
+      query: () => ({
+        url: "/testimonial",
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Testimonial"],
     }),
     getTestimonial: builder.query<
       { success: boolean; testimonial: Testimonial },
       number
     >({
-      query: (id) => `/testimonial/${id}`,
+      query: (id) => ({
+        url: `/testimonial/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Testimonial"],
     }),
     getTestimonialsByQuotedBy: builder.query<
@@ -96,7 +106,11 @@ export const testimonialApi = createApi({
       },
       string
     >({
-      query: (quotedBy) => `/testimonial/search/${quotedBy}`,
+      query: (quotedBy) => ({
+        url: `/testimonial/search/${quotedBy}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Testimonial"],
     }),
     deleteTestimonial: builder.mutation<

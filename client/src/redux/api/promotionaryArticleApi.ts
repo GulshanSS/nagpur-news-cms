@@ -94,14 +94,22 @@ export const promotionaryArticleApi = createApi({
       },
       void
     >({
-      query: () => "/promotionary-article",
+      query: () => ({
+        url: "/promotionary-article",
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["PromotionaryArticle"],
     }),
     getPromotionaryArticle: builder.query<
       { success: boolean; promotionaryArticle: PromotionaryArticle },
       number
     >({
-      query: (id) => `/promotionary-article/${id}`,
+      query: (id) => ({
+        url: `/promotionary-article/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["PromotionaryArticle"],
     }),
     getPromotionaryArticleByTitle: builder.query<
@@ -111,7 +119,11 @@ export const promotionaryArticleApi = createApi({
       },
       string
     >({
-      query: (title) => `/promotionary-article/search/${title}`,
+      query: (title) => ({
+        url: `/promotionary-article/search/${title}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["PromotionaryArticle"],
     }),
     deletePromotionaryArticle: builder.mutation<

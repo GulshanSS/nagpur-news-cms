@@ -12,18 +12,30 @@ export const tagApi = createApi({
       { success: boolean; count: number; tags: Tag[] },
       void
     >({
-      query: () => "/tag",
+      query: () => ({
+        url: "/tag",
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Tag"],
     }),
     getTag: builder.query<{ success: boolean; tag: Tag }, number>({
-      query: (id) => `/tag/${id}`,
+      query: (id) => ({
+        url: `/tag/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Tag"],
     }),
     getTagByName: builder.query<
       { success: boolean; count: number; tags: Tag[] },
       string
     >({
-      query: (name) => `/tag/search/${name}`,
+      query: (name) => ({
+        url: `/tag/search/${name}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Tag"],
     }),
     createTag: builder.mutation<{ success: boolean; tag: Tag }, TagInput>({

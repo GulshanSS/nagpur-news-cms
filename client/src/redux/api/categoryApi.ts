@@ -12,21 +12,33 @@ export const categoryApi = createApi({
       { success: boolean; count: number; categories: Category[] },
       void
     >({
-      query: () => "/category",
+      query: () => ({
+        url: "/category",
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Category"],
     }),
     getCategory: builder.query<
       { success: boolean; category: Category },
       number
     >({
-      query: (id) => `/category/${id}`,
+      query: (id) => ({
+        url: `/category/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Category"],
     }),
     getCategoryByName: builder.query<
       { success: boolean; count: number; categories: Category[] },
       string
     >({
-      query: (name) => `/category/search/${name}`,
+      query: (name) => ({
+        url: `/category/search/${name}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Category"],
     }),
     createCategory: builder.mutation<
