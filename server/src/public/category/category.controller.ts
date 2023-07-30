@@ -3,6 +3,7 @@ import asyncHandler from "../../middleware/asyncHandler";
 import { getAllCategories, getCategoryById } from "./category.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { GetCategoryInput } from "../../schemas/category.schema";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -38,6 +39,14 @@ export const getCategoryByIdHandler = asyncHandler(
           description: "Category Not found",
         })
       );
+    }
+
+    for (const article of category.article) {
+      if (article.media.length > 0) {
+        for (const media of article.media) {
+          media.key = await getSignedUrlForMedia(media.key);
+        }
+      }
     }
 
     return res.status(HttpCode.OK).json({

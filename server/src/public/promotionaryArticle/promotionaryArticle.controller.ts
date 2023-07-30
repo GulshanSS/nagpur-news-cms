@@ -7,6 +7,7 @@ import {
 } from "./promotionaryArticle.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { GetPromotionaryArticleInput } from "../../schemas/promotionaryArticle.schema";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllPromotionaryArticlesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -17,6 +18,12 @@ export const getAllPromotionaryArticlesHandler = asyncHandler(
           httpCode: HttpCode.NOT_FOUND,
           description: "Promotionary Articles Not Found",
         })
+      );
+    }
+
+    for (const promotionaryArticle of promotionaryArticles) {
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
+        promotionaryArticle.media!.key
       );
     }
 
@@ -36,6 +43,12 @@ export const getAllPromotionaryArticlesAsBannerHandler = asyncHandler(
           httpCode: HttpCode.NOT_FOUND,
           description: "Promotionary Articles Not Found",
         })
+      );
+    }
+
+    for (const promotionaryArticle of promotionaryArticles) {
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
+        promotionaryArticle.media!.key
       );
     }
 
@@ -64,6 +77,10 @@ export const getPromotionaryArticleByIdHandler = asyncHandler(
         })
       );
     }
+
+    promotionaryArticle.media!.key = await getSignedUrlForMedia(
+      promotionaryArticle.media!.key
+    );
 
     return res.status(HttpCode.OK).json({
       success: true,
