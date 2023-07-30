@@ -1,15 +1,19 @@
+import ButtonSpinner from "../ButtonSpinner";
+
 type Props = {
   label: string;
+  isLoading?: boolean;
 };
 
-const SubmitButton = ({ label }: Props) => {
+const SubmitButton = ({ label, isLoading }: Props) => {
   return (
     <>
       <button
         type="submit"
-        className="text-custom-100 font-bold bg-custom-800 hover:shadow-xl focus:ring-4 focus:outline-none focus:ring-custom-800 rounded-lg w-full sm:w-auto text-sm px-5 py-2.5 text-center"
+        disabled={isLoading}
+        className="text-custom-100 disabled:bg-custom-500 font-bold bg-custom-800 hover:shadow-xl rounded-lg w-full sm:w-auto text-sm px-5 py-2.5 text-center"
       >
-        {label}
+        {isLoading ? <ButtonSpinner /> : label}
       </button>
     </>
   );
