@@ -32,15 +32,6 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
     skip: debouncedSearchQuery === "",
   });
 
-  if (
-    isPromotionaryArticleLoading ||
-    isPromotionaryArticleFetching ||
-    isPromotionaryArticleByTitleLoading ||
-    isPromotionaryArticleByTitleFetching
-  ) {
-    return <Spinner />;
-  }
-
   if (isPromotionaryArticleError || isPromotionaryArticleByTitleError) {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
@@ -56,6 +47,10 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
 
   return (
     <>
+      {(isPromotionaryArticleLoading ||
+        isPromotionaryArticleFetching ||
+        isPromotionaryArticleByTitleLoading ||
+        isPromotionaryArticleByTitleFetching) && <Spinner />}
       <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
         {promotionaryArticleByTitleResult !== undefined && searchQuery !== ""
           ? promotionaryArticleByTitleResult.promotionaryArticles.map(

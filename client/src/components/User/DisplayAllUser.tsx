@@ -32,10 +32,6 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
     skip: debouncedSearchQuery === "",
   });
 
-  if (userLoading || userFetching || userByNameLoading || userByNameFetching) {
-    return <Spinner />;
-  }
-
   if (isUserError || isUserByNameError) {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
@@ -51,6 +47,10 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
 
   return (
     <>
+      {(userLoading ||
+        userFetching ||
+        userByNameLoading ||
+        userByNameFetching) && <Spinner />}
       <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
         {userByNameResult !== undefined && searchQuery !== ""
           ? userByNameResult?.users.map((user: User) => (

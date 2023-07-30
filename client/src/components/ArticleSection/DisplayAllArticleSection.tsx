@@ -11,10 +11,6 @@ const DisplayAllArticleSection = ({ articleId }: Props) => {
   const { data, isLoading, isFetching, error, isError } =
     useGetAllArticleSectionsForArticleQuery(articleId);
 
-  if (isLoading || isFetching) {
-    return <Spinner />;
-  }
-
   if (isError) {
     return (
       <div className="w-full flex justify-center items-center bg-red-100 py-2">
@@ -27,6 +23,7 @@ const DisplayAllArticleSection = ({ articleId }: Props) => {
 
   return (
     <>
+      {(isLoading || isFetching) && <Spinner />}
       <div className="w-full flex flex-wrap justify-center gap-2 mb-6">
         {data?.articleSections &&
           data.articleSections.map((articleSection: ArticleSection) => (

@@ -32,15 +32,6 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
     skip: debouncedSearchQuery === "",
   });
 
-  if (
-    isArticleLoading ||
-    isArticleFetching ||
-    isArticleByTitleLoading ||
-    isArticleByTitleFetching
-  ) {
-    return <Spinner />;
-  }
-
   if (isArticleError || isArticleByTitleError) {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
@@ -56,6 +47,10 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
 
   return (
     <>
+      {(isArticleLoading ||
+        isArticleFetching ||
+        isArticleByTitleLoading ||
+        isArticleByTitleFetching) && <Spinner />}
       <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
         {articleByTitleResult !== undefined && searchQuery !== ""
           ? articleByTitleResult.articles.map((article: Article) => (

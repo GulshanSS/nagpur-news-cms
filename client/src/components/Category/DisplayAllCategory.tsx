@@ -32,15 +32,6 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
     skip: debouncedSearchQuery === "",
   });
 
-  if (
-    categoryLoading ||
-    categoryFetching ||
-    categoryByNameLoading ||
-    categoryByNameFetching
-  ) {
-    return <Spinner />;
-  }
-
   if (isCategoryError || isCategoryByNameError) {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
@@ -56,6 +47,10 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
 
   return (
     <>
+      {(categoryLoading ||
+        categoryFetching ||
+        categoryByNameLoading ||
+        categoryByNameFetching) && <Spinner />}
       <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
         {categoryByNameResult !== undefined && searchQuery !== ""
           ? categoryByNameResult.categories.map((category: Category) => (

@@ -32,10 +32,6 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
     skip: debouncedSearchQuery === "",
   });
 
-  if (tagLoading || tagFetching || tagByNameLoading || tagByNameFetching) {
-    return <Spinner />;
-  }
-
   if (isTagError || isTagByNameError) {
     return (
       <div className="flex justify-center items-center bg-red-100 py-2">
@@ -51,6 +47,9 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
 
   return (
     <>
+      {(tagLoading || tagFetching || tagByNameLoading || tagByNameFetching) && (
+        <Spinner />
+      )}
       <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
         {tagByNameResult !== undefined && searchQuery !== ""
           ? tagByNameResult.tags.map((tag: Tag) => (
