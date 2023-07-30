@@ -4,12 +4,12 @@ import {
   createUser,
   deleteUserById,
   getUserById,
-  getUserByRole,
   verifyUser,
   updateUserNameOrEmailById,
   getUsersByName,
   getUserByEmail,
   resetPassword,
+  getAllUsers,
 } from "../service/user.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
 import {
@@ -35,18 +35,10 @@ export const getLoggedInUserHandler = asyncHandler(
         })
       );
     }
+    const { password, ...rest } = foundUser;
     return res.status(HttpCode.OK).json({
       success: true,
-      user: {
-        id: foundUser.id,
-        name: foundUser.name,
-        email: foundUser.email,
-        role: foundUser.role,
-        active: foundUser.active,
-        verified: foundUser.verified,
-        createdAt: foundUser.createdAt,
-        updatedAt: foundUser.updatedAt,
-      },
+      user: rest,
     });
   }
 );
@@ -79,12 +71,12 @@ export const getUserByIdHandler = asyncHandler(
 
 export const getAllUsersExceptAdminHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const users = await getUserByRole("TEAM");
+    const users = await getAllUsers();
     if (users.length === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
-          description: "No users found with Role TEAM",
+          description: "No users found",
         })
       );
     }
@@ -139,9 +131,11 @@ export const createUserHandler = asyncHandler(
     }
     const password = generatePassword();
     const createUserInput = {
-      ...data,
+      name: data.name,
+      email: data.email,
+      active: data.active,
       password: await hash(password),
-      role: "TEAM" as Role,
+      role: data.setAsAdmin ? ("ADMIN" as Role) : ("TEAM" as Role),
     };
     const user = await createUser(createUserInput);
     await sendEmail(user.email, password, config.EMAIL_TYPE_ACCOUNT_CREATION);

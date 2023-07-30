@@ -17,6 +17,7 @@ const payload = {
         "One special character"
       )
       .min(8, "Must be at least 8 characters in length"),
+    setAsAdmin: boolean().optional(),
     role: Role.optional(),
     active: boolean().optional(),
   }),

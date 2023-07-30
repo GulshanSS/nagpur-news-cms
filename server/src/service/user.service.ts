@@ -1,9 +1,10 @@
 import { Role, User } from "@prisma/client";
-import { CreateUserInput, UpdateUserInput } from "../schemas/user.schema";
+import { UpdateUserInput } from "../schemas/user.schema";
 import db from "../utils/db.server";
+import config from "../config";
 
 export const createUser = async (
-  user: Pick<User, "email" | "name" | "password"> &
+  user: Pick<User, "email" | "name" | "password" | "role"> &
     Partial<Pick<User, "active">>
 ) => {
   return db.user.create({
@@ -72,7 +73,11 @@ export const getUserByRole = async (role: Role) => {
 export const getAllUsers = async () => {
   return await db.user.findMany({
     where: {
-      role: "TEAM",
+      name: {
+        not: {
+          contains: config.ADMIN_NAME,
+        },
+      },
     },
     orderBy: [
       {
@@ -88,7 +93,6 @@ export const getAllUsers = async () => {
 export const getUsersByName = async (name: string) => {
   return await db.user.findMany({
     where: {
-      role: "TEAM",
       name: {
         contains: name,
       },
