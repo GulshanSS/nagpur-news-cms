@@ -9,7 +9,7 @@ const PublicPromotionaryArticleRouter = Router();
 
 PublicPromotionaryArticleRouter.get("/", getAllPromotionaryArticlesHandler);
 PublicPromotionaryArticleRouter.get(
-  "/banner",
+  "/banner/all",
   getAllPromotionaryArticlesAsBannerHandler
 );
 PublicPromotionaryArticleRouter.get(
