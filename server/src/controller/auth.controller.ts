@@ -133,6 +133,14 @@ export const refreshTokenHandler = asyncHandler(
     next: NextFunction
   ) => {
     const refreshToken = req.cookies["refresh_token"];
+    if (!refreshToken) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.UNAUTHORIZED,
+          description: "Not Authorized",
+        })
+      );
+    }
     const payload = verifyToken(refreshToken, config.JWT_REFRESH_TOKEN_SECRET);
 
     if (!payload.jti || !payload.userId) {
