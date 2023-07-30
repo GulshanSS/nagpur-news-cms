@@ -19,7 +19,7 @@ const InputField = ({ value, label, name, type, placeholder }: Props) => {
         defaultValue={value || ""}
         render={({ field, fieldState }) => (
           <>
-            <div className="mb-6">
+            <div className="w-full mb-6">
               <label
                 htmlFor={name}
                 className="block mb-2 text-sm font-semibold text-custom-800"
