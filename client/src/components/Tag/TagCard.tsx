@@ -3,12 +3,14 @@ import { MdDelete } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import ActionButton from "../ActionButton";
 import Status from "../Status";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import ViewTag from "./ViewTag";
 import { useDeleteTagMutation } from "../../redux/api/tagApi";
 import TagForm from "../Forms/TagForm";
 import RequireAdmin from "../Auth/RequireAdmin";
+import { toast } from "react-toastify";
+import { APIErrorResponse } from "../../redux/api/types";
 
 type Props = {
   id: number;
@@ -22,7 +24,18 @@ const TagCard = ({ id, name, active, setAsCategory }: Props) => {
 
   const [close, setClose] = useState<boolean>(false);
 
-  const [deleteTag] = useDeleteTagMutation();
+  const [deleteTag, { isSuccess, isLoading, error, isError }] =
+    useDeleteTagMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Tag Deleted Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

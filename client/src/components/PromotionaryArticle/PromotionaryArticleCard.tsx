@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { PromotionaryArticle } from "../../redux/api/types";
+import { useEffect, useState } from "react";
+import { APIErrorResponse, PromotionaryArticle } from "../../redux/api/types";
 import ActionButton from "../ActionButton";
 import Status from "../Status";
 import RequireAdmin from "../Auth/RequireAdmin";
@@ -11,6 +11,7 @@ import Modal from "../Modal";
 import PromotionaryArticleForm from "../Forms/PromotionaryArticleForm";
 import { UpdatePromotionaryArticleSchema } from "../../validationSchema/PromotionaeryArticleSchema";
 import ViewPromotionaryArticle from "./ViewPromotionaryArticle";
+import { toast } from "react-toastify";
 
 type Props = {
   promotionaryArticle: PromotionaryArticle;
@@ -21,7 +22,18 @@ const PromotionaryArticleCard = ({ promotionaryArticle }: Props) => {
 
   const [close, setClose] = useState<boolean>(false);
 
-  const [deletePromotionaryArticle] = useDeletePromotionaryArticleMutation();
+  const [deletePromotionaryArticle, { isSuccess, isLoading, error, isError }] =
+    useDeletePromotionaryArticleMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Promotionary Article Deleted Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

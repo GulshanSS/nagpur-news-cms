@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Article } from "../../redux/api/types";
+import { useEffect, useState } from "react";
+import { APIErrorResponse, Article } from "../../redux/api/types";
 import ActionButton from "../ActionButton";
 import Carousel from "../Carousel";
 import Status from "../Status";
@@ -12,6 +12,7 @@ import Modal from "../Modal";
 import ViewArticle from "./ViewArticle";
 import ArticleForm from "../Forms/Article/ArticleForm";
 import { UpdateArticleSchema } from "../../validationSchema/ArticleSchema";
+import { toast } from "react-toastify";
 
 type Props = {
   article: Article;
@@ -22,7 +23,18 @@ const ArticleCard = ({ article }: Props) => {
 
   const [close, setClose] = useState<boolean>(false);
 
-  const [deleteArticle] = useDeleteArticleMutation();
+  const [deleteArticle, { isSuccess, isLoading, error, isError }] =
+    useDeleteArticleMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Article Deleted Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

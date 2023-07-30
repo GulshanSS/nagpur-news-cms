@@ -8,7 +8,7 @@ import Status from "../Status";
 import { HiPencil } from "react-icons/hi";
 import Modal from "../Modal";
 import CategoryForm from "../Forms/CategoryForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
 import Spinner from "../Spinner";
@@ -24,7 +24,25 @@ const ViewCategory = ({ id }: Props) => {
 
   const { data, isLoading, isError, error } = useGetCategoryQuery(id);
 
-  const [deleteCategory] = useDeleteCategoryMutation();
+  const [
+    deleteCategory,
+    {
+      isSuccess: isDeleteCategorySuccess,
+      isLoading: isDeleteCategoryLoading,
+      error: deleteCategoryError,
+      isError: isDeleteCategoryError,
+    },
+  ] = useDeleteCategoryMutation();
+
+  useEffect(() => {
+    if (isDeleteCategorySuccess) {
+      toast.success("Category Deleted Successfully");
+    }
+
+    if (isDeleteCategoryError) {
+      toast.error((deleteCategoryError as APIErrorResponse).data.message);
+    }
+  }, [isDeleteCategoryLoading]);
 
   if (isError) {
     toast.error((error as APIErrorResponse).data.message);

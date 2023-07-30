@@ -1,6 +1,9 @@
 import { MdDelete } from "react-icons/md";
 import { useDeletMediaMutation } from "../redux/api/fileUploadApi";
 import ActionButton from "./ActionButton";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { APIErrorResponse } from "../redux/api/types";
 
 type Props = {
   id?: number;
@@ -10,7 +13,18 @@ type Props = {
 };
 
 const MediaCard = ({ id, url, name, type }: Props) => {
-  const [deleteMedia] = useDeletMediaMutation();
+  const [deleteMedia, { isLoading, isSuccess, isError, error }] =
+    useDeletMediaMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Media Delete Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

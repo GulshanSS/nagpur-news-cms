@@ -4,7 +4,7 @@ import ActionButton from "../ActionButton";
 import Status from "../Status";
 import { HiPencil } from "react-icons/hi";
 import Modal from "../Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { APIErrorResponse } from "../../redux/api/types";
 import Spinner from "../Spinner";
@@ -21,7 +21,25 @@ const ViewTag = ({ id }: Props) => {
 
   const { data, isLoading, isError, error } = useGetTagQuery(id);
 
-  const [deleteTag] = useDeleteTagMutation();
+  const [
+    deleteTag,
+    {
+      isSuccess: isDeleteTagSuccess,
+      isLoading: isDeleteTagLoading,
+      error: deleteTagError,
+      isError: isDeleteTagError,
+    },
+  ] = useDeleteTagMutation();
+
+  useEffect(() => {
+    if (isDeleteTagSuccess) {
+      toast.success("Tag Deleted Successfully");
+    }
+
+    if (isDeleteTagError) {
+      toast.error((deleteTagError as APIErrorResponse).data.message);
+    }
+  }, [isDeleteTagLoading]);
 
   if (isError) {
     toast.error((error as APIErrorResponse).data.message);

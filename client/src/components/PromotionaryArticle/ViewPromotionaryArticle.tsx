@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeletePromotionaryArticleMutation,
   useGetPromotionaryArticleQuery,
@@ -26,7 +26,25 @@ const ViewPromotionaryArticle = ({ id }: Props) => {
   const { data, isLoading, isError, error } =
     useGetPromotionaryArticleQuery(id);
 
-  const [deletePromotionaryArticle] = useDeletePromotionaryArticleMutation();
+  const [
+    deletePromotionaryArticle,
+    {
+      isLoading: isPromotionaryArticleLoading,
+      isSuccess: isPromotionaryArticleSuccess,
+      error: promotionaryArticleError,
+      isError: isDeletePromotionaryPromotionaryError,
+    },
+  ] = useDeletePromotionaryArticleMutation();
+
+  useEffect(() => {
+    if (isPromotionaryArticleSuccess) {
+      toast.success("Promotionary Article Deleted Successfully");
+    }
+
+    if (isDeletePromotionaryPromotionaryError) {
+      toast.error((promotionaryArticleError as APIErrorResponse).data.message);
+    }
+  }, [isPromotionaryArticleLoading]);
 
   if (isError) {
     toast.error((error as APIErrorResponse).data.message);

@@ -4,11 +4,13 @@ import { FaEye } from "react-icons/fa";
 import ActionButton from "../ActionButton";
 import Status from "../Status";
 import { useDeleteCategoryMutation } from "../../redux/api/categoryApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import ViewCategory from "./ViewCategory";
 import CategoryForm from "../Forms/CategoryForm";
 import RequireAdmin from "../Auth/RequireAdmin";
+import { toast } from "react-toastify";
+import { APIErrorResponse } from "../../redux/api/types";
 
 type Props = {
   id: number;
@@ -21,7 +23,18 @@ const CategoryCard = ({ id, name, active }: Props) => {
 
   const [close, setClose] = useState<boolean>(false);
 
-  const [deleteCategory] = useDeleteCategoryMutation();
+  const [deleteCategory, { isSuccess, isLoading, error, isError }] =
+    useDeleteCategoryMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Category Deleted Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

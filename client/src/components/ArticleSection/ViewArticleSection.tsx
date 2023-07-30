@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteArticleSectionMutation,
   useGetArticleSectionQuery,
@@ -25,7 +25,25 @@ const ViewArticleSection = ({ id }: Props) => {
 
   const { data, isLoading, isError, error } = useGetArticleSectionQuery(id);
 
-  const [deleteArticleSection] = useDeleteArticleSectionMutation();
+  const [
+    deleteArticleSection,
+    {
+      isSuccess: isDeleteArticleSectionSuccess,
+      isLoading: isDeleteArticleSectionLoading,
+      error: deleteArticleSectionError,
+      isError: isDeleteArticleSectionError,
+    },
+  ] = useDeleteArticleSectionMutation();
+
+  useEffect(() => {
+    if (isDeleteArticleSectionSuccess) {
+      toast.success("Section Deleted Successfully");
+    }
+
+    if (isDeleteArticleSectionError) {
+      toast.error((deleteArticleSectionError as APIErrorResponse).data.message);
+    }
+  }, [isDeleteArticleSectionLoading]);
 
   if (isError) {
     toast.error((error as APIErrorResponse).data.message);

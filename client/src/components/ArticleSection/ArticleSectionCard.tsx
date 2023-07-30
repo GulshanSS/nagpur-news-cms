@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArticleSection } from "../../redux/api/types";
+import { useEffect, useState } from "react";
+import { APIErrorResponse, ArticleSection } from "../../redux/api/types";
 import { useDeleteArticleSectionMutation } from "../../redux/api/articleSectionApi";
 import Carousel from "../Carousel";
 import ActionButton from "../ActionButton";
@@ -11,6 +11,7 @@ import Modal from "../Modal";
 import ArticleSectionForm from "../Forms/Article/ArticleSectionForm";
 import { UpdateArticleSectionSchema } from "../../validationSchema/ArticleSectionSchema";
 import ViewArticleSection from "./ViewArticleSection";
+import { toast } from "react-toastify";
 
 type Props = {
   articleSection: ArticleSection;
@@ -21,7 +22,18 @@ const ArticleSectionCard = ({ articleSection }: Props) => {
 
   const [close, setClose] = useState<boolean>(false);
 
-  const [deleteArticleSection] = useDeleteArticleSectionMutation();
+  const [deleteArticleSection, { isSuccess, isLoading, error, isError }] =
+    useDeleteArticleSectionMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Section Deleted Successfully");
+    }
+
+    if (isError) {
+      toast.error((error as APIErrorResponse).data.message);
+    }
+  }, [isLoading]);
 
   return (
     <>

@@ -9,7 +9,7 @@ import { User } from "../../redux/api/types";
 import ViewUser from "./ViewUser";
 
 type Props = {
-  user: Pick<User, "id" | "email" | "name" | "active" | "verified">;
+  user: Pick<User, "id" | "email" | "name" | "role" | "active" | "verified">;
 };
 
 const UserCard = ({ user }: Props) => {
@@ -22,6 +22,9 @@ const UserCard = ({ user }: Props) => {
       <div className="w-80 rounded-md bg-custom-50 border border-custom-600 text-custom-800 px-2.5 py-3 hover:cursor-pointer hover:shadow-lg transition-shadow ease-in-out duration-300">
         <h1 className="text-xl font-bold mb-2">{user.name}</h1>
         <h1 className="text-sm font-bold mb-6">{user.email}</h1>
+        {user.role === "ADMIN" && (
+          <Status label="Admin" colorVariant="orange" />
+        )}
         <div className="flex justify-between items-center">
           <div className="flex gap-1">
             <Status

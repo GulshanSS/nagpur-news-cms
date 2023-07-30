@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { APIErrorResponse } from "../../redux/api/types";
 import {
   useDeleteTestimonialMutation,
@@ -25,7 +25,25 @@ const ViewTestimonial = ({ id }: Props) => {
 
   const { data, isLoading, isError, error } = useGetTestimonialQuery(id);
 
-  const [deleteTestimonial] = useDeleteTestimonialMutation();
+  const [
+    deleteTestimonial,
+    {
+      isSuccess: isDeleteTestimonialSuccess,
+      isLoading: isDeleteTestimonialLoading,
+      isError: isDeleteTestimonialError,
+      error: deleteTestimonialError,
+    },
+  ] = useDeleteTestimonialMutation();
+
+  useEffect(() => {
+    if (isDeleteTestimonialSuccess) {
+      toast.success("Testimonial Deleted Successfully");
+    }
+
+    if (isDeleteTestimonialError) {
+      toast.error((deleteTestimonialError as APIErrorResponse).data.message);
+    }
+  }, [isDeleteTestimonialLoading]);
 
   if (isError) {
     toast.error((error as APIErrorResponse).data.message);
