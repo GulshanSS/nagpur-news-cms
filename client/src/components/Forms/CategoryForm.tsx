@@ -34,17 +34,34 @@ const CategoryForm = ({ buttonLabel, category }: Props) => {
   const [createCategory, { isLoading, isSuccess, error, isError }] =
     useCreateCategoryMutation();
 
-  const [updateCategory] = useUpdateCategoryMutation();
+  const [
+    updateCategory,
+    {
+      isLoading: isUpdateCategoryLoading,
+      isSuccess: isUpdateCategorySuccess,
+      error: updateCategoryError,
+      isError: isUpdateCategoryError,
+    },
+  ] = useUpdateCategoryMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Category Created Successfully");
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdateCategorySuccess) {
+      toast.success("Category Updated Successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateCategoryError) {
+      toast.error(
+        (
+          (error as APIErrorResponse) ||
+          (updateCategoryError as APIErrorResponse)
+        ).data.message
+      );
+    }
+  }, [isLoading, isUpdateCategoryLoading]);
 
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -81,7 +98,10 @@ const CategoryForm = ({ buttonLabel, category }: Props) => {
             name="active"
             label="Active"
           />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton
+            isLoading={isLoading || isUpdateCategoryLoading}
+            label={buttonLabel}
+          />
         </form>
       </FormProvider>
     </>

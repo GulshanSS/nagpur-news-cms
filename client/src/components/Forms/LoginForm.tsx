@@ -84,7 +84,7 @@ const LoginForm = () => {
               </div>
             </Link>
           </div>
-          <SubmitButton label="Login" />
+          <SubmitButton isLoading={isLoading} label="Login" />
         </form>
       </FormProvider>
     </>

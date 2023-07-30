@@ -29,17 +29,32 @@ const TagForm = ({ buttonLabel, tag }: Props) => {
   const [createTag, { isLoading, isSuccess, error, isError }] =
     useCreateTagMutation();
 
-  const [updateTag] = useUpdateTagMutation();
+  const [
+    updateTag,
+    {
+      isLoading: isUpdateTagLoading,
+      isSuccess: isUpdateTagSuccess,
+      error: updateTagError,
+      isError: isUpdateTagError,
+    },
+  ] = useUpdateTagMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Tag Created Successfully");
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdateTagSuccess) {
+      toast.success("Tag Updated Successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateTagError) {
+      toast.error(
+        ((error as APIErrorResponse) || (updateTagError as APIErrorResponse))
+          .data.message
+      );
+    }
+  }, [isLoading, isUpdateTagLoading]);
 
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -81,7 +96,10 @@ const TagForm = ({ buttonLabel, tag }: Props) => {
             name="active"
             label="Active"
           />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton
+            isLoading={isLoading || isUpdateTagLoading}
+            label={buttonLabel}
+          />
         </form>
       </FormProvider>
     </>

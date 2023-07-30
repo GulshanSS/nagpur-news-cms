@@ -36,17 +36,34 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
   const [createTestimonial, { isLoading, isSuccess, isError, error }] =
     useCreateTestimonialMutation();
 
-  const [updateTestimonial] = useUpdateTestimonialMutation();
+  const [
+    updateTestimonial,
+    {
+      isLoading: isUpdateTestimonialLoading,
+      isSuccess: isUpdateTestimonialSuccess,
+      isError: isUpdateTestimonialError,
+      error: updateTestimonialError,
+    },
+  ] = useUpdateTestimonialMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Testimonial created successfully");
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdateTestimonialSuccess) {
+      toast.success("Testimonial updated successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateTestimonialError) {
+      toast.error(
+        (
+          (error as APIErrorResponse) ||
+          (updateTestimonialError as APIErrorResponse)
+        ).data.message
+      );
+    }
+  }, [isLoading, isUpdateTestimonialLoading]);
 
   const handleTestimonialSubmit = (values: SchemaType) => {
     if (testimonial) {
@@ -121,7 +138,10 @@ const TestimonialForm = ({ buttonLabel, testimonial, schema }: Props) => {
             name="media"
             multiple={false}
           />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton
+            isLoading={isLoading || isUpdateTestimonialLoading}
+            label={buttonLabel}
+          />
         </form>
       </FormProvider>
     </>

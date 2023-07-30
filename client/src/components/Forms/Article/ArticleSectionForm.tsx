@@ -36,7 +36,15 @@ const ArticleSectionForm = ({
   const [createArticleSection, { isLoading, isSuccess, error, isError }] =
     useCreateArticleSectionMutation();
 
-  const [updateArticleSection] = useUpdateArticleSectionMutation();
+  const [
+    updateArticleSection,
+    {
+      isLoading: isUpdateArticleSectionLoading,
+      isSuccess: isUpdateArticleSectionSuccess,
+      error: updateArticleSectionError,
+      isError: isUpdateArticleSectionError,
+    },
+  ] = useUpdateArticleSectionMutation();
 
   const {
     handleSubmit,
@@ -49,10 +57,19 @@ const ArticleSectionForm = ({
       toast.success("Section Added to the Article");
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdateArticleSectionSuccess) {
+      toast.success("Section Updated Successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateArticleSectionError) {
+      toast.error(
+        (
+          (error as APIErrorResponse) ||
+          (updateArticleSectionError as APIErrorResponse)
+        ).data.message
+      );
+    }
+  }, [isLoading, isUpdateArticleSectionLoading]);
 
   const handlerArticleSectionSubmit = (values: SchemaType) => {
     if (articleSection) {
@@ -118,7 +135,10 @@ const ArticleSectionForm = ({
             </>
           )}
           <MediaInputField label="Article Media" name="media" multiple={true} />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton
+            isLoading={isLoading || isUpdateArticleSectionLoading}
+            label={buttonLabel}
+          />
         </form>
       </FormProvider>
     </>

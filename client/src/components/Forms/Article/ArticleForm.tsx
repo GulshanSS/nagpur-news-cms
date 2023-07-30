@@ -45,7 +45,15 @@ const ArticleForm = ({
   const { data: categoryResult, isLoading: isCategoryLoading } =
     useGetAllCategoriesQuery();
 
-  const [updateArticle] = useUpdateArticleMutation();
+  const [
+    updateArticle,
+    {
+      isLoading: isUpdateArticleLoading,
+      isSuccess: isUpdateArticleSuccess,
+      error: updateArticleError,
+      isError: isUpdateArticleError,
+    },
+  ] = useUpdateArticleMutation();
 
   const { data: tagResult, isLoading: isTagLoading } = useGetAllTagsQuery();
 
@@ -65,10 +73,19 @@ const ArticleForm = ({
       }
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdateArticleSuccess) {
+      toast.success("Article Updated Successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateArticleError) {
+      toast.error(
+        (
+          (error as APIErrorResponse) ||
+          (updateArticleError as APIErrorResponse)
+        ).data.message
+      );
+    }
+  }, [isLoading, isUpdateArticleLoading]);
 
   const handleArticleSubmit = (values: SchemaType) => {
     if (article) {
@@ -106,7 +123,7 @@ const ArticleForm = ({
         <FormProvider {...method}>
           <form
             onSubmit={handleSubmit(handleArticleSubmit)}
-            className="mx-2 h-[500px] md:h-[700px] bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+            className="mx-2 md:w-[600px] h-[500px] md:h-[700px] bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
             autoComplete="off"
             noValidate
           >
@@ -139,24 +156,26 @@ const ArticleForm = ({
                 value={article ? article.author : ""}
               />
             </div>
-            <InputField
-              label="Location"
-              name="location"
-              type="text"
-              placeholder="Enter Location"
-              value={article ? article.location : ""}
-            />
-            <InputField
-              label="Published On"
-              name="publishedOn"
-              type="date"
-              placeholder="Published On"
-              value={
-                article
-                  ? new Date(article.publishedOn!).toISOString().slice(0, 10)
-                  : new Date().toISOString().slice(0, 10)
-              }
-            />
+            <div className="md:flex md:gap-2">
+              <InputField
+                label="Location"
+                name="location"
+                type="text"
+                placeholder="Enter Location"
+                value={article ? article.location : ""}
+              />
+              <InputField
+                label="Published On"
+                name="publishedOn"
+                type="date"
+                placeholder="Published On"
+                value={
+                  article
+                    ? new Date(article.publishedOn!).toISOString().slice(0, 10)
+                    : new Date().toISOString().slice(0, 10)
+                }
+              />
+            </div>
             <div className="flex gap-2">
               <ToggleSwitch
                 label="Active"
@@ -170,24 +189,20 @@ const ArticleForm = ({
               />
             </div>
             <div className="w-full md:flex md:gap-2">
-              <div className="md:w-1/2">
-                <MultiSelectField
-                  options={{ category: categoryResult?.categories }}
-                  isLoading={isCategoryLoading}
-                  label="Category"
-                  name="category"
-                  value={article ? article?.category! : []}
-                />
-              </div>
-              <div className="md:w-1/2">
-                <MultiSelectField
-                  options={{ tag: tagResult?.tags }}
-                  isLoading={isTagLoading}
-                  label="Tag"
-                  name="tag"
-                  value={article ? article?.tag! : []}
-                />
-              </div>
+              <MultiSelectField
+                options={{ category: categoryResult?.categories }}
+                isLoading={isCategoryLoading}
+                label="Category"
+                name="category"
+                value={article ? article?.category! : []}
+              />
+              <MultiSelectField
+                options={{ tag: tagResult?.tags }}
+                isLoading={isTagLoading}
+                label="Tag"
+                name="tag"
+                value={article ? article?.tag! : []}
+              />
             </div>
             {article && (
               <>
@@ -211,8 +226,12 @@ const ArticleForm = ({
               multiple={true}
             />
             <div className="flex flex-col md:flex-row gap-2">
-              <SubmitButton label={buttonLabel} />
+              <SubmitButton
+                isLoading={isLoading || isUpdateArticleLoading}
+                label={buttonLabel}
+              />
               <ActionButtonSubmit
+                isLoading={isLoading || isUpdateArticleLoading}
                 label={actionButtonLabel}
                 onClick={handleSubmit(handleArticleSubmitAsDraft)}
               />

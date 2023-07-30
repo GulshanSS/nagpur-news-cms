@@ -41,17 +41,34 @@ const PromotionaryArticleForm = ({
   const [createPromotionaryArticle, { isLoading, isSuccess, error, isError }] =
     useCreatePromotionaryArticleMutation();
 
-  const [updatePromotionaryArticle] = useUpdatePromotionaryArticleMutation();
+  const [
+    updatePromotionaryArticle,
+    {
+      isLoading: isUpdatePromotionaryArticleLoading,
+      isSuccess: isUpdatePromotionaryArticleSuccess,
+      error: updatePromotionaryArticleError,
+      isError: isUpdateCategoryError,
+    },
+  ] = useUpdatePromotionaryArticleMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Promotionary Article created successfully");
     }
 
-    if (isError) {
-      toast.error((error as APIErrorResponse).data.message);
+    if (isUpdatePromotionaryArticleSuccess) {
+      toast.success("Promotionary Article updated successfully");
     }
-  }, [isLoading]);
+
+    if (isError || isUpdateCategoryError) {
+      toast.error(
+        (
+          (error as APIErrorResponse) ||
+          (updatePromotionaryArticleError as APIErrorResponse)
+        ).data.message
+      );
+    }
+  }, [isLoading, isUpdatePromotionaryArticleLoading]);
 
   const handlePromotionaryArticleSubmit = (values: SchemaType) => {
     if (promotionaryArticle) {
@@ -189,7 +206,10 @@ const PromotionaryArticleForm = ({
             name="media"
             multiple={false}
           />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton
+            isLoading={isLoading || isUpdatePromotionaryArticleLoading}
+            label={buttonLabel}
+          />
         </form>
       </FormProvider>
     </>

@@ -129,7 +129,12 @@ const ResetPasswordForm = ({ token }: Props) => {
                   type="password"
                   placeholder="Enter Confirm Password"
                 />
-                <SubmitButton label="Reset" />
+                <SubmitButton
+                  isLoading={
+                    isResetPasswordByTokenLoading || isResetPasswordLoading
+                  }
+                  label="Reset"
+                />
               </form>
             </FormProvider>
           </div>

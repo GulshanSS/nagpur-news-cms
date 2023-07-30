@@ -76,7 +76,7 @@ const SendResetLinkToMail = () => {
                   type="email"
                   placeholder="Enter Registered Email"
                 />
-                <SubmitButton label="Send" />
+                <SubmitButton isLoading={isLoading} label="Send" />
               </form>
             </FormProvider>
           </div>

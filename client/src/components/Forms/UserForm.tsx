@@ -68,8 +68,9 @@ const UserForm = ({ buttonLabel }: Props) => {
             type="email"
             placeholder="Enter Email"
           />
+          <ToggleSwitch value={false} name="setAsAdmin" label="Admin" />
           <ToggleSwitch value={true} name="active" label="Active" />
-          <SubmitButton label={buttonLabel} />
+          <SubmitButton isLoading={isLoading} label={buttonLabel} />
         </form>
       </FormProvider>
     </>
