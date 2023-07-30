@@ -2,6 +2,10 @@ import db from "../../utils/db.server";
 
 export const getAllArticles = async () => {
   return db.article.findMany({
+    where: {
+      active: true,
+      state: "PUBLISHED",
+    },
     take: 20,
     orderBy: [
       {
@@ -12,6 +16,7 @@ export const getAllArticles = async () => {
       },
     ],
     include: {
+      category: true,
       media: true,
     },
   });
@@ -22,6 +27,14 @@ export const getLatestArticles = async () => {
   previousDayDate.setDate(new Date().getDate() - 1);
   return db.article.findMany({
     where: {
+      AND: [
+        {
+          active: true,
+        },
+        {
+          state: "PUBLISHED",
+        },
+      ],
       OR: [
         {
           createdAt: {
@@ -35,6 +48,9 @@ export const getLatestArticles = async () => {
         },
       ],
     },
+    include: {
+      media: true,
+    },
   });
 };
 
@@ -42,6 +58,8 @@ export const getAllArticlesAsBanner = async () => {
   return db.article.findMany({
     where: {
       setAsBanner: true,
+      active: true,
+      state: "PUBLISHED",
     },
     take: 8,
     orderBy: [
@@ -54,6 +72,7 @@ export const getAllArticlesAsBanner = async () => {
     ],
     include: {
       media: true,
+      category: true,
     },
   });
 };
@@ -61,6 +80,14 @@ export const getAllArticlesAsBanner = async () => {
 export const getArticleByKeyword = async (keyword: string) => {
   return db.article.findMany({
     where: {
+      AND: [
+        {
+          active: true,
+        },
+        {
+          state: "PUBLISHED",
+        },
+      ],
       OR: [
         {
           title: {
