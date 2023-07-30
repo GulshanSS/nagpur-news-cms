@@ -11,7 +11,6 @@ const createSuperAdmin = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const role = config.ROLE as Role;
     const users = await getUserByRole(role);
-    logger.info("Checking if super admin exists");
     if (users.length === 0) {
       const adminData: CreateUserInput["body"] & {
         password: string;
@@ -23,7 +22,6 @@ const createSuperAdmin = asyncHandler(
         role: config.ROLE as Role,
       };
       await createUser(adminData);
-      logger.info("Super Admin Created");
     }
     next();
   }
