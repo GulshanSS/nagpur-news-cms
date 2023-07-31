@@ -11,7 +11,7 @@ const AddResourceButton = ({ setModalCloseForm }: Props) => {
         <button
           type="button"
           className="text-5xl"
-          onClick={(e) => setModalCloseForm(true)}
+          onClick={() => setModalCloseForm(true)}
         >
           <span className="text-custom-100">
             <AiFillPlusCircle />
