@@ -71,7 +71,8 @@ export const getUserByIdHandler = asyncHandler(
 
 export const getAllUsersExceptAdminHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const users = await getAllUsers();
+    const userId: string = res.locals.payload.userId;
+    const users = await getAllUsers(userId);
     if (users.length === 0) {
       return next(
         new AppError({

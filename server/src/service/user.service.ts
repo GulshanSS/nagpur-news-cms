@@ -70,9 +70,12 @@ export const getUserByRole = async (role: Role) => {
   });
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (id: string) => {
   return await db.user.findMany({
     where: {
+      id: {
+        not: parseInt(id),
+      },
       name: {
         not: {
           contains: config.ADMIN_NAME,
