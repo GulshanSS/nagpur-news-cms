@@ -47,10 +47,12 @@ export const getAllPromotionaryArticlesAsBanner = async () => {
   });
 };
 
-export const getPromotionaryArticleById = async (promotionaryId: string) => {
-  return db.promotionaryArticle.findUnique({
+export const getPromotionaryArticleById = async (
+  promotionaryArticleId: string
+) => {
+  return await db.promotionaryArticle.findUnique({
     where: {
-      id: parseInt(promotionaryId),
+      id: parseInt(promotionaryArticleId),
     },
     include: {
       media: true,
