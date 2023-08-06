@@ -2,8 +2,10 @@ import { Router } from "express";
 import {
   getAllPromotionaryArticlesAsBannerHandler,
   getAllPromotionaryArticlesHandler,
+  getPromotionaryArticleByIdHandler,
 } from "./promotionaryArticle.controller";
-import { getPromotionaryArticleById } from "./promotionaryArticle.service";
+import validateSchema from "../../middleware/validateSchema";
+import { getPromotionaryArticleSchema } from "../../schemas/promotionaryArticle.schema";
 
 const PublicPromotionaryArticleRouter = Router();
 
@@ -14,7 +16,8 @@ PublicPromotionaryArticleRouter.get(
 );
 PublicPromotionaryArticleRouter.get(
   "/:promotionaryArticleId",
-  getPromotionaryArticleById
+  validateSchema(getPromotionaryArticleSchema),
+  getPromotionaryArticleByIdHandler
 );
 
 export default PublicPromotionaryArticleRouter;
