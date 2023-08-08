@@ -22,7 +22,7 @@ import PublicCategoryRouter from "./public/category/category.routes";
 import PublicTagRouter from "./public/tag/tag.routes";
 import PublicArticleRouter from "./public/article/article.routes";
 import PublicTestimonialRouter from "./public/testimonial/testimonial.route";
-import PublicPromotionaryArticleRouter from "./public/promotionaryArticle/promotionartArticle.routes";
+import PublicPromotionaryArticleRouter from "./public/promotionaryArticle/promotionaryArticle.routes";
 
 const app = express();
 
