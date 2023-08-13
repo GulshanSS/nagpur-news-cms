@@ -1,13 +1,23 @@
 import { FiSearch } from "react-icons/fi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   searchQuery: string;
   setSearchQuery: Function;
-  setModalCloseForm: Function;
+  navigateToDifferentPage: boolean;
+  navigateTo?: string;
+  setModalCloseForm?: Function;
 };
 
-const PageNav = ({ searchQuery, setSearchQuery, setModalCloseForm }: Props) => {
+const PageNav = ({
+  searchQuery,
+  setSearchQuery,
+  setModalCloseForm,
+  navigateTo,
+  navigateToDifferentPage,
+}: Props) => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="md:w-[calc(100%-200px)] w-full fixed top-16 md:top-14 bg-custom-50 z-30">
@@ -15,7 +25,11 @@ const PageNav = ({ searchQuery, setSearchQuery, setModalCloseForm }: Props) => {
           <div className="hidden md:block">
             <button
               type="button"
-              onClick={(e) => setModalCloseForm(true)}
+              onClick={(e) =>
+                navigateToDifferentPage
+                  ? navigate(navigateTo!)
+                  : setModalCloseForm?.(true)
+              }
               className="flex gap-1 justify-center items-center bg-custom-800 px-2.5 py-1.5 text-custom-50 rounded-md"
             >
               <span className="text-xl">
