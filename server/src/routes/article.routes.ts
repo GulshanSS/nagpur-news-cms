@@ -4,6 +4,8 @@ import {
   deleteArticleByIdHandler,
   getAllArticleHandler,
   getArticleByIdHandler,
+  getArticleByStateAndTitleHandler,
+  getArticleByStateHandler,
   getArticleByTitleHandler,
   updateArticleByIdHandler,
 } from "../controller/article.controller";
@@ -47,9 +49,21 @@ ArticleRouter.put(
 );
 
 ArticleRouter.get(
+  "/state/:articleState",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getArticleByStateHandler
+);
+
+ArticleRouter.get(
   "/search/:title",
   [isAuthenticated, authorize("ADMIN", "TEAM")],
   getArticleByTitleHandler
+);
+
+ArticleRouter.get(
+  "/state/:state/search/:title",
+  [isAuthenticated, authorize("ADMIN", "TEAM")],
+  getArticleByStateAndTitleHandler
 );
 
 ArticleRouter.delete(
