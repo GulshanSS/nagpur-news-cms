@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 type Props = {
   onClick?: () => void;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   text: string;
   to: string;
 };
@@ -21,7 +21,7 @@ const NavItem = ({ icon, text, to, onClick }: Props) => {
             }`
           }
         >
-          <span className="text-2xl">{icon}</span>
+          {icon && <span className="text-2xl">{icon}</span>}
           <span className="ml-3">{text}</span>
         </NavLink>
       </li>
