@@ -87,6 +87,17 @@ export const articleApi = createApi({
         }
       },
     }),
+    getArticleByState: builder.query<
+      { success: boolean; articles: Article[] },
+      string
+    >({
+      query: (state) => ({
+        url: `/article/state/${state}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Article"],
+    }),
     getAllArticle: builder.query<
       { success: boolean; articles: Article[] },
       void
@@ -97,6 +108,17 @@ export const articleApi = createApi({
     getArticle: builder.query<{ success: boolean; article: Article }, number>({
       query: (id) => ({
         url: `/article/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Article"],
+    }),
+    getArticleByStateAndTitle: builder.query<
+      { success: boolean; articles: Article[] },
+      { state: string; title: string }
+    >({
+      query: ({ state, title }) => ({
+        url: `/article/state/${state}/search/${title}`,
         method: "GET",
         credentials: "include",
       }),
@@ -130,8 +152,10 @@ export const articleApi = createApi({
 export const {
   useCreateArticleMutation,
   useUpdateArticleMutation,
+  useGetArticleByStateQuery,
   useGetAllArticleQuery,
   useGetArticleQuery,
+  useGetArticleByStateAndTitleQuery,
   useGetArticleByTitleQuery,
   useDeleteArticleMutation,
 } = articleApi;
