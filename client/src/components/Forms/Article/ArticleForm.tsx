@@ -123,7 +123,7 @@ const ArticleForm = ({
         <FormProvider {...method}>
           <form
             onSubmit={handleSubmit(handleArticleSubmit)}
-            className="mx-2 md:w-[600px] h-[500px] md:h-[700px] bg-custom-50 px-3 py-5 rounded-md overflow-hidden overflow-y-scroll"
+            className="mx-2 md:w-[600px] bg-custom-50 px-3 py-5 rounded-md"
             autoComplete="off"
             noValidate
           >
