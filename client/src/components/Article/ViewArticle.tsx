@@ -13,18 +13,17 @@ import { HiPencil } from "react-icons/hi";
 import RequireAdmin from "../Auth/RequireAdmin";
 import { MdDelete } from "react-icons/md";
 import Modal from "../Modal";
-import ArticleForm from "../Forms/Article/ArticleForm";
-import { UpdateArticleSchema } from "../../validationSchema/ArticleSchema";
 import ViewItem from "../ViewItem";
 import ArticleSectionButton from "../Forms/Article/ArticleSectionButton";
 import ArticleSection from "../ArticleSection/ArticleSection";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   id: number;
 };
 
 const ViewArticle = ({ id }: Props) => {
-  const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [modalArticleSection, setModalArticleSection] =
     useState<boolean>(false);
@@ -175,7 +174,13 @@ const ViewArticle = ({ id }: Props) => {
             </div>
             <div className="flex gap-1">
               <ActionButton
-                onClick={() => setModalCloseForm(true)}
+                onClick={() =>
+                  navigate("/article/create", {
+                    state: {
+                      article: data!.article,
+                    },
+                  })
+                }
                 Icon={<HiPencil />}
                 color="blue"
               />
@@ -190,18 +195,6 @@ const ViewArticle = ({ id }: Props) => {
           </div>
         </div>
       </div>
-      <Modal
-        id="articleUpdateForm"
-        close={modalCloseForm}
-        setClose={setModalCloseForm}
-      >
-        <ArticleForm
-          buttonLabel="Update & Publish"
-          actionButtonLabel="Update & Save As Draft"
-          article={data?.article}
-          schema={UpdateArticleSchema}
-        />
-      </Modal>
       <Modal
         id="articleSection"
         close={modalArticleSection}

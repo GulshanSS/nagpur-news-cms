@@ -10,16 +10,15 @@ import { useDeleteArticleMutation } from "../../redux/api/articleApi";
 import { MdDelete } from "react-icons/md";
 import Modal from "../Modal";
 import ViewArticle from "./ViewArticle";
-import ArticleForm from "../Forms/Article/ArticleForm";
-import { UpdateArticleSchema } from "../../validationSchema/ArticleSchema";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   article: Article;
 };
 
 const ArticleCard = ({ article }: Props) => {
-  const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [close, setClose] = useState<boolean>(false);
 
@@ -93,7 +92,13 @@ const ArticleCard = ({ article }: Props) => {
                 color="slate"
               />
               <ActionButton
-                onClick={() => setModalCloseForm(true)}
+                onClick={() =>
+                  navigate("/article/create", {
+                    state: {
+                      article,
+                    },
+                  })
+                }
                 Icon={<HiPencil />}
                 color="blue"
               />
@@ -109,18 +114,6 @@ const ArticleCard = ({ article }: Props) => {
         </div>
         <Modal id="articleDetails" close={close} setClose={setClose}>
           <ViewArticle id={article.id} />
-        </Modal>
-        <Modal
-          id="articleUpdateForm"
-          close={modalCloseForm}
-          setClose={setModalCloseForm}
-        >
-          <ArticleForm
-            buttonLabel="Update & Publish"
-            actionButtonLabel="Update & Save As Draft"
-            article={article}
-            schema={UpdateArticleSchema}
-          />
         </Modal>
       </div>
     </>
