@@ -16,6 +16,7 @@ const PromotionaryArticlePage = () => {
         setModalCloseForm={setModalCloseForm}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        navigateToDifferentPage={false}
       />
       <div className="w-auto py-32">
         <DisplayAllPromotionaryArticle searchQuery={searchQuery} />
@@ -30,7 +31,10 @@ const PromotionaryArticlePage = () => {
           schema={CreatePromotionaryArticleSchema}
         />
       </Modal>
-      <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      <AddResourceButton
+        navigateToDifferentPage={false}
+        setModalCloseForm={setModalCloseForm}
+      />
     </>
   );
 };

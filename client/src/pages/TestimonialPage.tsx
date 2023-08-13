@@ -16,6 +16,7 @@ const TestimonialPage = () => {
         setModalCloseForm={setModalCloseForm}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        navigateToDifferentPage={false}
       />
       <div className="w-auto py-32">
         <DisplayAllTestimonial searchQuery={searchQuery} />
@@ -30,7 +31,10 @@ const TestimonialPage = () => {
           schema={CreateTestimonialSchema}
         />
       </Modal>
-      <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      <AddResourceButton
+        navigateToDifferentPage={false}
+        setModalCloseForm={setModalCloseForm}
+      />
     </>
   );
 };

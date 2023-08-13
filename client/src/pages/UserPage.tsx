@@ -15,6 +15,7 @@ const UserPage = () => {
         setModalCloseForm={setModalCloseForm}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        navigateToDifferentPage={false}
       />
       <div className="w-auto py-32">
         <DisplayAllUser searchQuery={searchQuery} />
@@ -22,7 +23,10 @@ const UserPage = () => {
       <Modal id="userForm" close={modalCloseForm} setClose={setModalCloseForm}>
         <UserForm buttonLabel="Create" />
       </Modal>
-      <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      <AddResourceButton
+        navigateToDifferentPage={false}
+        setModalCloseForm={setModalCloseForm}
+      />
     </>
   );
 };

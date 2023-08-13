@@ -15,6 +15,7 @@ const CategoryPage = () => {
         setModalCloseForm={setModalCloseForm}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        navigateToDifferentPage={false}
       />
       <div className="w-auto py-32">
         <DisplayAllCategory searchQuery={searchQuery} />
@@ -26,7 +27,10 @@ const CategoryPage = () => {
       >
         <CategoryForm buttonLabel="Create" />
       </Modal>
-      <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      <AddResourceButton
+        navigateToDifferentPage={false}
+        setModalCloseForm={setModalCloseForm}
+      />
     </>
   );
 };

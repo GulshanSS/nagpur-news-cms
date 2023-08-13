@@ -15,6 +15,7 @@ const TagPage = () => {
         setModalCloseForm={setModalCloseForm}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        navigateToDifferentPage={false}
       />
       <div className="w-auto py-32">
         <DisplayAllTag searchQuery={searchQuery} />
@@ -22,7 +23,10 @@ const TagPage = () => {
       <Modal id="tagForm" close={modalCloseForm} setClose={setModalCloseForm}>
         <TagForm buttonLabel="Create" />
       </Modal>
-      <AddResourceButton setModalCloseForm={setModalCloseForm} />
+      <AddResourceButton
+        navigateToDifferentPage={false}
+        setModalCloseForm={setModalCloseForm}
+      />
     </>
   );
 };
