@@ -12,6 +12,8 @@ import {
   disconnectCategoryAndTagFromArticle,
   getAllArticles,
   getArticleById,
+  getArticleByState,
+  getArticleByStateAndTitle,
   getArticleByTitle,
   updateArticleById,
 } from "../service/article.service";
@@ -100,6 +102,38 @@ export const getAllArticleHandler = asyncHandler(
   }
 );
 
+export const getArticleByStateHandler = asyncHandler(
+  async (
+    req: Request<{ articleState: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const articleState = req.params.articleState;
+    const articles = await getArticleByState(articleState);
+    if (articles.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `No Articles Found in ${articleState}`,
+        })
+      );
+    }
+
+    for (const article of articles) {
+      if (article.media.length > 0) {
+        for (const media of article.media) {
+          media.key = await getSignedUrlForMedia(media.key);
+        }
+      }
+    }
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      articles,
+    });
+  }
+);
+
 export const getArticleByIdHandler = asyncHandler(
   async (
     req: Request<GetArticleInput["params"], {}, {}>,
@@ -126,6 +160,39 @@ export const getArticleByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       article,
+    });
+  }
+);
+
+export const getArticleByStateAndTitleHandler = asyncHandler(
+  async (
+    req: Request<{ state: string; title: string }, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const articleState = req.params.state;
+    const title = req.params.title;
+    const articles = await getArticleByStateAndTitle(articleState, title);
+    if (articles.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: `No Articles found in ${articleState} which has title ${title}`,
+        })
+      );
+    }
+
+    for (const article of articles) {
+      if (article.media.length > 0) {
+        for (const media of article.media) {
+          media.key = await getSignedUrlForMedia(media.key);
+        }
+      }
+    }
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      articles,
     });
   }
 );

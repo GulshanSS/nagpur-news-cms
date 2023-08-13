@@ -76,6 +76,27 @@ export const getAllArticles = async () => {
   });
 };
 
+export const getArticleByState = async (state: string) => {
+  return db.article.findMany({
+    where: {
+      state: state.toUpperCase(),
+    },
+    include: {
+      category: true,
+      tag: true,
+      media: true,
+    },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
+  });
+};
+
 export const getArticleById = async (articleId: string) => {
   return db.article.findUnique({
     where: {
@@ -87,6 +108,33 @@ export const getArticleById = async (articleId: string) => {
       tag: true,
       articleSection: true,
     },
+  });
+};
+
+export const getArticleByStateAndTitle = async (
+  state: string,
+  title: string
+) => {
+  return db.article.findMany({
+    where: {
+      state: state.toUpperCase(),
+      title: {
+        contains: title,
+      },
+    },
+    include: {
+      category: true,
+      tag: true,
+      media: true,
+    },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
   });
 };
 
