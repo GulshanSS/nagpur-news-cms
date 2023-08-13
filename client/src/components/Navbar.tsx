@@ -10,6 +10,7 @@ import { BsFillTagFill } from "react-icons/bs";
 import { MdArticle, MdReviews } from "react-icons/md";
 import { HiSpeakerphone, HiUserGroup } from "react-icons/hi";
 import RequireAdmin from "./Auth/RequireAdmin";
+import NavGroupItem from "./NavGroupItem";
 
 type Props = {
   children: JSX.Element;
@@ -95,7 +96,15 @@ const Navbar = ({ children }: Props) => {
             <NavItem icon={<CgProfile />} text="Profile" to="me" />
             <NavItem icon={<BiSolidCategory />} text="Category" to="category" />
             <NavItem icon={<BsFillTagFill />} text="Tag" to="tag" />
-            <NavItem icon={<MdArticle />} text="Article" to="article" />
+            <NavGroupItem
+              icon={<MdArticle />}
+              text="Article"
+              to="article"
+              groupItems={[
+                { text: "Published", to: "article/published" },
+                { text: "Drafts", to: "article/draft" },
+              ]}
+            />
             <NavItem icon={<MdReviews />} text="Testimonial" to="testimonial" />
             <NavItem
               icon={<HiSpeakerphone />}
