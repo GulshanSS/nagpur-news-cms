@@ -17,6 +17,8 @@ import TestimonialPage from "./pages/TestimonialPage";
 import PromotionaryArticlePage from "./pages/PromotionaryArticlePage";
 import MainPage from "./pages/MainPage";
 import ArticlePage from "./pages/ArticlePage";
+import CreateArticlePage from "./pages/CreateArticlePage";
+import ArticleStatePage from "./pages/ArticleStatePage";
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
                 element={<PromotionaryArticlePage />}
               />
               <Route path="/article" element={<ArticlePage />} />
+              <Route path="/article/create" element={<CreateArticlePage />} />
+              <Route path="/article/:state" element={<ArticleStatePage />} />
             </Route>
           </Route>
           <Route element={<RequireUser allowedRoles={["ADMIN"]} />}>
