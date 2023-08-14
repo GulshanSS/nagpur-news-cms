@@ -88,21 +88,37 @@ export const articleApi = createApi({
       },
     }),
     getArticleByState: builder.query<
-      { success: boolean; articles: Article[] },
-      string
+      {
+        success: boolean;
+        articles: Article[];
+        count: number;
+        page: number;
+        pages: number;
+      },
+      { state: string; page: number }
     >({
-      query: (state) => ({
-        url: `/article/state/${state}`,
+      query: ({ state, page }) => ({
+        url: `/article/state/${state}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
       providesTags: ["Article"],
     }),
     getAllArticle: builder.query<
-      { success: boolean; articles: Article[] },
-      void
+      {
+        success: boolean;
+        articles: Article[];
+        count: number;
+        page: number;
+        pages: number;
+      },
+      number
     >({
-      query: () => ({ url: "/article", method: "GET", credentials: "include" }),
+      query: (page) => ({
+        url: `/article?page=${page}`,
+        method: "GET",
+        credentials: "include",
+      }),
       providesTags: ["Article"],
     }),
     getArticle: builder.query<{ success: boolean; article: Article }, number>({
@@ -114,22 +130,34 @@ export const articleApi = createApi({
       providesTags: ["Article"],
     }),
     getArticleByStateAndTitle: builder.query<
-      { success: boolean; articles: Article[] },
-      { state: string; title: string }
+      {
+        success: boolean;
+        articles: Article[];
+        count: number;
+        page: number;
+        pages: number;
+      },
+      { state: string; title: string; page: number }
     >({
-      query: ({ state, title }) => ({
-        url: `/article/state/${state}/search/${title}`,
+      query: ({ state, title, page }) => ({
+        url: `/article/state/${state}/search/${title}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
       providesTags: ["Article"],
     }),
     getArticleByTitle: builder.query<
-      { success: boolean; articles: Article[] },
-      string
+      {
+        success: boolean;
+        articles: Article[];
+        count: number;
+        page: number;
+        pages: number;
+      },
+      { title: string; page: number }
     >({
-      query: (title) => ({
-        url: `/article/search/${title}`,
+      query: ({ title, page }) => ({
+        url: `/article/search/${title}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
