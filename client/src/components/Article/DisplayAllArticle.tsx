@@ -6,12 +6,16 @@ import {
 import Spinner from "../Spinner";
 import { APIErrorResponse, Article } from "../../redux/api/types";
 import ArticleCard from "./ArticleCard";
+import Pagination from "../Pagination";
+import { useState } from "react";
 
 type Props = {
   searchQuery: string;
 };
 
 const DisplayAllArticle = ({ searchQuery }: Props) => {
+  const [page, setPage] = useState<number>(1);
+
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const {
@@ -20,7 +24,7 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
     isFetching: isArticleFetching,
     error: articleError,
     isError: isArticleError,
-  } = useGetAllArticleQuery();
+  } = useGetAllArticleQuery(page);
 
   const {
     data: articleByTitleResult,
@@ -28,9 +32,12 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
     isFetching: isArticleByTitleFetching,
     error: articleByTitleError,
     isError: isArticleByTitleError,
-  } = useGetArticleByTitleQuery(debouncedSearchQuery, {
-    skip: debouncedSearchQuery === "",
-  });
+  } = useGetArticleByTitleQuery(
+    { title: debouncedSearchQuery, page },
+    {
+      skip: debouncedSearchQuery === "",
+    }
+  );
 
   if (isArticleError || isArticleByTitleError) {
     return (
@@ -47,19 +54,29 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
 
   return (
     <>
-      {(isArticleLoading ||
-        isArticleFetching ||
-        isArticleByTitleLoading ||
-        isArticleByTitleFetching) && <Spinner />}
-      <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
-        {articleByTitleResult !== undefined && searchQuery !== ""
-          ? articleByTitleResult.articles.map((article: Article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))
-          : articleResult?.articles.map((article: Article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-      </div>
+      {isArticleLoading ||
+      isArticleFetching ||
+      isArticleByTitleLoading ||
+      isArticleByTitleFetching ? (
+        <Spinner />
+      ) : (
+        <>
+          <Pagination
+            page={(articleByTitleResult || articleResult)!.page}
+            pages={(articleByTitleResult || articleResult)!.pages}
+            changePage={setPage}
+          />
+          <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
+            {articleByTitleResult !== undefined && searchQuery !== ""
+              ? articleByTitleResult.articles.map((article: Article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))
+              : articleResult?.articles.map((article: Article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+          </div>
+        </>
+      )}
     </>
   );
 };
