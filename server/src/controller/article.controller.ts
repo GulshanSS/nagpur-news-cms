@@ -23,6 +23,7 @@ import {
   getSignedUrlForMedia,
   invalidateCloudFrontCache,
 } from "../utils/s3";
+import db from "../utils/db.server";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -76,8 +77,28 @@ export const updateArticleByIdHandler = asyncHandler(
 );
 
 export const getAllArticleHandler = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const articles = await getAllArticles();
+  async (
+    req: Request<{}, {}, {}, { page?: string; limit?: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 1;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count();
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const articles = await getAllArticles(skip, limit);
     if (articles.length === 0) {
       return next(
         new AppError({
@@ -98,18 +119,47 @@ export const getAllArticleHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
 
 export const getArticleByStateHandler = asyncHandler(
   async (
-    req: Request<{ articleState: string }, {}, {}>,
+    req: Request<
+      { articleState: string },
+      {},
+      {},
+      { page?: string; limit?: string }
+    >,
     res: Response,
     next: NextFunction
   ) => {
     const articleState = req.params.articleState;
-    const articles = await getArticleByState(articleState);
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 2;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count({
+      where: {
+        state: articleState.toUpperCase(),
+      },
+    });
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const articles = await getArticleByState(articleState, skip, limit);
     if (articles.length === 0) {
       return next(
         new AppError({
@@ -130,6 +180,9 @@ export const getArticleByStateHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
@@ -166,13 +219,39 @@ export const getArticleByIdHandler = asyncHandler(
 
 export const getArticleByStateAndTitleHandler = asyncHandler(
   async (
-    req: Request<{ state: string; title: string }, {}, {}>,
+    req: Request<
+      { state: string; title: string },
+      {},
+      {},
+      { page?: string; limit?: string }
+    >,
     res: Response,
     next: NextFunction
   ) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 2;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count();
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
     const articleState = req.params.state;
     const title = req.params.title;
-    const articles = await getArticleByStateAndTitle(articleState, title);
+    const articles = await getArticleByStateAndTitle(
+      articleState,
+      title,
+      skip,
+      limit
+    );
     if (articles.length === 0) {
       return next(
         new AppError({
@@ -193,18 +272,37 @@ export const getArticleByStateAndTitleHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
 
 export const getArticleByTitleHandler = asyncHandler(
   async (
-    req: Request<{ title: string }, {}, {}>,
+    req: Request<{ title: string }, {}, {}, { page?: string; limit?: string }>,
     res: Response,
     next: NextFunction
   ) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 2;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count();
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
     const title = req.params.title;
-    const articles = await getArticleByTitle(title);
+    const articles = await getArticleByTitle(title, skip, limit);
     if (articles.length === 0) {
       return next(
         new AppError({
@@ -225,6 +323,9 @@ export const getArticleByTitleHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
