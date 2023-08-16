@@ -20,6 +20,8 @@ import {
   getSignedUrlForMedia,
   invalidateCloudFrontCache,
 } from "../utils/s3";
+import config from "../config";
+import db from "../utils/db.server";
 
 export const createTestimonialHandler = asyncHandler(
   async (
@@ -80,9 +82,19 @@ export const updateTestimonialByIdHandler = asyncHandler(
 );
 
 export const getAllTestimonialHandler = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const testimonials = await getAllTestimonials();
-    if (testimonials.length === 0) {
+  async (
+    req: Request<{}, {}, {}, { page?: string; limit?: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.testimonial.count();
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -90,6 +102,19 @@ export const getAllTestimonialHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const testimonials = await getAllTestimonials(skip, limit);
 
     for (const testimonial of testimonials) {
       testimonial.media!.key = await getSignedUrlForMedia(
@@ -100,6 +125,9 @@ export const getAllTestimonialHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       testimonials,
+      count: total,
+      page,
+      pages,
     });
   }
 );
@@ -132,13 +160,31 @@ export const getTestimonialByIdHandler = asyncHandler(
 
 export const getTestimonialByQuotedByHandler = asyncHandler(
   async (
-    req: Request<{ quotedBy: string }, {}, {}>,
+    req: Request<
+      { quotedBy: string },
+      {},
+      {},
+      { page?: string; limit?: string }
+    >,
     res: Response,
     next: NextFunction
   ) => {
     const quotedBy = req.params.quotedBy;
-    const testimonials = await getTestimonialByQuotedBy(quotedBy);
-    if (testimonials.length === 0) {
+
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.testimonial.count({
+      where: {
+        quotedBy: {
+          contains: quotedBy,
+        },
+      },
+    });
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -146,6 +192,19 @@ export const getTestimonialByQuotedByHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const testimonials = await getTestimonialByQuotedBy(quotedBy, skip, limit);
 
     for (const testimonial of testimonials) {
       testimonial.media!.key = await getSignedUrlForMedia(
@@ -156,6 +215,9 @@ export const getTestimonialByQuotedByHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       testimonials,
+      count: total,
+      page,
+      pages,
     });
   }
 );

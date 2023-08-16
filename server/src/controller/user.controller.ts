@@ -22,6 +22,7 @@ import { Role } from "@prisma/client";
 import { sendEmail } from "../utils/email";
 import config from "../config";
 import { generatePassword } from "../utils/password";
+import db from "../utils/db.server";
 
 export const getLoggedInUserHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -70,10 +71,32 @@ export const getUserByIdHandler = asyncHandler(
 );
 
 export const getAllUsersExceptAdminHandler = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{}, {}, {}, { page?: string; limit?: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
     const userId: string = res.locals.payload.userId;
-    const users = await getAllUsers(userId);
-    if (users.length === 0) {
+
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.user.count({
+      where: {
+        id: {
+          not: parseInt(userId),
+        },
+        name: {
+          not: {
+            contains: config.ADMIN_NAME,
+          },
+        },
+      },
+    });
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -81,23 +104,59 @@ export const getAllUsersExceptAdminHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const users = await getAllUsers(userId, skip, limit);
+
     return res.status(HttpCode.OK).json({
       success: true,
       users,
-      count: users.length,
+      count: total,
+      page,
+      pages,
     });
   }
 );
 
 export const getUsersExceptAdminByNameHandler = asyncHandler(
   async (
-    req: Request<{ name: string }, {}, {}>,
+    req: Request<{ name: string }, {}, {}, { page?: string; limit?: string }>,
     res: Response,
     next: NextFunction
   ) => {
+    const userId: string = res.locals.payload.userId;
     const name = req.params.name;
-    const users = await getUsersByName(name);
-    if (users.length === 0) {
+
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.user.count({
+      where: {
+        id: {
+          not: parseInt(userId),
+        },
+        name: {
+          contains: name,
+          not: {
+            contains: config.ADMIN_NAME,
+          },
+        },
+      },
+    });
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -105,6 +164,19 @@ export const getUsersExceptAdminByNameHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const users = await getUsersByName(userId, name, skip, limit);
 
     return res.status(HttpCode.OK).json({
       success: true,

@@ -20,6 +20,8 @@ import {
   getSignedUrlForMedia,
   invalidateCloudFrontCache,
 } from "../utils/s3";
+import config from "../config";
+import db from "../utils/db.server";
 
 export const createPromotionaryArticleHandler = asyncHandler(
   async (
@@ -82,9 +84,19 @@ export const updatePromotionaryArticleByIdHandler = asyncHandler(
 );
 
 export const getAllPromotionaryArticleHandler = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const promotionaryArticles = await getAllPromotionaryArticles();
-    if (promotionaryArticles.length === 0) {
+  async (
+    req: Request<{}, {}, {}, { page?: string; limit?: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.promotionaryArticle.count();
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -92,6 +104,19 @@ export const getAllPromotionaryArticleHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const promotionaryArticles = await getAllPromotionaryArticles(skip, limit);
 
     for (const promotionaryArticle of promotionaryArticles) {
       promotionaryArticle.media!.key = await getSignedUrlForMedia(
@@ -102,6 +127,9 @@ export const getAllPromotionaryArticleHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       promotionaryArticles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
@@ -139,14 +167,26 @@ export const getPromotionaryArticleByIdHandler = asyncHandler(
 
 export const getPromotionaryArticleByTitleHandler = asyncHandler(
   async (
-    req: Request<{ title: string }, {}, {}>,
+    req: Request<{ title: string }, {}, {}, { page?: string; limit?: string }>,
     res: Response,
     next: NextFunction
   ) => {
     const title = req.params.title;
-    const promotionaryArticles = await getPromotionaryArticleByTitle(title);
 
-    if (promotionaryArticles.length === 0) {
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.promotionaryArticle.count({
+      where: {
+        title: {
+          contains: title,
+        },
+      },
+    });
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -154,6 +194,23 @@ export const getPromotionaryArticleByTitleHandler = asyncHandler(
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const promotionaryArticles = await getPromotionaryArticleByTitle(
+      title,
+      skip,
+      limit
+    );
 
     for (const promotionaryArticle of promotionaryArticles) {
       promotionaryArticle.media!.key = await getSignedUrlForMedia(
@@ -164,6 +221,9 @@ export const getPromotionaryArticleByTitleHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       promotionaryArticles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
