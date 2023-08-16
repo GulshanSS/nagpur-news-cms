@@ -9,7 +9,7 @@ type Props = {
 const Pagination = ({ page, pages, changePage }: Props) => {
   let middlePagination;
 
-  if (pages < 2) {
+  if (pages <= 2) {
     middlePagination = [...Array(pages)].map((_, idx) => (
       <button
         className="w-10 h-10 text-sm font-bold flex justify-center items-center p-1.5 border border-custom-600 rounded-md disabled:bg-custom-800 disabled:text-custom-50 disabled:cursor-not-allowed"
