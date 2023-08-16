@@ -60,8 +60,6 @@ export const updateArticleById = async (
 
 export const getAllArticles = async (skip: number, take: number) => {
   return db.article.findMany({
-    skip,
-    take,
     include: {
       category: true,
       tag: true,
@@ -75,6 +73,8 @@ export const getAllArticles = async (skip: number, take: number) => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
@@ -84,8 +84,6 @@ export const getArticleByState = async (
   take: number
 ) => {
   return db.article.findMany({
-    skip,
-    take,
     where: {
       state: state.toUpperCase(),
     },
@@ -102,6 +100,8 @@ export const getArticleByState = async (
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
@@ -126,8 +126,6 @@ export const getArticleByStateAndTitle = async (
   take: number
 ) => {
   return db.article.findMany({
-    skip,
-    take,
     where: {
       state: state.toUpperCase(),
       title: {
@@ -147,6 +145,8 @@ export const getArticleByStateAndTitle = async (
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
@@ -156,8 +156,6 @@ export const getArticleByTitle = async (
   take: number
 ) => {
   return db.article.findMany({
-    skip,
-    take,
     where: {
       title: {
         contains: title,
@@ -176,6 +174,8 @@ export const getArticleByTitle = async (
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 

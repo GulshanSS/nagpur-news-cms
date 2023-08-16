@@ -70,7 +70,7 @@ export const getUserByRole = async (role: Role) => {
   });
 };
 
-export const getAllUsers = async (id: string) => {
+export const getAllUsers = async (id: string, skip: number, take: number) => {
   return await db.user.findMany({
     where: {
       id: {
@@ -90,14 +90,27 @@ export const getAllUsers = async (id: string) => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
-export const getUsersByName = async (name: string) => {
+export const getUsersByName = async (
+  id: string,
+  name: string,
+  skip: number,
+  take: number
+) => {
   return await db.user.findMany({
     where: {
+      id: {
+        not: parseInt(id),
+      },
       name: {
         contains: name,
+        not: {
+          contains: config.ADMIN_NAME,
+        },
       },
     },
     orderBy: [
@@ -108,6 +121,8 @@ export const getUsersByName = async (name: string) => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 

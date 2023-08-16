@@ -4,7 +4,10 @@ import {
 } from "../schemas/promotionaryArticle.schema";
 import db from "../utils/db.server";
 
-export const getAllPromotionaryArticles = async () => {
+export const getAllPromotionaryArticles = async (
+  skip: number,
+  take: number
+) => {
   return await db.promotionaryArticle.findMany({
     include: {
       media: true,
@@ -17,6 +20,8 @@ export const getAllPromotionaryArticles = async () => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
@@ -33,7 +38,11 @@ export const getPromotionaryArticleById = async (
   });
 };
 
-export const getPromotionaryArticleByTitle = async (title: string) => {
+export const getPromotionaryArticleByTitle = async (
+  title: string,
+  skip: number,
+  take: number
+) => {
   return await db.promotionaryArticle.findMany({
     where: {
       title: {
@@ -51,6 +60,8 @@ export const getPromotionaryArticleByTitle = async (title: string) => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 

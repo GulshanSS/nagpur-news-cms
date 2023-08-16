@@ -4,7 +4,7 @@ import {
 } from "../schemas/testimonial.schema";
 import db from "../utils/db.server";
 
-export const getAllTestimonials = async () => {
+export const getAllTestimonials = async (skip: number, take: number) => {
   return await db.testimonial.findMany({
     include: {
       media: true,
@@ -17,6 +17,8 @@ export const getAllTestimonials = async () => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
@@ -31,7 +33,11 @@ export const getTestimonialById = async (testimonialId: string) => {
   });
 };
 
-export const getTestimonialByQuotedBy = async (quotedBy: string) => {
+export const getTestimonialByQuotedBy = async (
+  quotedBy: string,
+  skip: number,
+  take: number
+) => {
   return await db.testimonial.findMany({
     where: {
       quotedBy: {
@@ -49,6 +55,8 @@ export const getTestimonialByQuotedBy = async (quotedBy: string) => {
         updatedAt: "desc",
       },
     ],
+    skip,
+    take,
   });
 };
 
