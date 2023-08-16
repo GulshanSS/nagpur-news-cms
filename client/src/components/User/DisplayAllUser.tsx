@@ -6,12 +6,17 @@ import {
   useGetUsersByNameQuery,
 } from "../../redux/api/userApi";
 import UserCard from "./UserCard";
+import { useState } from "react";
+import Pagination from "../Pagination";
 
 type Props = {
   searchQuery: string;
 };
 
 const DisplayAllUser = ({ searchQuery }: Props) => {
+  const [page, setPage] = useState<number>(1);
+  const [searchPage, setSearchPage] = useState<number>(1);
+
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const {
@@ -20,7 +25,7 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
     isFetching: userFetching,
     error: userError,
     isError: isUserError,
-  } = useGetAllUsersQuery();
+  } = useGetAllUsersQuery(page);
 
   const {
     data: userByNameResult,
@@ -28,9 +33,12 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
     isFetching: userByNameFetching,
     error: userByNameError,
     isError: isUserByNameError,
-  } = useGetUsersByNameQuery(debouncedSearchQuery, {
-    skip: debouncedSearchQuery === "",
-  });
+  } = useGetUsersByNameQuery(
+    { name: debouncedSearchQuery, page: searchPage },
+    {
+      skip: debouncedSearchQuery === "",
+    }
+  );
 
   if (isUserError || isUserByNameError) {
     return (
@@ -47,19 +55,41 @@ const DisplayAllUser = ({ searchQuery }: Props) => {
 
   return (
     <>
-      {(userLoading ||
-        userFetching ||
-        userByNameLoading ||
-        userByNameFetching) && <Spinner />}
-      <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
-        {userByNameResult !== undefined && searchQuery !== ""
-          ? userByNameResult?.users.map((user: User) => (
-              <UserCard key={user.id} user={user} />
-            ))
-          : userResult?.users.map((user: User) => (
-              <UserCard key={user.id} user={user} />
-            ))}
-      </div>
+      {userLoading ||
+      userFetching ||
+      userByNameLoading ||
+      userByNameFetching ? (
+        <Spinner />
+      ) : (
+        <>
+          <Pagination
+            page={
+              userByNameResult !== undefined && searchQuery !== ""
+                ? searchPage
+                : page
+            }
+            pages={
+              userByNameResult !== undefined && searchQuery !== ""
+                ? userByNameResult!.pages
+                : userResult!.pages
+            }
+            changePage={
+              userByNameResult !== undefined && searchQuery !== ""
+                ? setSearchPage
+                : setPage
+            }
+          />
+          <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
+            {userByNameResult !== undefined && searchQuery !== ""
+              ? userByNameResult?.users.map((user: User) => (
+                  <UserCard key={user.id} user={user} />
+                ))
+              : userResult?.users.map((user: User) => (
+                  <UserCard key={user.id} user={user} />
+                ))}
+          </div>
+        </>
+      )}
     </>
   );
 };

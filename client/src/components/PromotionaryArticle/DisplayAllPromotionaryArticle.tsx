@@ -6,12 +6,17 @@ import {
 import Spinner from "../Spinner";
 import { APIErrorResponse, PromotionaryArticle } from "../../redux/api/types";
 import PromotionaryArticleCard from "./PromotionaryArticleCard";
+import { useState } from "react";
+import Pagination from "../Pagination";
 
 type Props = {
   searchQuery: string;
 };
 
 const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
+  const [page, setPage] = useState<number>(1);
+  const [searchPage, setSearchPage] = useState<number>(1);
+
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const {
@@ -20,7 +25,7 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
     isFetching: isPromotionaryArticleFetching,
     error: promotionaryArticleError,
     isError: isPromotionaryArticleError,
-  } = useGetAllPromotionaryArticleQuery();
+  } = useGetAllPromotionaryArticleQuery(page);
 
   const {
     data: promotionaryArticleByTitleResult,
@@ -28,9 +33,12 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
     isFetching: isPromotionaryArticleByTitleFetching,
     error: promotionaryArticleByTitleError,
     isError: isPromotionaryArticleByTitleError,
-  } = useGetPromotionaryArticleByTitleQuery(debouncedSearchQuery, {
-    skip: debouncedSearchQuery === "",
-  });
+  } = useGetPromotionaryArticleByTitleQuery(
+    { title: debouncedSearchQuery, page: searchPage },
+    {
+      skip: debouncedSearchQuery === "",
+    }
+  );
 
   if (isPromotionaryArticleError || isPromotionaryArticleByTitleError) {
     return (
@@ -47,29 +55,55 @@ const DisplayAllPromotionaryArticle = ({ searchQuery }: Props) => {
 
   return (
     <>
-      {(isPromotionaryArticleLoading ||
-        isPromotionaryArticleFetching ||
-        isPromotionaryArticleByTitleLoading ||
-        isPromotionaryArticleByTitleFetching) && <Spinner />}
-      <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
-        {promotionaryArticleByTitleResult !== undefined && searchQuery !== ""
-          ? promotionaryArticleByTitleResult.promotionaryArticles.map(
-              (promotionaryArticle: PromotionaryArticle) => (
-                <PromotionaryArticleCard
-                  key={promotionaryArticle.id}
-                  promotionaryArticle={promotionaryArticle}
-                />
-              )
-            )
-          : promotionaryArticleResult?.promotionaryArticles.map(
-              (promotionaryArticle: PromotionaryArticle) => (
-                <PromotionaryArticleCard
-                  key={promotionaryArticle.id}
-                  promotionaryArticle={promotionaryArticle}
-                />
-              )
-            )}
-      </div>
+      {isPromotionaryArticleLoading ||
+      isPromotionaryArticleFetching ||
+      isPromotionaryArticleByTitleLoading ||
+      isPromotionaryArticleByTitleFetching ? (
+        <Spinner />
+      ) : (
+        <>
+          <Pagination
+            page={
+              promotionaryArticleByTitleResult !== undefined &&
+              searchQuery !== ""
+                ? searchPage
+                : page
+            }
+            pages={
+              promotionaryArticleByTitleResult !== undefined &&
+              searchQuery !== ""
+                ? promotionaryArticleByTitleResult!.pages
+                : promotionaryArticleResult!.pages
+            }
+            changePage={
+              promotionaryArticleByTitleResult !== undefined &&
+              searchQuery !== ""
+                ? setSearchPage
+                : setPage
+            }
+          />
+          <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
+            {promotionaryArticleByTitleResult !== undefined &&
+            searchQuery !== ""
+              ? promotionaryArticleByTitleResult.promotionaryArticles.map(
+                  (promotionaryArticle: PromotionaryArticle) => (
+                    <PromotionaryArticleCard
+                      key={promotionaryArticle.id}
+                      promotionaryArticle={promotionaryArticle}
+                    />
+                  )
+                )
+              : promotionaryArticleResult?.promotionaryArticles.map(
+                  (promotionaryArticle: PromotionaryArticle) => (
+                    <PromotionaryArticleCard
+                      key={promotionaryArticle.id}
+                      promotionaryArticle={promotionaryArticle}
+                    />
+                  )
+                )}
+          </div>
+        </>
+      )}
     </>
   );
 };

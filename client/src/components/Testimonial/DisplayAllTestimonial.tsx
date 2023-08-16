@@ -6,12 +6,17 @@ import {
 import Spinner from "../Spinner";
 import { APIErrorResponse, Testimonial } from "../../redux/api/types";
 import TestimonialCard from "./TestimonialCard";
+import { useState } from "react";
+import Pagination from "../Pagination";
 
 type Props = {
   searchQuery: string;
 };
 
 const DisplayAllTestimonial = ({ searchQuery }: Props) => {
+  const [page, setPage] = useState<number>(1);
+  const [searchPage, setSearchPage] = useState<number>(1);
+
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const {
@@ -20,7 +25,7 @@ const DisplayAllTestimonial = ({ searchQuery }: Props) => {
     isFetching: isTestimonialFetching,
     error: testimonialError,
     isError: isTestimonialError,
-  } = useGetAllTestimonialQuery();
+  } = useGetAllTestimonialQuery(page);
 
   const {
     data: testimonialByQuotedByResult,
@@ -28,18 +33,12 @@ const DisplayAllTestimonial = ({ searchQuery }: Props) => {
     isFetching: isTestimonialByQuotedByFetching,
     error: testimonialByQuotedByError,
     isError: isTestimonialByQuotedByError,
-  } = useGetTestimonialsByQuotedByQuery(debouncedSearchQuery, {
-    skip: debouncedSearchQuery === "",
-  });
-
-  if (
-    isTestimonialLoading ||
-    isTestimonialFetching ||
-    isTestimonialByQuotedByLoading ||
-    isTestimonialByQuotedByFetching
-  ) {
-    return <Spinner />;
-  }
+  } = useGetTestimonialsByQuotedByQuery(
+    { quotedBy: debouncedSearchQuery, page: searchPage },
+    {
+      skip: debouncedSearchQuery === "",
+    }
+  );
 
   if (isTestimonialError || isTestimonialByQuotedByError) {
     return (
@@ -56,20 +55,51 @@ const DisplayAllTestimonial = ({ searchQuery }: Props) => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
-        {testimonialByQuotedByResult !== undefined && searchQuery !== ""
-          ? testimonialByQuotedByResult.testimonials.map(
-              (testimonial: Testimonial) => (
-                <TestimonialCard
-                  key={testimonial.id}
-                  testimonial={testimonial}
-                />
-              )
-            )
-          : testimonialResult?.testimonials.map((testimonial: Testimonial) => (
-              <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-            ))}
-      </div>
+      {isTestimonialLoading ||
+      isTestimonialFetching ||
+      isTestimonialByQuotedByLoading ||
+      isTestimonialByQuotedByFetching ? (
+        <Spinner />
+      ) : (
+        <>
+          <Pagination
+            page={
+              testimonialByQuotedByResult !== undefined && searchQuery !== ""
+                ? searchPage
+                : page
+            }
+            pages={
+              testimonialByQuotedByResult !== undefined && searchQuery !== ""
+                ? testimonialByQuotedByResult!.pages
+                : testimonialResult!.pages
+            }
+            changePage={
+              testimonialByQuotedByResult !== undefined && searchQuery !== ""
+                ? setSearchPage
+                : setPage
+            }
+          />
+          <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
+            {testimonialByQuotedByResult !== undefined && searchQuery !== ""
+              ? testimonialByQuotedByResult.testimonials.map(
+                  (testimonial: Testimonial) => (
+                    <TestimonialCard
+                      key={testimonial.id}
+                      testimonial={testimonial}
+                    />
+                  )
+                )
+              : testimonialResult?.testimonials.map(
+                  (testimonial: Testimonial) => (
+                    <TestimonialCard
+                      key={testimonial.id}
+                      testimonial={testimonial}
+                    />
+                  )
+                )}
+          </div>
+        </>
+      )}
     </>
   );
 };
