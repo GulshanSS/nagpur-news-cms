@@ -37,11 +37,17 @@ export const userApi = createApi({
       providesTags: ["User"],
     }),
     getAllUsers: builder.query<
-      { success: boolean; users: User[]; count: number },
-      void
+      {
+        success: boolean;
+        users: User[];
+        count: number;
+        page: number;
+        pages: number;
+      },
+      number
     >({
-      query: () => ({
-        url: "/user",
+      query: (page) => ({
+        url: `/user?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
@@ -52,11 +58,13 @@ export const userApi = createApi({
         success: boolean;
         users: User[];
         count: number;
+        page: number;
+        pages: number;
       },
-      string
+      { name: string; page: number }
     >({
-      query: (name) => ({
-        url: `/user/search/${name}`,
+      query: ({ name, page }) => ({
+        url: `/user/search/${name}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),

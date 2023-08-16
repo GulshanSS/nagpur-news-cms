@@ -78,11 +78,14 @@ export const testimonialApi = createApi({
       {
         success: boolean;
         testimonials: Testimonial[];
+        count: number;
+        page: number;
+        pages: number;
       },
-      void
+      number
     >({
-      query: () => ({
-        url: "/testimonial",
+      query: (page) => ({
+        url: `/testimonial?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
@@ -103,11 +106,14 @@ export const testimonialApi = createApi({
       {
         success: boolean;
         testimonials: Testimonial[];
+        count: number;
+        page: number;
+        pages: number;
       },
-      string
+      { quotedBy: string; page: number }
     >({
-      query: (quotedBy) => ({
-        url: `/testimonial/search/${quotedBy}`,
+      query: ({ quotedBy, page }) => ({
+        url: `/testimonial/search/${quotedBy}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),

@@ -91,11 +91,14 @@ export const promotionaryArticleApi = createApi({
       {
         success: boolean;
         promotionaryArticles: PromotionaryArticle[];
+        count: number;
+        page: number;
+        pages: number;
       },
-      void
+      number
     >({
-      query: () => ({
-        url: "/promotionary-article",
+      query: (page) => ({
+        url: `/promotionary-article?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
@@ -116,11 +119,14 @@ export const promotionaryArticleApi = createApi({
       {
         success: boolean;
         promotionaryArticles: PromotionaryArticle[];
+        count: number;
+        page: number;
+        pages: number;
       },
-      string
+      { title: string; page: number }
     >({
-      query: (title) => ({
-        url: `/promotionary-article/search/${title}`,
+      query: ({ title, page }) => ({
+        url: `/promotionary-article/search/${title}?page=${page}`,
         method: "GET",
         credentials: "include",
       }),
