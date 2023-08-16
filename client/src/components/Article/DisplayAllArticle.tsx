@@ -15,6 +15,7 @@ type Props = {
 
 const DisplayAllArticle = ({ searchQuery }: Props) => {
   const [page, setPage] = useState<number>(1);
+  const [searchPage, setSearchPage] = useState<number>(1);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -33,7 +34,7 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
     error: articleByTitleError,
     isError: isArticleByTitleError,
   } = useGetArticleByTitleQuery(
-    { title: debouncedSearchQuery, page },
+    { title: debouncedSearchQuery, page: searchPage },
     {
       skip: debouncedSearchQuery === "",
     }
@@ -62,9 +63,21 @@ const DisplayAllArticle = ({ searchQuery }: Props) => {
       ) : (
         <>
           <Pagination
-            page={(articleByTitleResult || articleResult)!.page}
-            pages={(articleByTitleResult || articleResult)!.pages}
-            changePage={setPage}
+            page={
+              articleByTitleResult !== undefined && searchQuery !== ""
+                ? searchPage
+                : page
+            }
+            pages={
+              articleByTitleResult !== undefined && searchQuery !== ""
+                ? articleByTitleResult!.pages
+                : articleResult!.pages
+            }
+            changePage={
+              articleByTitleResult !== undefined && searchQuery !== ""
+                ? setSearchPage
+                : setPage
+            }
           />
           <div className="flex flex-wrap justify-center md:justify-start p-2 gap-2">
             {articleByTitleResult !== undefined && searchQuery !== ""
