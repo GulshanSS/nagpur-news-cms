@@ -42,4 +42,6 @@ export default {
   CLOUDFRONT_PRIVATE_KEY: process.env.CLOUDFRONT_PRIVATE_KEY as string,
   CLOUDFRONT_KEY_PAIR_ID: process.env.CLOUDFRONT_KEY_PAIR_ID as string,
   CLOUDFRONT_DISTRIBUTION_ID: process.env.CLOUDFRONT_DISTRIBUTION_ID as string,
+  PAGE_LIMIT: parseInt(process.env.PAGE_LIMIT as string),
+  CURR_PAGE: parseInt(process.env.CURR_PAGE as string),
 };
