@@ -26,14 +26,26 @@ const CreateArticlePage = () => {
           </button>
         </div>
         <ArticleForm
-          buttonLabel={location.state.article ? "Update & Publish" : "Publish"}
+          buttonLabel={
+            location.state !== null && location.state.article !== undefined
+              ? "Update & Publish"
+              : "Publish"
+          }
           actionButtonLabel={
-            location.state.article ? "Update & Save As Draft" : "Save As Draft"
+            location.state !== null && location.state.article !== undefined
+              ? "Update & Save As Draft"
+              : "Save As Draft"
           }
           schema={
-            location.state.article ? UpdateArticleSchema : CreateArticleSchema
+            location.state !== null && location.state.article !== undefined
+              ? UpdateArticleSchema
+              : CreateArticleSchema
           }
-          article={location.state.article || undefined}
+          article={
+            location.state !== null && location.state.article !== undefined
+              ? location.state.article
+              : undefined
+          }
         />
       </div>
     </>
