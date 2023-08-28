@@ -18,13 +18,10 @@ import {
   updateArticleById,
 } from "../service/article.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import {
-  deleteFileByKey,
-  getSignedUrlForMedia,
-  invalidateCloudFrontCache,
-} from "../utils/s3";
+import { deleteFileByKey } from "../utils/s3";
 import db from "../utils/db.server";
 import config from "../config";
+import { getSignedUrlIK } from "../utils/imageKit";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -115,7 +112,7 @@ export const getAllArticleHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -179,7 +176,7 @@ export const getArticleByStateHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -213,7 +210,7 @@ export const getArticleByIdHandler = asyncHandler(
 
     if (article.media.length > 0) {
       for (const media of article.media) {
-        media.key = await getSignedUrlForMedia(media.key);
+        media.key = getSignedUrlIK(media.key);
       }
     }
 
@@ -282,7 +279,7 @@ export const getArticleByStateAndTitleHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -342,7 +339,7 @@ export const getArticleByTitleHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -377,7 +374,6 @@ export const deleteArticleByIdHandler = asyncHandler(
     if (article.media.length > 0) {
       for (const media of article.media) {
         await deleteFileByKey(media.key);
-        await invalidateCloudFrontCache(media.key);
       }
     }
 

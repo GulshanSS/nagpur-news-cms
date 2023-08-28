@@ -14,11 +14,8 @@ import {
   updateArticleSectionById,
 } from "../service/articleSection.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import {
-  deleteFileByKey,
-  getSignedUrlForMedia,
-  invalidateCloudFrontCache,
-} from "../utils/s3";
+import { deleteFileByKey } from "../utils/s3";
+import { getSignedUrlIK } from "../utils/imageKit";
 
 export const createArticleSectionHandler = asyncHandler(
   async (
@@ -70,14 +67,11 @@ export const updateArticleSectionByIdHandler = asyncHandler(
 
     const data = req.body;
 
-    const articleSection = await updateArticleSectionById(
-      articleSectionId,
-      data
-    );
+    await updateArticleSectionById(articleSectionId, data);
 
     return res.status(HttpCode.OK).json({
       success: true,
-      articleSection,
+      message: "Article Section sucessfully updated",
     });
   }
 );
@@ -102,7 +96,7 @@ export const getAllArticleSectionByArticleIdHandler = asyncHandler(
     for (const articleSection of articleSections) {
       if (articleSection.media.length > 0) {
         for (const media of articleSection.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -134,7 +128,7 @@ export const getArticleSectionByIdHandler = asyncHandler(
 
     if (articleSection.media.length > 0) {
       for (const media of articleSection.media) {
-        media.key = await getSignedUrlForMedia(media.key);
+        media.key = getSignedUrlIK(media.key);
       }
     }
 
@@ -165,7 +159,6 @@ export const deleteArticleSectionByIdHandler = asyncHandler(
     if (articleSection.media.length > 0) {
       for (const media of articleSection.media) {
         await deleteFileByKey(media.key);
-        await invalidateCloudFrontCache(media.key);
       }
     }
 
