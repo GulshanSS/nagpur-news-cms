@@ -44,4 +44,7 @@ export default {
   CLOUDFRONT_DISTRIBUTION_ID: process.env.CLOUDFRONT_DISTRIBUTION_ID as string,
   PAGE_LIMIT: parseInt(process.env.PAGE_LIMIT as string),
   CURR_PAGE: parseInt(process.env.CURR_PAGE as string),
+  IMAGE_KIT_PRIVATE_KEY: process.env.IMAGE_KIT_PRIVATE_KEY as string,
+  IMAGE_KIT_PUBLIC_KEY: process.env.IMAGE_KIT_PUBLIC_KEY as string,
+  IMAGE_KIT_URL_ENDPOINT: process.env.IMAGE_KIT_URL_ENDPOINT as string,
 };
