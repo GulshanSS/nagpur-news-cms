@@ -9,7 +9,7 @@ import {
 } from "./article.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { GetArticleInput } from "../../schemas/article.schema";
-import { getSignedUrlForMedia } from "../../utils/s3";
+import { getSignedUrlIK } from "../../utils/imageKit";
 
 export const getAllArticlesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +26,7 @@ export const getAllArticlesHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -53,7 +53,7 @@ export const getLatestArticlesHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -85,7 +85,7 @@ export const getArticlesByKeywordHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -113,7 +113,7 @@ export const getAllArticlesAsBannerHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
@@ -144,7 +144,7 @@ export const getArticleByIdHandler = asyncHandler(
 
     if (article.media.length > 0) {
       for (const media of article.media) {
-        media.key = await getSignedUrlForMedia(media.key);
+        media.key = getSignedUrlIK(media.key);
       }
     }
 

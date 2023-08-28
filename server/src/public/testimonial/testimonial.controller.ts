@@ -3,6 +3,7 @@ import asyncHandler from "../../middleware/asyncHandler";
 import { getAllTestimonials, getTestimonialById } from "./testimonial.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { GetTestimonialInput } from "../../schemas/testimonial.schema";
+import { getSignedUrlIK } from "../../utils/imageKit";
 
 export const getAllTestimonialsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -14,6 +15,10 @@ export const getAllTestimonialsHandler = asyncHandler(
           description: "Testimonials Not Found",
         })
       );
+    }
+
+    for (const testimonial of testimonials) {
+      testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
     }
 
     return res.status(HttpCode.OK).json({
@@ -39,6 +44,8 @@ export const getTestimonialByIdHandler = asyncHandler(
         })
       );
     }
+
+    testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
 
     return res.status(HttpCode.OK).json({
       success: true,
