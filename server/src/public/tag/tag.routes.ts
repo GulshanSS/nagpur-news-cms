@@ -1,11 +1,9 @@
 import { Router } from "express";
-import { getAllTagsHandler, getTagByIdHandler } from "./tag.controller";
-import validateSchema from "../../middleware/validateSchema";
-import { getTagSchema } from "../../schemas/tag.schema";
+import { getAllTagsHandler, getTagBySlugHandler } from "./tag.controller";
 
 const PublicTagRouter = Router();
 
 PublicTagRouter.get("/", getAllTagsHandler);
-PublicTagRouter.get("/:tagId", validateSchema(getTagSchema), getTagByIdHandler);
+PublicTagRouter.get("/:slug", getTagBySlugHandler);
 
 export default PublicTagRouter;

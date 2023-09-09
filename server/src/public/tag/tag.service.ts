@@ -13,10 +13,10 @@ export const getAllTags = async () => {
   });
 };
 
-export const getTagById = async (tagId: string) => {
+export const getTagBySlug = async (slug: string) => {
   return db.tag.findUnique({
     where: {
-      id: parseInt(tagId),
+      slug,
     },
     include: {
       article: {
