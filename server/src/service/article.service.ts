@@ -4,7 +4,9 @@ import {
 } from "../schemas/article.schema";
 import db from "../utils/db.server";
 
-export const createArticle = async (data: CreateArticleInput["body"]) => {
+export const createArticle = async (
+  data: CreateArticleInput["body"] & { slug: string }
+) => {
   return db.article.create({
     data: {
       ...data,
@@ -39,7 +41,7 @@ export const disconnectCategoryAndTagFromArticle = async (
 
 export const updateArticleById = async (
   articleId: string,
-  data: UpdateArticleInput["body"]
+  data: UpdateArticleInput["body"] & { slug?: string }
 ) => {
   return await db.article.update({
     where: {

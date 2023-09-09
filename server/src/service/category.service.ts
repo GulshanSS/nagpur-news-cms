@@ -44,7 +44,7 @@ export const getCategoryByName = async (searchParam: string) => {
 };
 
 export const createCategory = async (
-  createCategoryInput: CreateCategoryInput["body"]
+  createCategoryInput: CreateCategoryInput["body"] & { slug: string }
 ) => {
   return db.category.create({
     data: createCategoryInput,
@@ -53,7 +53,7 @@ export const createCategory = async (
 
 export const updateCategoryById = async (
   categoryId: string,
-  updateCategoryInput: UpdateCategoryInput["body"]
+  updateCategoryInput: UpdateCategoryInput["body"] & { slug?: string }
 ) => {
   return db.category.update({
     where: {

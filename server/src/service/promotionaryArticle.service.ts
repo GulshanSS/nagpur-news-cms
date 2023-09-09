@@ -66,7 +66,7 @@ export const getPromotionaryArticleByTitle = async (
 };
 
 export const createPromotionaryAticle = async (
-  promotionaryArticle: CreatePromotionaryArticleInput["body"]
+  promotionaryArticle: CreatePromotionaryArticleInput["body"] & { slug: string }
 ) => {
   return await db.promotionaryArticle.create({
     data: {
@@ -78,7 +78,9 @@ export const createPromotionaryAticle = async (
 
 export const updatePromotionaryArticleById = async (
   promotionaryArticleId: string,
-  promotionaryArticle: UpdatePromotionaryArticleInput["body"]
+  promotionaryArticle: UpdatePromotionaryArticleInput["body"] & {
+    slug?: string;
+  }
 ) => {
   return await db.promotionaryArticle.update({
     where: {
