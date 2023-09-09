@@ -55,6 +55,7 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
+  slug String?
   article Article[]
   active Boolean @default(true)
 }
@@ -64,6 +65,7 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
+  slug String?
   setAsCategory Boolean @default(false)
   article Article[]
   active Boolean @default(true)
@@ -102,6 +104,7 @@ model Article {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
+  slug String?
   content String
   location String
   youtubeVideoUrl String?
@@ -121,7 +124,8 @@ model PromotionaryArticle {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   priority Int @default(0)
-  title String?
+  title String
+  slug String?
   content String?
   websiteLink String?
   whatsAppLink String?
@@ -137,7 +141,7 @@ model Testimonial {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  quote String? 
+  quote String?
   quotedBy String?
   designation String?
   media Media?
