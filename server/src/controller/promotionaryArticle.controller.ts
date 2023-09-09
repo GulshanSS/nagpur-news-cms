@@ -19,6 +19,7 @@ import { deleteFileByKey } from "../utils/s3";
 import config from "../config";
 import db from "../utils/db.server";
 import { getSignedUrlIK } from "../utils/imageKit";
+import { createSlug } from "../utils/slugify";
 
 export const createPromotionaryArticleHandler = asyncHandler(
   async (
@@ -26,7 +27,8 @@ export const createPromotionaryArticleHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const data = req.body;
+    const slug = createSlug(req.body.title);
+    const data = { slug, ...req.body };
     const promotionaryArticle = await createPromotionaryAticle(data);
     if (!promotionaryArticle) {
       return next(
@@ -69,7 +71,13 @@ export const updatePromotionaryArticleByIdHandler = asyncHandler(
       );
     }
 
-    const data = req.body;
+    let data = req.body;
+    const title = req.body.title;
+
+    if (title !== existingPromotionaryArticle.title) {
+      const slug = createSlug(title);
+      data = { slug, ...data };
+    }
 
     await updatePromotionaryArticleById(promotionaryArticleId, data);
 
@@ -255,6 +263,50 @@ export const deletePromotionaryArticleByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       message: "Promotionary Article deleted successfully",
+    });
+  }
+);
+
+export const addSlugToAllPromotionaryArticlesHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const promotionaryArticles = await db.promotionaryArticle.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    if (promotionaryArticles.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Promotionary Articles Not Found",
+        })
+      );
+    }
+
+    for (const promotionaryArticle of promotionaryArticles) {
+      const slug = createSlug(promotionaryArticle.title);
+      await db.promotionaryArticle.update({
+        where: {
+          id: promotionaryArticle.id,
+        },
+        data: {
+          ...promotionaryArticle,
+          slug,
+        },
+      });
+    }
+
+    const newPromotionaryArticles = await db.article.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      count: newPromotionaryArticles.length,
+      promotionaryArticles: newPromotionaryArticles,
     });
   }
 );

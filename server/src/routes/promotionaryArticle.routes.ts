@@ -8,6 +8,7 @@ import {
   getPromotionaryArticleByIdHandler,
   updatePromotionaryArticleByIdHandler,
   deletePromotionaryArticleByIdHandler,
+  addSlugToAllPromotionaryArticlesHandler,
 } from "../controller/promotionaryArticle.controller";
 import validateSchema from "../middleware/validateSchema";
 import {
@@ -53,6 +54,12 @@ PromotionaryArticleRouter.delete(
   "/:promotionaryArticleId/delete",
   [isAuthenticated, authorize("ADMIN")],
   deletePromotionaryArticleByIdHandler
+);
+
+PromotionaryArticleRouter.post(
+  "/all/add/slug",
+  [isAuthenticated, authorize("ADMIN")],
+  addSlugToAllPromotionaryArticlesHandler
 );
 
 export default PromotionaryArticleRouter;

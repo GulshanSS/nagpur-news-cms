@@ -6,6 +6,7 @@ const payload = {
       .trim()
       .regex(new RegExp("\\d{1}"), "Please enter valid priority"),
     title: string().trim(),
+    slug: string().optional(),
     content: string().trim().optional(),
     websiteLink: string().trim().optional(),
     whatsAppLink: string().trim().optional(),
