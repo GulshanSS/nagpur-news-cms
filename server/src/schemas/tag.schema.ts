@@ -3,7 +3,6 @@ import { TypeOf, boolean, object, string } from "zod";
 const payload = {
   body: object({
     name: string().min(1, "Tag Name is required"),
-    slug: string().optional(),
     setAsCategory: boolean().optional(),
     active: boolean().optional(),
   }),
