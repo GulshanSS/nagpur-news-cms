@@ -15,6 +15,8 @@ import {
   GetCategoryInput,
   UpdateCategoryInput,
 } from "../schemas/category.schema";
+import { createSlug } from "../utils/slugify";
+import db from "../utils/db.server";
 
 export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -83,9 +85,22 @@ export const getCategoryByNameHandler = asyncHandler(
 );
 
 export const createCategoryHandler = asyncHandler(
-  async (req: Request<{}, {}, CreateCategoryInput["body"]>, res: Response) => {
-    const data = req.body;
-    const category = await createCategory({ ...data });
+  async (
+    req: Request<{}, {}, CreateCategoryInput["body"]>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const slug = createSlug(req.body.name);
+    const data = { slug, ...req.body };
+    const category = await createCategory(data);
+    if (!category) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: "Not able to create category",
+        })
+      );
+    }
     return res.status(HttpCode.CREATED).json({
       success: true,
       category,
@@ -104,8 +119,8 @@ export const updateCategoryByIdHandler = asyncHandler(
     next: NextFunction
   ) => {
     const categoryId = req.params.categoryId;
-    const oldCategory = await getCategoryById(categoryId);
-    if (!oldCategory) {
+    const existingCategory = await getCategoryById(categoryId);
+    if (!existingCategory) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
@@ -113,7 +128,15 @@ export const updateCategoryByIdHandler = asyncHandler(
         })
       );
     }
-    const data = req.body;
+
+    let data = req.body;
+    const name = req.body.name;
+
+    if (name !== existingCategory.name) {
+      const slug = createSlug(name);
+      data = { slug, ...data };
+    }
+
     const updatedCategory = await updateCategoryById(categoryId, { ...data });
     return res.status(HttpCode.CREATED).json({
       success: true,
@@ -142,6 +165,49 @@ export const deleteCategoryByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       message: `Category with id ${categoryId} deleted successfully`,
+    });
+  }
+);
+
+export const addSlugToAllCategoriesHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const categories = await db.category.findMany({
+      where: {
+        slug: null,
+      },
+    });
+    if (categories.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Categories Not Found",
+        })
+      );
+    }
+
+    for (const category of categories) {
+      const slug = createSlug(category.name);
+      await db.category.update({
+        where: {
+          id: category.id,
+        },
+        data: {
+          ...category,
+          slug,
+        },
+      });
+    }
+
+    const newCategories = await db.category.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      count: newCategories.length,
+      categories: newCategories,
     });
   }
 );

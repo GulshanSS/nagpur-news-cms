@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addSlugToAllCategoriesHandler,
   createCategoryHandler,
   deleteCategoryByIdHandler,
   getAllCategoriesHandler,
@@ -57,6 +58,12 @@ CategoryRouter.delete(
   [isAuthenticated, authorize("ADMIN")],
   validateSchema(deleteCategorySchema),
   deleteCategoryByIdHandler
+);
+
+CategoryRouter.post(
+  "/all/add/slug",
+  [isAuthenticated, authorize("ADMIN")],
+  addSlugToAllCategoriesHandler
 );
 
 export default CategoryRouter;
