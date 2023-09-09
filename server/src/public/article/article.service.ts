@@ -120,10 +120,10 @@ export const getArticleByKeyword = async (keyword: string) => {
   });
 };
 
-export const getArticleById = async (articleId: string) => {
+export const getArticleBySlug = async (slug: string) => {
   return db.article.findUnique({
     where: {
-      id: parseInt(articleId),
+      slug,
     },
     include: {
       media: true,

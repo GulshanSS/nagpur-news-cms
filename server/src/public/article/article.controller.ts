@@ -3,12 +3,11 @@ import asyncHandler from "../../middleware/asyncHandler";
 import {
   getAllArticles,
   getAllArticlesAsBanner,
-  getArticleById,
+  getArticleBySlug,
   getArticleByKeyword,
   getLatestArticles,
 } from "./article.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { GetArticleInput } from "../../schemas/article.schema";
 import { getSignedUrlIK } from "../../utils/imageKit";
 
 export const getAllArticlesHandler = asyncHandler(
@@ -125,14 +124,14 @@ export const getAllArticlesAsBannerHandler = asyncHandler(
   }
 );
 
-export const getArticleByIdHandler = asyncHandler(
+export const getArticleBySlugHandler = asyncHandler(
   async (
-    req: Request<GetArticleInput["params"]>,
+    req: Request<{ slug: string }, {}, {}>,
     res: Response,
     next: NextFunction
   ) => {
-    const articleId = req.params.articleId;
-    const article = await getArticleById(articleId);
+    const slug = req.params.slug;
+    const article = await getArticleBySlug(slug);
     if (!article) {
       return next(
         new AppError({

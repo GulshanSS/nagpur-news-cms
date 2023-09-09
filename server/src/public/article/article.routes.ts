@@ -2,22 +2,16 @@ import { Router } from "express";
 import {
   getAllArticlesAsBannerHandler,
   getAllArticlesHandler,
-  getArticleByIdHandler,
+  getArticleBySlugHandler,
   getArticlesByKeywordHandler,
   getLatestArticlesHandler,
 } from "./article.controller";
-import validateSchema from "../../middleware/validateSchema";
-import { GetArticleSchema } from "../../schemas/article.schema";
 
 const PublicArticleRouter = Router();
 
 PublicArticleRouter.get("/", getAllArticlesHandler);
 PublicArticleRouter.get("/banner/all", getAllArticlesAsBannerHandler);
-PublicArticleRouter.get(
-  "/:articleId",
-  validateSchema(GetArticleSchema),
-  getArticleByIdHandler
-);
+PublicArticleRouter.get("/:slug", getArticleBySlugHandler);
 PublicArticleRouter.get("/search/:keyword", getArticlesByKeywordHandler);
 PublicArticleRouter.get("/latest/today", getLatestArticlesHandler);
 
