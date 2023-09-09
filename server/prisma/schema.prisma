@@ -55,7 +55,7 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  slug String?
+  slug String @unique
   article Article[]
   active Boolean @default(true)
 }
@@ -65,7 +65,7 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
-  slug String?
+  slug String @unique
   setAsCategory Boolean @default(false)
   article Article[]
   active Boolean @default(true)
@@ -104,7 +104,7 @@ model Article {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
-  slug String?
+  slug String @unique
   content String
   location String
   youtubeVideoUrl String?
@@ -125,7 +125,7 @@ model PromotionaryArticle {
   updatedAt DateTime @updatedAt
   priority Int @default(0)
   title String
-  slug String?
+  slug String @unique
   content String?
   websiteLink String?
   whatsAppLink String?
