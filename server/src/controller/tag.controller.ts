@@ -126,7 +126,7 @@ export const updateTagByIdHandler = asyncHandler(
       );
     }
 
-    let data = req.body;
+    let data = req.body as any;
     const name = req.body.name;
 
     if (name !== existingTag.name) {
@@ -182,7 +182,7 @@ export const addSlugToAllTagsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const tags = await db.tag.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
 
@@ -210,7 +210,7 @@ export const addSlugToAllTagsHandler = asyncHandler(
 
     const newTags = await db.tag.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
 

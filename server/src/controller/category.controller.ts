@@ -129,7 +129,7 @@ export const updateCategoryByIdHandler = asyncHandler(
       );
     }
 
-    let data = req.body;
+    let data = req.body as any;
     const name = req.body.name;
 
     if (name !== existingCategory.name) {
@@ -173,7 +173,7 @@ export const addSlugToAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const categories = await db.category.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
     if (categories.length === 0) {
@@ -200,7 +200,7 @@ export const addSlugToAllCategoriesHandler = asyncHandler(
 
     const newCategories = await db.category.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
 

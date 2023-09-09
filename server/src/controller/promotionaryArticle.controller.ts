@@ -71,7 +71,7 @@ export const updatePromotionaryArticleByIdHandler = asyncHandler(
       );
     }
 
-    let data = req.body;
+    let data = req.body as any;
     const title = req.body.title;
 
     if (title !== existingPromotionaryArticle.title) {
@@ -271,7 +271,7 @@ export const addSlugToAllPromotionaryArticlesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const promotionaryArticles = await db.promotionaryArticle.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
 
@@ -299,7 +299,7 @@ export const addSlugToAllPromotionaryArticlesHandler = asyncHandler(
 
     const newPromotionaryArticles = await db.article.findMany({
       where: {
-        slug: null,
+        slug: undefined,
       },
     });
 
