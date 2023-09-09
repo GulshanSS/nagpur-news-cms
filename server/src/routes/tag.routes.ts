@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { authorize } from "../middleware/authorize";
 import {
+  addSlugToAllTagsHandler,
   createTagHandler,
   deleteTagByIdHandler,
   getAllTagsHandler,
@@ -57,6 +58,12 @@ TagRouter.delete(
   [isAuthenticated, authorize("ADMIN")],
   validateSchema(deleteTagSchema),
   deleteTagByIdHandler
+);
+
+TagRouter.post(
+  "/all/add/slug",
+  [isAuthenticated, authorize("ADMIN")],
+  addSlugToAllTagsHandler
 );
 
 export default TagRouter;

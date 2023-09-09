@@ -15,6 +15,8 @@ import {
 } from "../service/tag.sevice";
 import asyncHandler from "../middleware/asyncHandler";
 import { AppError, HttpCode } from "../exceptions/AppError";
+import { createSlug } from "../utils/slugify";
+import db from "../utils/db.server";
 
 export const getAllTagsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -89,7 +91,8 @@ export const createTagHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const data = req.body;
+    const slug = createSlug(req.body.name);
+    const data = { slug, ...req.body };
     const tag = await createTag(data);
     if (!tag) {
       return next(
@@ -123,7 +126,14 @@ export const updateTagByIdHandler = asyncHandler(
       );
     }
 
-    const data = req.body;
+    let data = req.body;
+    const name = req.body.name;
+
+    if (name !== existingTag.name) {
+      const slug = createSlug(name);
+      data = { slug, ...data };
+    }
+
     const updatedTag = await updateTagById(tagId, data);
 
     if (!updatedTag) {
@@ -164,6 +174,50 @@ export const deleteTagByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       message: `Tag with ${tagId} deleted successfully`,
+    });
+  }
+);
+
+export const addSlugToAllTagsHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const tags = await db.tag.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    if (tags.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Tags not found",
+        })
+      );
+    }
+
+    for (const tag of tags) {
+      const slug = createSlug(tag.name);
+      await db.tag.update({
+        where: {
+          id: tag.id,
+        },
+        data: {
+          ...tag,
+          slug,
+        },
+      });
+    }
+
+    const newTags = await db.tag.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      count: newTags.length,
+      tags: newTags,
     });
   }
 );
