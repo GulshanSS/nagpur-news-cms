@@ -1,8 +1,9 @@
-import { object, string, TypeOf, boolean, date, array, number } from "zod";
+import { object, string, TypeOf, boolean, array, number } from "zod";
 
 const payload = {
   body: object({
     title: string().trim().min(1, "Title is required"),
+    slug: string().optional(),
     content: string().trim().min(1, "Content is required"),
     location: string().trim().min(1, "Location is required"),
     category: array(object({ id: number() })).min(1, "Category is required"),

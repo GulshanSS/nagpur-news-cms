@@ -22,6 +22,7 @@ import { deleteFileByKey } from "../utils/s3";
 import db from "../utils/db.server";
 import config from "../config";
 import { getSignedUrlIK } from "../utils/imageKit";
+import { createSlug } from "../utils/slugify";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -29,7 +30,8 @@ export const createArticleHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const data = req.body;
+    const slug = createSlug(req.body.title);
+    const data = { slug, ...req.body };
     const article = await createArticle(data);
     if (!article) {
       return next(
@@ -63,7 +65,14 @@ export const updateArticleByIdHandler = asyncHandler(
       );
     }
 
-    const data = req.body;
+    let data = req.body;
+    const title = req.body.title;
+
+    if (title !== existingArticle.title) {
+      const slug = createSlug(title);
+      data = { slug, ...data };
+    }
+
     await disconnectCategoryAndTagFromArticle(articleId);
     await updateArticleById(articleId, data);
 
@@ -382,6 +391,49 @@ export const deleteArticleByIdHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       message: "Article deleted successfully",
+    });
+  }
+);
+
+export const addSlugToAllArticlesHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const articles = await db.article.findMany({
+      where: {
+        slug: null,
+      },
+    });
+    if (articles.length === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Articles Not Found",
+        })
+      );
+    }
+
+    for (const article of articles) {
+      const slug = createSlug(article.title);
+      await db.article.update({
+        where: {
+          id: article.id,
+        },
+        data: {
+          ...article,
+          slug,
+        },
+      });
+    }
+
+    const newArticles = await db.article.findMany({
+      where: {
+        slug: null,
+      },
+    });
+
+    return res.status(HttpCode.OK).json({
+      success: true,
+      count: newArticles.length,
+      articles: newArticles,
     });
   }
 );

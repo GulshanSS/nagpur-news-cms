@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addSlugToAllArticlesHandler,
   createArticleHandler,
   deleteArticleByIdHandler,
   getAllArticleHandler,
@@ -71,6 +72,12 @@ ArticleRouter.delete(
   [isAuthenticated, authorize("ADMIN")],
   validateSchema(DeleteArticleSchema),
   deleteArticleByIdHandler
+);
+
+ArticleRouter.post(
+  "/all/add/slug",
+  [isAuthenticated, authorize("ADMIN")],
+  addSlugToAllArticlesHandler
 );
 
 export default ArticleRouter;
