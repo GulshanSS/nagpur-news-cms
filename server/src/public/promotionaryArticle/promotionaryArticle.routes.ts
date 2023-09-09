@@ -2,10 +2,8 @@ import { Router } from "express";
 import {
   getAllPromotionaryArticlesAsBannerHandler,
   getAllPromotionaryArticlesHandler,
-  getPromotionaryArticleByIdHandler,
+  getPromotionaryArticleBySlugHandler,
 } from "./promotionaryArticle.controller";
-import validateSchema from "../../middleware/validateSchema";
-import { getPromotionaryArticleSchema } from "../../schemas/promotionaryArticle.schema";
 
 const PublicPromotionaryArticleRouter = Router();
 
@@ -15,9 +13,8 @@ PublicPromotionaryArticleRouter.get(
   getAllPromotionaryArticlesAsBannerHandler
 );
 PublicPromotionaryArticleRouter.get(
-  "/:promotionaryArticleId",
-  validateSchema(getPromotionaryArticleSchema),
-  getPromotionaryArticleByIdHandler
+  "/:slug",
+  getPromotionaryArticleBySlugHandler
 );
 
 export default PublicPromotionaryArticleRouter;

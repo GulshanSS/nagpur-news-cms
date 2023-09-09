@@ -3,10 +3,9 @@ import asyncHandler from "../../middleware/asyncHandler";
 import {
   getAllPromotionartArticles,
   getAllPromotionaryArticlesAsBanner,
-  getPromotionaryArticleById,
+  getPromotionaryArticleBySlug,
 } from "./promotionaryArticle.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { GetPromotionaryArticleInput } from "../../schemas/promotionaryArticle.schema";
 import { getSignedUrlIK } from "../../utils/imageKit";
 
 export const getAllPromotionaryArticlesHandler = asyncHandler(
@@ -59,16 +58,14 @@ export const getAllPromotionaryArticlesAsBannerHandler = asyncHandler(
   }
 );
 
-export const getPromotionaryArticleByIdHandler = asyncHandler(
+export const getPromotionaryArticleBySlugHandler = asyncHandler(
   async (
-    req: Request<GetPromotionaryArticleInput["params"]>,
+    req: Request<{ slug: string }, {}, {}>,
     res: Response,
     next: NextFunction
   ) => {
-    const promotionaryArticleId = req.params.promotionaryArticleId;
-    const promotionaryArticle = await getPromotionaryArticleById(
-      promotionaryArticleId
-    );
+    const slug = req.params.slug;
+    const promotionaryArticle = await getPromotionaryArticleBySlug(slug);
     if (!promotionaryArticle) {
       return next(
         new AppError({
