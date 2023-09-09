@@ -1,18 +1,12 @@
 import { Router } from "express";
 import {
   getAllCategoriesHandler,
-  getCategoryByIdHandler,
+  getCategoryBySlugHandler,
 } from "./category.controller";
-import validateSchema from "../../middleware/validateSchema";
-import { getCategorySchema } from "../../schemas/category.schema";
 
 const PublicCategoryRouter = Router();
 
 PublicCategoryRouter.get("/", getAllCategoriesHandler);
-PublicCategoryRouter.get(
-  "/:categoryId",
-  validateSchema(getCategorySchema),
-  getCategoryByIdHandler
-);
+PublicCategoryRouter.get("/:slug", getCategoryBySlugHandler);
 
 export default PublicCategoryRouter;

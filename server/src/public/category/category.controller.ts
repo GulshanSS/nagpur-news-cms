@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "../../middleware/asyncHandler";
-import { getAllCategories, getCategoryById } from "./category.service";
+import { getAllCategories, getCategoryBySlug } from "./category.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { GetCategoryInput } from "../../schemas/category.schema";
 import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllCategoriesHandler = asyncHandler(
@@ -24,14 +23,14 @@ export const getAllCategoriesHandler = asyncHandler(
   }
 );
 
-export const getCategoryByIdHandler = asyncHandler(
+export const getCategoryBySlugHandler = asyncHandler(
   async (
-    req: Request<GetCategoryInput["params"], {}, {}>,
+    req: Request<{ slug: string }, {}, {}>,
     res: Response,
     next: NextFunction
   ) => {
-    const categoryId = req.params.categoryId;
-    const category = await getCategoryById(categoryId);
+    const slug = req.params.slug;
+    const category = await getCategoryBySlug(slug);
     if (!category) {
       return next(
         new AppError({

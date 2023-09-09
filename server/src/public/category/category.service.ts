@@ -13,10 +13,10 @@ export const getAllCategories = async () => {
   });
 };
 
-export const getCategoryById = async (categoryId: string) => {
+export const getCategoryBySlug = async (slug: string) => {
   return await db.category.findUnique({
     where: {
-      id: parseInt(categoryId),
+      slug,
     },
     include: {
       article: {
