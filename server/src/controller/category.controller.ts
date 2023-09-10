@@ -17,6 +17,7 @@ import {
 } from "../schemas/category.schema";
 import { createSlug } from "../utils/slugify";
 import db from "../utils/db.server";
+import { getCategoryBySlug } from "../public/category/category.service";
 
 export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -91,6 +92,18 @@ export const createCategoryHandler = asyncHandler(
     next: NextFunction
   ) => {
     const slug = createSlug(req.body.name);
+
+    const existingCategory = await getCategoryBySlug(slug);
+
+    if (existingCategory) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: `Category with Name: ${req.body.name} exists`,
+        })
+      );
+    }
+
     const data = { slug, ...req.body };
     const category = await createCategory(data);
     if (!category) {
@@ -134,6 +147,16 @@ export const updateCategoryByIdHandler = asyncHandler(
 
     if (name !== existingCategory.name) {
       const slug = createSlug(name);
+      const existingCategory = await getCategoryBySlug(slug);
+
+      if (existingCategory) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: `Cannot update Category with Title: ${name} as it exists`,
+          })
+        );
+      }
       data = { slug, ...data };
     }
 

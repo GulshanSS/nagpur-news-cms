@@ -23,6 +23,7 @@ import db from "../utils/db.server";
 import config from "../config";
 import { getSignedUrlIK } from "../utils/imageKit";
 import { createSlug } from "../utils/slugify";
+import { getArticleBySlug } from "../public/article/article.service";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -31,6 +32,18 @@ export const createArticleHandler = asyncHandler(
     next: NextFunction
   ) => {
     const slug = createSlug(req.body.title);
+
+    const existingArticle = await getArticleBySlug(slug);
+
+    if (existingArticle) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: `Article with Title: ${req.body.title} exists`,
+        })
+      );
+    }
+
     const data = { slug, ...req.body };
     const article = await createArticle(data);
     if (!article) {
@@ -70,6 +83,15 @@ export const updateArticleByIdHandler = asyncHandler(
 
     if (title !== existingArticle.title) {
       const slug = createSlug(title);
+      const existingArticle = await getArticleBySlug(slug);
+      if (existingArticle) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: `Cannot update Article with Title: ${title} as it exists`,
+          })
+        );
+      }
       data = { slug, ...data };
     }
 

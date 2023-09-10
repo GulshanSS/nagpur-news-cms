@@ -17,6 +17,7 @@ import asyncHandler from "../middleware/asyncHandler";
 import { AppError, HttpCode } from "../exceptions/AppError";
 import { createSlug } from "../utils/slugify";
 import db from "../utils/db.server";
+import { getTagBySlug } from "../public/tag/tag.service";
 
 export const getAllTagsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -92,6 +93,16 @@ export const createTagHandler = asyncHandler(
     next: NextFunction
   ) => {
     const slug = createSlug(req.body.name);
+    const existingTag = await getTagBySlug(slug);
+
+    if (existingTag) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: `Tag with Name: ${req.body.name} exists`,
+        })
+      );
+    }
     const data = { slug, ...req.body };
     const tag = await createTag(data);
     if (!tag) {
@@ -131,6 +142,16 @@ export const updateTagByIdHandler = asyncHandler(
 
     if (name !== existingTag.name) {
       const slug = createSlug(name);
+      const existingTag = await getTagBySlug(slug);
+
+      if (existingTag) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: `Cannot update Tag with Name: ${name} as it exists`,
+          })
+        );
+      }
       data = { slug, ...data };
     }
 

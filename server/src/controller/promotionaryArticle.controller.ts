@@ -20,6 +20,7 @@ import config from "../config";
 import db from "../utils/db.server";
 import { getSignedUrlIK } from "../utils/imageKit";
 import { createSlug } from "../utils/slugify";
+import { getPromotionaryArticleBySlug } from "../public/promotionaryArticle/promotionaryArticle.service";
 
 export const createPromotionaryArticleHandler = asyncHandler(
   async (
@@ -28,6 +29,20 @@ export const createPromotionaryArticleHandler = asyncHandler(
     next: NextFunction
   ) => {
     const slug = createSlug(req.body.title);
+
+    const existingPromotionaryArticle = await getPromotionaryArticleBySlug(
+      slug
+    );
+
+    if (existingPromotionaryArticle) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.BAD_REQUEST,
+          description: `Cannot update Promotionary Article with Title: ${req.body.title} as it exists`,
+        })
+      );
+    }
+
     const data = { slug, ...req.body };
     const promotionaryArticle = await createPromotionaryAticle(data);
     if (!promotionaryArticle) {
@@ -76,6 +91,18 @@ export const updatePromotionaryArticleByIdHandler = asyncHandler(
 
     if (title !== existingPromotionaryArticle.title) {
       const slug = createSlug(title);
+      const existingPromotionaryArticle = await getPromotionaryArticleBySlug(
+        slug
+      );
+
+      if (existingPromotionaryArticle) {
+        return next(
+          new AppError({
+            httpCode: HttpCode.BAD_REQUEST,
+            description: `Cannot update Promotionary Article with Title: ${title} as it exists`,
+          })
+        );
+      }
       data = { slug, ...data };
     }
 
