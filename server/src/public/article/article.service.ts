@@ -1,12 +1,11 @@
 import db from "../../utils/db.server";
 
-export const getAllArticles = async () => {
+export const getAllArticles = async (skip: number, take: number) => {
   return db.article.findMany({
     where: {
       active: true,
       state: "PUBLISHED",
     },
-    take: 20,
     orderBy: [
       {
         createdAt: "desc",
@@ -18,7 +17,10 @@ export const getAllArticles = async () => {
     include: {
       category: true,
       media: true,
+      articleSection: true,
     },
+    skip,
+    take,
   });
 };
 

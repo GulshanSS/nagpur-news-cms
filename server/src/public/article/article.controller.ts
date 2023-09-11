@@ -9,18 +9,48 @@ import {
 } from "./article.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { getSignedUrlIK } from "../../utils/imageKit";
+import config from "../../config";
+import db from "../../utils/db.server";
 
 export const getAllArticlesHandler = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const articles = await getAllArticles();
-    if (articles.length === 0) {
+  async (
+    req: Request<{}, {}, {}, { page?: string; limit: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count({
+      where: {
+        active: true,
+        state: "PUBLISHED",
+      },
+    });
+
+    if (total === 0) {
       return next(
         new AppError({
           httpCode: HttpCode.NOT_FOUND,
-          description: "Articles Not Found",
+          description: "No Articles Found",
         })
       );
     }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const articles = await getAllArticles(skip, limit);
 
     for (const article of articles) {
       if (article.media.length > 0) {
@@ -33,6 +63,9 @@ export const getAllArticlesHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );
