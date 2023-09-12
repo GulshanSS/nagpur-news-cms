@@ -7,6 +7,8 @@ import {
 } from "./category.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { getSignedUrlForMedia } from "../../utils/s3";
+import config from "../../config";
+import db from "../../utils/db.server";
 
 export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -39,7 +41,7 @@ export const getAllCategoriesWithMinArticlesHandler = asyncHandler(
       );
     }
 
-    for(const category of categories) {
+    for (const category of categories) {
       for (const article of category.article) {
         if (article.media.length > 0) {
           for (const media of article.media) {
@@ -58,12 +60,48 @@ export const getAllCategoriesWithMinArticlesHandler = asyncHandler(
 
 export const getCategoryBySlugHandler = asyncHandler(
   async (
-    req: Request<{ slug: string }, {}, {}>,
+    req: Request<{ slug: string }, {}, {}, { page?: string; limit?: string }>,
     res: Response,
     next: NextFunction
   ) => {
     const slug = req.params.slug;
-    const category = await getCategoryBySlug(slug);
+
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+    const skip = (page - 1) * limit;
+    const total = await db.article.count({
+      where: {
+        category: {
+          some: {
+            slug,
+          },
+        },
+      },
+    });
+
+    if (total === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "Category Not found",
+        })
+      );
+    }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const category = await getCategoryBySlug(slug, skip, limit);
     if (!category) {
       return next(
         new AppError({
@@ -84,6 +122,9 @@ export const getCategoryBySlugHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       category,
+      count: total,
+      page,
+      pages,
     });
   }
 );

@@ -42,14 +42,19 @@ export const getAllCategoriesWithMinArticles = async () => {
   });
 };
 
-export const getCategoryBySlug = async (slug: string) => {
+export const getCategoryBySlug = async (
+  slug: string,
+  skip: number,
+  take: number
+) => {
   return await db.category.findUnique({
     where: {
       slug,
     },
     include: {
       article: {
-        take: 20,
+        skip,
+        take,
         orderBy: [
           {
             createdAt: "desc",
