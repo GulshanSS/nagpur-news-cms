@@ -25,6 +25,14 @@ export const getAllCategoriesWithMinArticles = async () => {
     ],
     include: {
       article: {
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+          {
+            updatedAt: "desc",
+          },
+        ],
         include: {
           media: true,
         },
