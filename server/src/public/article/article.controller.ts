@@ -99,12 +99,74 @@ export const getLatestArticlesHandler = asyncHandler(
 
 export const getArticlesByKeywordHandler = asyncHandler(
   async (
-    req: Request<{ keyword: string }, {}, {}>,
+    req: Request<
+      { keyword: string },
+      {},
+      {},
+      { page?: string; limit?: string }
+    >,
     res: Response,
     next: NextFunction
   ) => {
+    const page = req.query.page ? parseInt(req.query.page) : config.CURR_PAGE;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit)
+      : config.PAGE_LIMIT;
+
     const keyword = req.params.keyword;
-    const articles = await getArticleByKeyword(keyword);
+
+    const skip = (page - 1) * limit;
+    const total = await db.article.count({
+      where: {
+        AND: [
+          {
+            active: true,
+          },
+          {
+            state: "PUBLISHED",
+          },
+        ],
+        OR: [
+          {
+            title: {
+              contains: keyword,
+            },
+          },
+          {
+            content: {
+              contains: keyword,
+            },
+          },
+          {
+            location: {
+              contains: keyword,
+            },
+          },
+        ],
+      },
+    });
+
+    if (total === 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Articles Found",
+        })
+      );
+    }
+
+    const pages = Math.ceil(total / limit);
+
+    if (page > pages || page <= 0) {
+      return next(
+        new AppError({
+          httpCode: HttpCode.NOT_FOUND,
+          description: "No Page Found",
+        })
+      );
+    }
+
+    const articles = await getArticleByKeyword(skip, limit, keyword);
     if (articles.length === 0) {
       return next(
         new AppError({
@@ -125,6 +187,9 @@ export const getArticlesByKeywordHandler = asyncHandler(
     return res.status(HttpCode.OK).json({
       success: true,
       articles,
+      count: total,
+      page,
+      pages,
     });
   }
 );

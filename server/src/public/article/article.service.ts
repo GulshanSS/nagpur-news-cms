@@ -79,8 +79,14 @@ export const getAllArticlesAsBanner = async () => {
   });
 };
 
-export const getArticleByKeyword = async (keyword: string) => {
+export const getArticleByKeyword = async (
+  skip: number,
+  take: number,
+  keyword: string
+) => {
   return db.article.findMany({
+    skip,
+    take,
     where: {
       AND: [
         {
