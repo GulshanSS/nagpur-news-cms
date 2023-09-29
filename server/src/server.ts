@@ -55,7 +55,7 @@ app.use("/api/v1/media", MediaRouter);
 
 //-------------Public Routes-------------//
 app.use("/api/v1/public/category", PublicCategoryRouter);
-app.use("/api/vi/public/tag", PublicTagRouter);
+app.use("/api/v1/public/tag", PublicTagRouter);
 app.use("/api/v1/public/article", PublicArticleRouter);
 app.use("/api/v1/public/testimonial", PublicTestimonialRouter);
 app.use("/api/v1/public/promotionary-article", PublicPromotionaryArticleRouter);
