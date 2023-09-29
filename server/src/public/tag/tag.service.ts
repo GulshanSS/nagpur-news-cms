@@ -10,17 +10,25 @@ export const getAllTags = async () => {
         updatedAt: "asc",
       },
     ],
+    include: {
+      article: true,
+    },
   });
 };
 
-export const getTagBySlug = async (slug: string) => {
+export const getTagBySlug = async (
+  slug: string,
+  skip: number,
+  take: number
+) => {
   return db.tag.findUnique({
     where: {
       slug,
     },
     include: {
       article: {
-        take: 20,
+        skip,
+        take,
         orderBy: [
           {
             createdAt: "desc",
