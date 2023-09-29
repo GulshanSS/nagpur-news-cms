@@ -6,9 +6,9 @@ import {
   getCategoryBySlug,
 } from "./category.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { getSignedUrlForMedia } from "../../utils/s3";
 import config from "../../config";
 import db from "../../utils/db.server";
+import { getSignedUrlIK } from "../../utils/imageKit";
 
 export const getAllCategoriesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -45,7 +45,7 @@ export const getAllCategoriesWithMinArticlesHandler = asyncHandler(
       for (const article of category.article) {
         if (article.media.length > 0) {
           for (const media of article.media) {
-            media.key = await getSignedUrlForMedia(media.key);
+            media.key = getSignedUrlIK(media.key);
           }
         }
       }
@@ -114,7 +114,7 @@ export const getCategoryBySlugHandler = asyncHandler(
     for (const article of category.article) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = await getSignedUrlForMedia(media.key);
+          media.key = getSignedUrlIK(media.key);
         }
       }
     }
