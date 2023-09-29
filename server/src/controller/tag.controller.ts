@@ -93,7 +93,7 @@ export const createTagHandler = asyncHandler(
     next: NextFunction
   ) => {
     const slug = createSlug(req.body.name);
-    const existingTag = await getTagBySlug(slug);
+    const existingTag = await getTagBySlug(slug, 1, 1);
 
     if (existingTag) {
       return next(
@@ -142,7 +142,7 @@ export const updateTagByIdHandler = asyncHandler(
 
     if (name !== existingTag.name) {
       const slug = createSlug(name);
-      const existingTag = await getTagBySlug(slug);
+      const existingTag = await getTagBySlug(slug, 1, 1);
 
       if (existingTag) {
         return next(
