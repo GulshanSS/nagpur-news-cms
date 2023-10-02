@@ -124,10 +124,22 @@ const ViewArticle = ({ id }: Props) => {
             </div>
           )}
           {data?.article.youtubeVideoUrl && (
-            <ViewItem
-              label="YouTube Video URL"
-              value={data!.article.youtubeVideoUrl}
-            />
+            <div className="flex flex-col">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
+                Youtube Video
+              </span>
+              <iframe
+                src={data!.article.youtubeVideoUrl}
+                allowFullScreen
+                title="video"
+                style={{
+                  borderRadius: "10px",
+                  width: "300px",
+                  minHeight: "180px",
+                  margin: "10px 0",
+                }}
+              />
+            </div>
           )}
           {data?.article.author && (
             <ViewItem label="Author" value={data!.article.author} />
