@@ -40,7 +40,7 @@ export const CreateArticleSectionSchema = z.object({
   sequence: z
     .string()
     .trim()
-    .regex(new RegExp("\\d{1}"), "Sequence should contain 0-9 number"),
+    .regex(new RegExp("\\b([0-9]|[1-9][0-9])\\b"), "Sequence should contain 0-99 number"),
 });
 
 export const UpdateArticleSectionSchema = z.object({
@@ -72,7 +72,7 @@ export const UpdateArticleSectionSchema = z.object({
   sequence: z
     .string()
     .trim()
-    .regex(new RegExp("\\d{1}"), "Sequence should contain 0-9 number"),
+    .regex(new RegExp("\\b([0-9]|[1-9][0-9])\\b"), "Sequence should contain 0-99 number"),
 });
 
 export type CreateArticleSectionInput = TypeOf<

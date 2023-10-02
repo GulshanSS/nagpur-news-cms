@@ -116,7 +116,7 @@ const ArticleSectionForm = ({
             name="sequence"
             type="text"
             value={articleSection ? articleSection.sequence.toString() : ""}
-            placeholder="Set Priority 0-9"
+            placeholder="Set Sequence 0-99"
           />
           {articleSection && (
             <>

@@ -6,7 +6,10 @@ const payload = {
     content: string().trim().min(1, "Content is required"),
     sequence: string()
       .trim()
-      .regex(new RegExp("\\d{1}"), "Sequence should contain 0-9 number"),
+      .regex(
+        new RegExp("\\b([0-9]|[1-9][0-9])\\b"),
+        "Sequence should contain 0-99 number"
+      ),
     articleId: number({
       required_error: "Article Id is required",
     }),
