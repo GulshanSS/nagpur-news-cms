@@ -11,6 +11,7 @@ import { AppError, HttpCode } from "../../exceptions/AppError";
 import { getSignedUrlIK } from "../../utils/imageKit";
 import config from "../../config";
 import db from "../../utils/db.server";
+import { Article } from "@prisma/client";
 
 export const getAllArticlesHandler = asyncHandler(
   async (
@@ -207,17 +208,20 @@ export const getAllArticlesAsBannerHandler = asyncHandler(
       );
     }
 
+    let articlesWithMedia = [] as Article[];
+
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
           media.key = getSignedUrlIK(media.key);
         }
+        articlesWithMedia.push(article);
       }
     }
 
     return res.status(HttpCode.OK).json({
       success: true,
-      articles,
+      articles: articlesWithMedia,
     });
   }
 );
@@ -242,6 +246,16 @@ export const getArticleBySlugHandler = asyncHandler(
     if (article.media.length > 0) {
       for (const media of article.media) {
         media.key = getSignedUrlIK(media.key);
+      }
+    }
+
+    if (article.articleSection.length > 0) {
+      for (const articleSection of article.articleSection) {
+        if (articleSection.media.length > 0) {
+          for (const media of articleSection.media) {
+            media.key = getSignedUrlIK(media.key);
+          }
+        }
       }
     }
 
