@@ -41,7 +41,7 @@ export const getAllArticleSectionByArticleId = async (articleId: string) => {
       media: true,
     },
     orderBy: {
-      sequence: "desc",
+      sequence: "asc",
     },
   });
 };

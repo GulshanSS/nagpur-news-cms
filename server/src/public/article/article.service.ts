@@ -137,8 +137,11 @@ export const getArticleBySlug = async (slug: string) => {
       media: true,
       tag: true,
       articleSection: {
+        include: {
+          media: true,
+        },
         orderBy: {
-          sequence: "desc",
+          sequence: "asc",
         },
       },
     },
