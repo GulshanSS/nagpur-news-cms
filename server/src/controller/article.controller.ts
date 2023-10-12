@@ -24,6 +24,8 @@ import config from "../config";
 import { getSignedUrlIK } from "../utils/imageKit";
 import { createSlug } from "../utils/slugify";
 import { getArticleBySlug } from "../public/article/article.service";
+import { postToFacebookPage } from "../utils/facebook";
+import { postToTwitter } from "../utils/twitter";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -45,6 +47,7 @@ export const createArticleHandler = asyncHandler(
     }
 
     const data = { slug, ...req.body };
+
     const article = await createArticle(data);
     if (!article) {
       return next(
@@ -54,6 +57,15 @@ export const createArticleHandler = asyncHandler(
         })
       );
     }
+
+    const link = `${config.NAGPUR_NEWS_URI}/article/${slug}`;
+    if (req.body.postToSocialMedia) {
+      await Promise.all([
+        postToFacebookPage(link, article.title),
+        postToTwitter(link, article.title),
+      ]);
+    }
+
     return res.status(HttpCode.CREATED).json({
       success: true,
       article,
@@ -96,7 +108,15 @@ export const updateArticleByIdHandler = asyncHandler(
     }
 
     await disconnectCategoryAndTagFromArticle(articleId);
-    await updateArticleById(articleId, data);
+    const updatedArticle = await updateArticleById(articleId, data);
+
+    const link = `${config.NAGPUR_NEWS_URI}/article/${updatedArticle.slug}`;
+    if (req.body.postToSocialMedia) {
+      await Promise.all([
+        postToFacebookPage(link, updatedArticle.title),
+        postToTwitter(link, updatedArticle.title),
+      ]);
+    }
 
     return res.status(HttpCode.OK).json({
       success: true,
