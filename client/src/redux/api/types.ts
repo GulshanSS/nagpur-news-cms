@@ -84,6 +84,7 @@ export type Article = {
   state: string;
   setAsBanner: boolean;
   active: boolean;
+  postToSocialMedia: boolean;
   media: Media[];
   articleSection: ArticleSection[];
   tag: Tag[];
