@@ -47,4 +47,14 @@ export default {
   IMAGE_KIT_PRIVATE_KEY: process.env.IMAGE_KIT_PRIVATE_KEY as string,
   IMAGE_KIT_PUBLIC_KEY: process.env.IMAGE_KIT_PUBLIC_KEY as string,
   IMAGE_KIT_URL_ENDPOINT: process.env.IMAGE_KIT_URL_ENDPOINT as string,
+  TWITTER_API_KEY: process.env.TWITTER_API_KEY as string,
+  TWITTER_API_KEY_SECRET: process.env.TWITTER_API_KEY_SECRET as string,
+  TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN as string,
+  TWITTER_ACCESS_TOKEN: process.env.TWITTER_ACCESS_TOKEN as string,
+  TWITTER_ACCESS_TOKEN_SECRET: process.env
+    .TWITTER_ACCESS_TOKEN_SECRET as string,
+  FACEBOOK_PAGE_ACCESS_TOKEN: process.env.FACEBOOK_PAGE_ACCESS_TOKEN as string,
+  FACEBOOK_PAGE_ID: process.env.FACEBOOK_PAGE_ID as string,
+  FACEBOOK_POST_BASE_URL: process.env.FACEBOOK_POST_BASE_URL as string,
+  NAGPUR_NEWS_URI: process.env.NAGPUR_NEWS_URI as string,
 };
