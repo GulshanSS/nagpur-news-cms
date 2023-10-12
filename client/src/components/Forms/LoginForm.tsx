@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
-import { APIErrorResponse, OTPErrorResponse } from "../../redux/api/types";
+import { OTPErrorResponse } from "../../redux/api/types";
 import { toast } from "react-toastify";
 import { BsQuestionCircleFill } from "react-icons/bs";
 
@@ -31,15 +31,19 @@ const LoginForm = () => {
     }
 
     if (isError) {
-      if ((error as OTPErrorResponse).data.userId !== undefined) {
+      if (
+        (error as OTPErrorResponse).data !== null &&
+        (error as OTPErrorResponse).data.userId !== undefined
+      ) {
         navigate("/verify-otp", {
           state: {
             userId: (error as OTPErrorResponse).data.userId,
             message: (error as OTPErrorResponse).data.message,
           },
         });
+      } else {
+        toast.error("Something went wrong. Try Again Later!!!");
       }
-      toast.error((error as APIErrorResponse).data.message);
     }
   }, [isLoading]);
 
