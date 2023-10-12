@@ -113,6 +113,7 @@ model Article {
   state String @default("DRAFT")
   setAsBanner Boolean @default(false)
   active Boolean @default(true)
+  postToSocialMedia Boolean? @default(false)
   media Media[]
   articleSection ArticleSection[]
   tag Tag[]

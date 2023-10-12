@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Article" ALTER COLUMN "facebook" DROP NOT NULL,
+ALTER COLUMN "twitter" DROP NOT NULL;
