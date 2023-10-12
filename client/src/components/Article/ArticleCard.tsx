@@ -65,12 +65,16 @@ const ArticleCard = ({ article }: Props) => {
                 dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
             )}
-            <div className="mt-6">
+            <div className="flex gap-1 mt-6">
               <Status
                 label={article.state}
                 colorVariant={
                   article.state === "PUBLISHED" ? "orange" : "slate"
                 }
+              />
+              <Status
+                label="Social Media"
+                colorVariant={article.postToSocialMedia ? "green" : "slate"}
               />
             </div>
           </div>

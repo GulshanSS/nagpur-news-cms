@@ -188,6 +188,11 @@ const ArticleForm = ({
                 value={article ? article.setAsBanner! : true}
               />
             </div>
+            <ToggleSwitch
+              label="Post To Social Media"
+              name="postToSocialMedia"
+              value={article ? article.postToSocialMedia! : false}
+            />
             <div className="w-full md:flex md:gap-2">
               <MultiSelectField
                 options={{ category: categoryResult?.categories }}
