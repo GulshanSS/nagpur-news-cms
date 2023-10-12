@@ -52,6 +52,7 @@ export const CreateArticleSchema = z.object({
   state: z.string().trim().optional(),
   setAsBanner: z.boolean().optional(),
   active: z.boolean().optional(),
+  postToSocialMedia: z.boolean().optional(),
 });
 
 export const UpdateArticleSchema = z.object({
@@ -95,6 +96,7 @@ export const UpdateArticleSchema = z.object({
   state: z.string().trim().optional(),
   setAsBanner: z.boolean().optional(),
   active: z.boolean().optional(),
+  postToSocialMedia: z.boolean().optional(),
 });
 
 export type CreateArticleInput = TypeOf<typeof CreateArticleSchema>;
