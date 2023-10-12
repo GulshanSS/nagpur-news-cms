@@ -13,6 +13,7 @@ const payload = {
     state: string().trim().min(1, "Publish State is required"),
     setAsBanner: boolean().optional(),
     active: boolean().optional(),
+    postToSocialMedia: boolean().optional(),
   }),
 };
 
