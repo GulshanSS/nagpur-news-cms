@@ -33,7 +33,7 @@ class ErrorHandler {
         message: "Internal Server Error",
       });
     }
-
+    console.log(error);
     logger.error("Application encountered a critical error. Exiting");
     process.exit(1);
   }
