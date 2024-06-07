@@ -5,7 +5,7 @@ import { AppError, HttpCode } from "../../exceptions/AppError";
 import { Tag } from "@prisma/client";
 import config from "../../config";
 import db from "../../utils/db.server";
-import { getSignedUrlIK } from "../../utils/imageKit";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllTagsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -92,7 +92,7 @@ export const getTagBySlugHandler = asyncHandler(
     for (const article of tag.article) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = getSignedUrlIK(media.key);
+          media.key = await getSignedUrlForMedia(media.key);
         }
       }
     }

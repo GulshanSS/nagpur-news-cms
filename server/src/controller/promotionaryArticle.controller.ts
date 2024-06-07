@@ -15,10 +15,9 @@ import {
   updatePromotionaryArticleById,
 } from "../service/promotionaryArticle.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey } from "../utils/s3";
+import { deleteFileByKey, getSignedUrlForMedia, invalidateCloudFrontCache } from "../utils/s3";
 import config from "../config";
 import db from "../utils/db.server";
-import { getSignedUrlIK } from "../utils/imageKit";
 import { createSlug } from "../utils/slugify";
 import { getPromotionaryArticleBySlug } from "../public/promotionaryArticle/promotionaryArticle.service";
 
@@ -151,7 +150,7 @@ export const getAllPromotionaryArticleHandler = asyncHandler(
     const promotionaryArticles = await getAllPromotionaryArticles(skip, limit);
 
     for (const promotionaryArticle of promotionaryArticles) {
-      promotionaryArticle.media!.key = getSignedUrlIK(
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
         promotionaryArticle.media!.key
       );
     }
@@ -186,7 +185,7 @@ export const getPromotionaryArticleByIdHandler = asyncHandler(
       );
     }
 
-    promotionaryArticle.media!.key = getSignedUrlIK(
+    promotionaryArticle.media!.key = await getSignedUrlForMedia(
       promotionaryArticle.media!.key
     );
 
@@ -245,7 +244,7 @@ export const getPromotionaryArticleByTitleHandler = asyncHandler(
     );
 
     for (const promotionaryArticle of promotionaryArticles) {
-      promotionaryArticle.media!.key = getSignedUrlIK(
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
         promotionaryArticle.media!.key
       );
     }
@@ -284,6 +283,7 @@ export const deletePromotionaryArticleByIdHandler = asyncHandler(
     const mediaKey = promotionaryArticle.media!.key;
 
     await deleteFileByKey(mediaKey);
+    await invalidateCloudFrontCache(mediaKey);
 
     await deletePromotionaryArticleById(promotionaryArticleId);
 

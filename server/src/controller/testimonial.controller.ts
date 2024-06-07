@@ -15,10 +15,9 @@ import {
   updateTestimonialById,
 } from "../service/testimonial.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey } from "../utils/s3";
+import { deleteFileByKey, getSignedUrlForMedia, invalidateCloudFrontCache } from "../utils/s3";
 import config from "../config";
 import db from "../utils/db.server";
-import { getSignedUrlIK } from "../utils/imageKit";
 
 export const createTestimonialHandler = asyncHandler(
   async (
@@ -114,7 +113,7 @@ export const getAllTestimonialHandler = asyncHandler(
     const testimonials = await getAllTestimonials(skip, limit);
 
     for (const testimonial of testimonials) {
-      testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
+      testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
     }
 
     return res.status(HttpCode.OK).json({
@@ -144,7 +143,7 @@ export const getTestimonialByIdHandler = asyncHandler(
       );
     }
 
-    testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
+    testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
 
     return res.status(HttpCode.OK).json({
       success: true,
@@ -202,7 +201,7 @@ export const getTestimonialByQuotedByHandler = asyncHandler(
     const testimonials = await getTestimonialByQuotedBy(quotedBy, skip, limit);
 
     for (const testimonial of testimonials) {
-      testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
+      testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
     }
 
     return res.status(HttpCode.OK).json({
@@ -235,6 +234,7 @@ export const deleteTestimonialByIdHandler = asyncHandler(
     const mediaKey = testimonial.media!.key;
 
     await deleteFileByKey(mediaKey);
+    await invalidateCloudFrontCache(mediaKey);
 
     await deleteTestimonialById(testimonialId);
 

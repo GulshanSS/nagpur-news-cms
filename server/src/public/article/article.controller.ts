@@ -8,10 +8,10 @@ import {
   getLatestArticles,
 } from "./article.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { getSignedUrlIK } from "../../utils/imageKit";
 import config from "../../config";
 import db from "../../utils/db.server";
 import { Article } from "@prisma/client";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllArticlesHandler = asyncHandler(
   async (
@@ -56,7 +56,7 @@ export const getAllArticlesHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = getSignedUrlIK(media.key);
+          media.key = await getSignedUrlForMedia(media.key);
         }
       }
     }
@@ -86,7 +86,7 @@ export const getLatestArticlesHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = getSignedUrlIK(media.key);
+          media.key = await getSignedUrlForMedia(media.key);
         }
       }
     }
@@ -180,7 +180,7 @@ export const getArticlesByKeywordHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = getSignedUrlIK(media.key);
+          media.key = await getSignedUrlForMedia(media.key);
         }
       }
     }
@@ -213,7 +213,7 @@ export const getAllArticlesAsBannerHandler = asyncHandler(
     for (const article of articles) {
       if (article.media.length > 0) {
         for (const media of article.media) {
-          media.key = getSignedUrlIK(media.key);
+          media.key = await getSignedUrlForMedia(media.key);
         }
         articlesWithMedia.push(article);
       }
@@ -245,7 +245,7 @@ export const getArticleBySlugHandler = asyncHandler(
 
     if (article.media.length > 0) {
       for (const media of article.media) {
-        media.key = getSignedUrlIK(media.key);
+        media.key = await getSignedUrlForMedia(media.key);
       }
     }
 
@@ -253,7 +253,7 @@ export const getArticleBySlugHandler = asyncHandler(
       for (const articleSection of article.articleSection) {
         if (articleSection.media.length > 0) {
           for (const media of articleSection.media) {
-            media.key = getSignedUrlIK(media.key);
+            media.key = await getSignedUrlForMedia(media.key);
           }
         }
       }

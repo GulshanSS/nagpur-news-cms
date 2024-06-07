@@ -3,7 +3,7 @@ import asyncHandler from "../../middleware/asyncHandler";
 import { getAllTestimonials, getTestimonialById } from "./testimonial.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
 import { GetTestimonialInput } from "../../schemas/testimonial.schema";
-import { getSignedUrlIK } from "../../utils/imageKit";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllTestimonialsHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +18,7 @@ export const getAllTestimonialsHandler = asyncHandler(
     }
 
     for (const testimonial of testimonials) {
-      testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
+      testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
     }
 
     return res.status(HttpCode.OK).json({
@@ -45,7 +45,7 @@ export const getTestimonialByIdHandler = asyncHandler(
       );
     }
 
-    testimonial.media!.key = getSignedUrlIK(testimonial.media!.key);
+    testimonial.media!.key = await getSignedUrlForMedia(testimonial.media!.key);
 
     return res.status(HttpCode.OK).json({
       success: true,

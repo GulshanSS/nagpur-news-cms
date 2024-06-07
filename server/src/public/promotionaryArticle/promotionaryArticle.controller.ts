@@ -6,7 +6,7 @@ import {
   getPromotionaryArticleBySlug,
 } from "./promotionaryArticle.service";
 import { AppError, HttpCode } from "../../exceptions/AppError";
-import { getSignedUrlIK } from "../../utils/imageKit";
+import { getSignedUrlForMedia } from "../../utils/s3";
 
 export const getAllPromotionaryArticlesHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +21,7 @@ export const getAllPromotionaryArticlesHandler = asyncHandler(
     }
 
     for (const promotionaryArticle of promotionaryArticles) {
-      promotionaryArticle.media!.key = getSignedUrlIK(
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
         promotionaryArticle.media!.key
       );
     }
@@ -46,7 +46,7 @@ export const getAllPromotionaryArticlesAsBannerHandler = asyncHandler(
     }
 
     for (const promotionaryArticle of promotionaryArticles) {
-      promotionaryArticle.media!.key = getSignedUrlIK(
+      promotionaryArticle.media!.key = await getSignedUrlForMedia(
         promotionaryArticle.media!.key
       );
     }
@@ -75,7 +75,7 @@ export const getPromotionaryArticleBySlugHandler = asyncHandler(
       );
     }
 
-    promotionaryArticle.media!.key = getSignedUrlIK(
+    promotionaryArticle.media!.key = await getSignedUrlForMedia(
       promotionaryArticle.media!.key
     );
 
