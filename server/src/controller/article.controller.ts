@@ -86,10 +86,11 @@ export const updateArticleByIdHandler = asyncHandler(
     }
 
     let data = req.body as any;
-    const slugText = req.body.slug;
+    const title = req.body.title;
+    const slug = createSlug(req.body.slug);
 
-    if (req.body.slug !== existingArticle.slug) {
-      const slug = createSlug(slugText);
+
+    if (title !== existingArticle.title) {
       const existingArticle = await getArticleBySlug(slug);
       if (existingArticle) {
         return next(
@@ -99,8 +100,9 @@ export const updateArticleByIdHandler = asyncHandler(
           })
         );
       }
-      data = { slug, ...data };
     }
+
+    data = { slug, ...data };
 
     await disconnectCategoryAndTagFromArticle(articleId);
     const updatedArticle = await updateArticleById(articleId, data);

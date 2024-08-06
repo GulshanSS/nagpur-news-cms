@@ -139,9 +139,9 @@ export const updateTagByIdHandler = asyncHandler(
 
     let data = req.body as any;
     const name = req.body.name;
+    const slug = createSlug(req.body.slug);
 
     if (name !== existingTag.name) {
-      const slug = createSlug(req.body.slug);
       const existingTag = await getTagBySlug(slug, 1, 1);
 
       if (existingTag) {
@@ -152,8 +152,9 @@ export const updateTagByIdHandler = asyncHandler(
           })
         );
       }
-      data = { slug, ...data };
     }
+
+    data = { slug, ...data };
 
     const updatedTag = await updateTagById(tagId, data);
 
