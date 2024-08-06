@@ -41,7 +41,7 @@ export const getTagByName = async (name: string) => {
 };
 
 export const createTag = async (
-  tag: CreateTagInput["body"] & { slug: string }
+  tag: CreateTagInput["body"]
 ) => {
   return await db.tag.create({
     data: tag,
@@ -50,7 +50,7 @@ export const createTag = async (
 
 export const updateTagById = async (
   tagId: string,
-  tag: UpdateTagInput["body"] & { slug?: string }
+  tag: UpdateTagInput["body"]
 ) => {
   return await db.tag.update({
     where: {
