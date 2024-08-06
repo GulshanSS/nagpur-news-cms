@@ -9,6 +9,7 @@ import {
   CloudFrontClient,
   CreateInvalidationCommand,
 } from "@aws-sdk/client-cloudfront";
+import { watermarkImage } from "./sharp";
 
 const s3 = new S3Client({
   region: config.AWS_BUCKET_REGION,
@@ -56,10 +57,13 @@ export const uploadSingleFile = async (
   file: Express.Multer.File,
   imageName: string
 ) => {
+
+  const imageBuffer = await watermarkImage(file);
+
   const params = {
     Bucket: config.AWS_BUCKET_NAME,
     Key: imageName,
-    Body: file.buffer,
+    Body: imageBuffer ? imageBuffer : file.buffer,
     ContentType: file.mimetype,
   };
 

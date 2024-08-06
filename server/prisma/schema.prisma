@@ -107,7 +107,8 @@ model Article {
   slug String @unique
   content String
   location String
-  youtubeVideoUrl String?
+  youtubeVideoUrl String? @default("")
+  twitterId String? @default("")
   author String
   publishedOn DateTime @default(now())
   state String @default("DRAFT")

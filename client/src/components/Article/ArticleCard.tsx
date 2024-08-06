@@ -72,10 +72,6 @@ const ArticleCard = ({ article }: Props) => {
                   article.state === "PUBLISHED" ? "orange" : "slate"
                 }
               />
-              <Status
-                label="Social Media"
-                colorVariant={article.postToSocialMedia ? "green" : "slate"}
-              />
             </div>
           </div>
           <div className="w-full flex justify-between items-center">

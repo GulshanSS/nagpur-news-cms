@@ -57,6 +57,7 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
               <CategoryCard
                 key={category.id}
                 id={category.id}
+                slug={category.slug}
                 name={category.name}
                 active={category.active}
               />
@@ -65,6 +66,7 @@ const DisplayAllCategory = ({ searchQuery }: Props) => {
               <CategoryCard
                 key={category.id}
                 id={category.id}
+                slug={category.slug}
                 name={category.name}
                 active={category.active}
               />

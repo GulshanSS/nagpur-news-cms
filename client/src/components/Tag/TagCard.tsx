@@ -14,12 +14,13 @@ import { APIErrorResponse } from "../../redux/api/types";
 
 type Props = {
   id: number;
+  slug: string;
   name: string;
   setAsCategory: boolean;
   active: boolean;
 };
 
-const TagCard = ({ id, name, active, setAsCategory }: Props) => {
+const TagCard = ({ id, slug, name, active, setAsCategory }: Props) => {
   const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
 
   const [close, setClose] = useState<boolean>(false);
@@ -78,7 +79,7 @@ const TagCard = ({ id, name, active, setAsCategory }: Props) => {
         close={modalCloseForm}
         setClose={setModalCloseForm}
       >
-        <TagForm buttonLabel="Update" tag={{ id, name, active }} />
+        <TagForm buttonLabel="Update" tag={{ id, slug, name, active }} />
       </Modal>
     </>
   );

@@ -36,6 +36,7 @@ export const CreateArticleSchema = z.object({
       "Only these types are allowed .jpg, .jpeg, .png, .webp, .mp4, .webm and .ogg"
     ),
   title: z.string().trim().min(1, "Title is required"),
+  slug: z.string().trim().min(1, "Slug is required"),
   content: z.string().trim().min(1, "Content is required"),
   location: z.string().trim().min(1, "Location is required"),
   category: z
@@ -45,6 +46,7 @@ export const CreateArticleSchema = z.object({
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
     .min(1, "Tag is required"),
   youtubeVideoUrl: z.string().trim().optional(),
+  twitterId: z.string().trim().optional(),
   author: z.string().trim().min(1, "Author is required"),
   publishedOn: z.string({
     required_error: "Publish Date is required",
@@ -80,6 +82,7 @@ export const UpdateArticleSchema = z.object({
       "Only these types are allowed .jpg, .jpeg, .png, .webp, .mp4, .webm and .ogg"
     ),
   title: z.string().trim().min(1, "Title is required"),
+  slug: z.string().trim().min(1, "Slug is required"),
   content: z.string().trim().min(1, "Content is required"),
   location: z.string().trim().min(1, "Location is required"),
   category: z
@@ -89,6 +92,7 @@ export const UpdateArticleSchema = z.object({
     .array(z.object({ label: z.string(), value: z.object({ id: z.number() }) }))
     .min(1, "Tag is required"),
   youtubeVideoUrl: z.string().trim().optional(),
+  twitterId: z.string().trim().optional(),
   author: z.string().trim().min(1, "Author is required"),
   publishedOn: z.string({
     required_error: "Publish Date is required",

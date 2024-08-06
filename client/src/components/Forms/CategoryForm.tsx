@@ -93,6 +93,13 @@ const CategoryForm = ({ buttonLabel, category }: Props) => {
             value={category ? category.name : ""}
             placeholder="Enter Category Name"
           />
+          <InputField
+            label="Slug Text"
+            name="slug"
+            type="text"
+            value={category ? category.slug : ""}
+            placeholder="Enter Slug Text"
+          />
           <ToggleSwitch
             value={category ? category.active! : true}
             name="active"

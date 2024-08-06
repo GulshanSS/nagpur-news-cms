@@ -18,13 +18,15 @@ import {
   updateArticleById,
 } from "../service/article.service";
 import { AppError, HttpCode } from "../exceptions/AppError";
-import { deleteFileByKey, getSignedUrlForMedia, invalidateCloudFrontCache } from "../utils/s3";
+import {
+  deleteFileByKey,
+  getSignedUrlForMedia,
+  invalidateCloudFrontCache,
+} from "../utils/s3";
 import db from "../utils/db.server";
 import config from "../config";
 import { createSlug } from "../utils/slugify";
 import { getArticleBySlug } from "../public/article/article.service";
-import { postToFacebookPage } from "../utils/facebook";
-import { postToTwitter } from "../utils/twitter";
 
 export const createArticleHandler = asyncHandler(
   async (
@@ -32,7 +34,9 @@ export const createArticleHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const slug = createSlug(req.body.title);
+    const slugText = req.body.slug;
+
+    const slug = createSlug(slugText);
 
     const existingArticle = await getArticleBySlug(slug);
 
@@ -45,7 +49,7 @@ export const createArticleHandler = asyncHandler(
       );
     }
 
-    const data = { slug, ...req.body };
+    const data = { ...req.body, slug };
 
     const article = await createArticle(data);
     if (!article) {
@@ -55,14 +59,6 @@ export const createArticleHandler = asyncHandler(
           description: "Not able to create article",
         })
       );
-    }
-
-    const link = `${config.NAGPUR_NEWS_URI}/article/${slug}`;
-    if (req.body.postToSocialMedia) {
-      await Promise.all([
-        postToFacebookPage(link, article.title),
-        postToTwitter(link, article.title),
-      ]);
     }
 
     return res.status(HttpCode.CREATED).json({
@@ -90,16 +86,16 @@ export const updateArticleByIdHandler = asyncHandler(
     }
 
     let data = req.body as any;
-    const title = req.body.title;
+    const slugText = req.body.slug;
 
-    if (title !== existingArticle.title) {
-      const slug = createSlug(title);
+    if (req.body.slug !== existingArticle.slug) {
+      const slug = createSlug(slugText);
       const existingArticle = await getArticleBySlug(slug);
       if (existingArticle) {
         return next(
           new AppError({
             httpCode: HttpCode.BAD_REQUEST,
-            description: `Cannot update Article with Title: ${title} as it exists`,
+            description: `Cannot update Article with Title: ${req.body.title} as it exists`,
           })
         );
       }
@@ -108,14 +104,6 @@ export const updateArticleByIdHandler = asyncHandler(
 
     await disconnectCategoryAndTagFromArticle(articleId);
     const updatedArticle = await updateArticleById(articleId, data);
-
-    const link = `${config.NAGPUR_NEWS_URI}/article/${updatedArticle.slug}`;
-    if (req.body.postToSocialMedia) {
-      await Promise.all([
-        postToFacebookPage(link, updatedArticle.title),
-        postToTwitter(link, updatedArticle.title),
-      ]);
-    }
 
     return res.status(HttpCode.OK).json({
       success: true,

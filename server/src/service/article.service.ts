@@ -43,6 +43,7 @@ export const updateArticleById = async (
   articleId: string,
   data: UpdateArticleInput["body"] & { slug?: string }
 ) => {
+  console.log(data);
   return await db.article.update({
     where: {
       id: parseInt(articleId),
@@ -56,6 +57,9 @@ export const updateArticleById = async (
       tag: {
         connect: data.tag,
       },
+    },
+    include: {
+      media: true,
     },
   });
 };

@@ -91,7 +91,9 @@ export const createCategoryHandler = asyncHandler(
     res: Response,
     next: NextFunction
   ) => {
-    const slug = createSlug(req.body.name);
+    const slugText = req.body.slug;
+
+    const slug = createSlug(slugText);
 
     const existingCategory = await getCategoryBySlug(slug, 1, 1);
 
@@ -104,7 +106,7 @@ export const createCategoryHandler = asyncHandler(
       );
     }
 
-    const data = { slug, ...req.body };
+    const data = { ...req.body, slug };
     const category = await createCategory(data);
     if (!category) {
       return next(
@@ -143,10 +145,10 @@ export const updateCategoryByIdHandler = asyncHandler(
     }
 
     let data = req.body as any;
-    const name = req.body.name;
+    const slugText = req.body.slug;
 
-    if (name !== existingCategory.name) {
-      const slug = createSlug(name);
+    if (req.body.name !== existingCategory.name) {
+      const slug = createSlug(slugText);
       const existingCategory = await getCategoryBySlug(slug, 1, 1);
 
       if (existingCategory) {

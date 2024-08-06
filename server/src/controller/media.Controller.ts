@@ -15,6 +15,10 @@ import {
   getMediaById,
   updateMedia,
 } from "../service/media.service";
+import { postToFacebookPage } from "../utils/facebook";
+import { postToTwitter } from "../utils/twitter";
+import { getArticleById } from "../service/article.service";
+import config from "../config";
 
 export const getAllMediaHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -140,6 +144,13 @@ export const uploadMutipleFileForArticleHandler = asyncHandler(
         articleId: parseInt(articleId),
       });
     }
+    const article = await getArticleById(articleId);
+    const link = `${config.NAGPUR_NEWS_URI}/article/${article?.slug}`;
+
+    await Promise.all([
+      postToFacebookPage(files[0], link, article!.title),
+      postToTwitter(files[0], link, article!.title),
+    ]);
 
     return res.status(HttpCode.CREATED).json({
       success: true,

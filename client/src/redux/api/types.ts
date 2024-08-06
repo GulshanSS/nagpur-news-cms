@@ -6,6 +6,7 @@ export type OTPInput = {
 export type Category = {
   id: number;
   name: string;
+  slug: string;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -14,6 +15,7 @@ export type Category = {
 export type Tag = {
   id: number;
   name: string;
+  slug: string;
   active: boolean;
   setAsCategory: boolean;
   createdAt: Date;
@@ -75,10 +77,12 @@ export type Article = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
+  slug: string;
   title: string;
   content: string;
   location: string;
   youtubeVideoUrl: string;
+  twitterId: string;
   author: string;
   publishedOn: Date;
   state: string;

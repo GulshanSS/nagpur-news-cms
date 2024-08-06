@@ -15,7 +15,10 @@ const Modal = ({ id, children, close, setClose }: Props) => {
   }
 
   const handleOnClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLInputElement).id === id) setClose(false);
+    if ((e.target as HTMLInputElement).id === id) {
+      setClose(false);
+      window.location.reload();
+    };
   };
 
   return (
@@ -28,7 +31,10 @@ const Modal = ({ id, children, close, setClose }: Props) => {
         <div className="flex flex-col items-end">
           <div className="mb-2 mr-2">
             <ActionButton
-              onClick={() => setClose(false)}
+              onClick={() => {
+                setClose(false)
+                window.location.reload()
+              }}
               Icon={<IoIosCloseCircle />}
               color="slate"
             />

@@ -17,6 +17,7 @@ import ViewItem from "../ViewItem";
 import ArticleSectionButton from "../Forms/Article/ArticleSectionButton";
 import ArticleSection from "../ArticleSection/ArticleSection";
 import { useNavigate } from "react-router-dom";
+import TwitterVideoEmbeded from "./TwitterVideoEmbeded";
 
 type Props = {
   id: number;
@@ -56,6 +57,10 @@ const ViewArticle = ({ id }: Props) => {
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (data) {
+    console.log(data);
   }
 
   return (
@@ -139,6 +144,14 @@ const ViewArticle = ({ id }: Props) => {
                   margin: "10px 0",
                 }}
               />
+            </div>
+          )}
+          {data?.article.twitterId && (
+            <div className="flex flex-col">
+              <span className="w-28 text-[12px] font-bold text-custom-800">
+                Twitter Video
+              </span>
+              <TwitterVideoEmbeded content={data?.article.twitterId} />
             </div>
           )}
           {data?.article.author && (

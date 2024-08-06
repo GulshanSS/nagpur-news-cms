@@ -5,6 +5,9 @@ const payload = {
     name: string({
       required_error: "Category Name is required",
     }).min(1, { message: "Category Name cannot be empty" }),
+    slug: string({
+      required_error: "Slug is required",
+    }).min(1, { message: "Slug cannot be empty" }),
     active: boolean().optional(),
   }),
 };

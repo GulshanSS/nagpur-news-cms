@@ -86,6 +86,13 @@ const TagForm = ({ buttonLabel, tag }: Props) => {
             value={tag ? tag.name : ""}
             placeholder="Enter Tag Name"
           />
+          <InputField
+            label="Slug Text"
+            name="slug"
+            type="text"
+            value={tag ? tag.slug : ""}
+            placeholder="Enter Slug Text"
+          />
           <ToggleSwitch
             value={tag ? tag.setAsCategory! : true}
             name="setAsCategory"

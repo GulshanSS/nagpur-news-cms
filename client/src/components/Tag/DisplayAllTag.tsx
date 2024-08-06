@@ -56,6 +56,7 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
               <TagCard
                 key={tag.id}
                 id={tag.id}
+                slug={tag.slug}
                 name={tag.name}
                 setAsCategory={tag.setAsCategory}
                 active={tag.active}
@@ -65,6 +66,7 @@ const DisplayAllTag = ({ searchQuery }: Props) => {
               <TagCard
                 key={tag.id}
                 id={tag.id}
+                slug={tag.slug}
                 name={tag.name}
                 setAsCategory={tag.setAsCategory}
                 active={tag.active}

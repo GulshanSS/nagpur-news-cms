@@ -1,5 +1,11 @@
-import { TwitterApi, TwitterApiTokens } from "twitter-api-v2";
+import {
+  TwitterApi,
+  TwitterApiTokens,
+  TwitterApiV2Settings,
+} from "twitter-api-v2";
 import config from "../config";
+
+TwitterApiV2Settings.deprecationWarnings = false;
 
 const tokens: TwitterApiTokens = {
   appKey: config.TWITTER_API_KEY,
@@ -10,6 +16,18 @@ const tokens: TwitterApiTokens = {
 
 const client = new TwitterApi(tokens);
 
-export const postToTwitter = async (link: string, tweetText: string) => {
-  return await client.v2.tweet(`${tweetText} ${link}`);
+export const postToTwitter = async (
+  file: Express.Multer.File,
+  link: string,
+  tweetText: string
+) => {
+  const mediaId = await client.v1.uploadMedia(file.buffer, {
+    type: file.mimetype,
+  });
+  return await client.v2.tweet({
+    text: `${tweetText} ${link}`,
+    media: {
+      media_ids: [mediaId],
+    },
+  });
 };

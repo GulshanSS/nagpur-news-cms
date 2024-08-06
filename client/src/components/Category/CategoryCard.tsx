@@ -14,11 +14,12 @@ import { APIErrorResponse } from "../../redux/api/types";
 
 type Props = {
   id: number;
+  slug: string;
   name: string;
   active: boolean;
 };
 
-const CategoryCard = ({ id, name, active }: Props) => {
+const CategoryCard = ({ id, slug, name, active }: Props) => {
   const [modalCloseForm, setModalCloseForm] = useState<boolean>(false);
 
   const [close, setClose] = useState<boolean>(false);
@@ -73,7 +74,7 @@ const CategoryCard = ({ id, name, active }: Props) => {
         close={modalCloseForm}
         setClose={setModalCloseForm}
       >
-        <CategoryForm buttonLabel="Update" category={{ id, name, active }} />
+        <CategoryForm buttonLabel="Update" category={{ id, slug, name, active }} />
       </Modal>
     </>
   );
