@@ -283,7 +283,7 @@ export const deletePromotionaryArticleByIdHandler = asyncHandler(
     const mediaKey = promotionaryArticle.media!.key;
 
     await deleteFileByKey(mediaKey);
-    await invalidateCloudFrontCache(mediaKey);
+    // await invalidateCloudFrontCache(mediaKey);
 
     await deletePromotionaryArticleById(promotionaryArticleId);
 

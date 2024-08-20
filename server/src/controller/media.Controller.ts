@@ -263,7 +263,7 @@ export const deleteMediaByIdHandler = asyncHandler(
     }
 
     await deleteFileByKey(media.key);
-    await invalidateCloudFrontCache(media.key);
+    // await invalidateCloudFrontCache(media.key);
     await deleteMediaById(parseInt(mediaId));
 
     return res.status(HttpCode.OK).json({

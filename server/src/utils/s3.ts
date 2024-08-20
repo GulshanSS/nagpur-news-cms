@@ -1,10 +1,12 @@
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import config from "../config";
-import { getSignedUrl } from "@aws-sdk/cloudfront-signer";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 import {
   CloudFrontClient,
   CreateInvalidationCommand,
@@ -44,12 +46,25 @@ export const invalidateCloudFrontCache = async (key: string) => {
 };
 
 export const getSignedUrlForMedia = async (key: string) => {
-  const url = await getSignedUrl({
-    url: `${config.CLOUDFRONT_URL}/${key}`,
-    dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24).toString(),
-    privateKey: config.CLOUDFRONT_PRIVATE_KEY,
-    keyPairId: config.CLOUDFRONT_KEY_PAIR_ID,
-  });
+
+  // Get SignedUrl from Cloudfront
+
+  // const url = await getSignedUrl({
+  //   url: `${config.CLOUDFRONT_URL}/${key}`,
+  //   dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24).toString(),
+  //   privateKey: config.CLOUDFRONT_PRIVATE_KEY,
+  //   keyPairId: config.CLOUDFRONT_KEY_PAIR_ID,
+  // });
+
+  // Get SignedUrl from S3
+
+  const command = new GetObjectCommand({
+    Bucket: config.AWS_BUCKET_NAME,
+    Key: key,
+  })
+
+  const url = getSignedUrl(s3, command);
+
   return url;
 };
 
@@ -57,7 +72,6 @@ export const uploadSingleFile = async (
   file: Express.Multer.File,
   imageName: string
 ) => {
-
   const imageBuffer = await watermarkImage(file);
 
   const params = {

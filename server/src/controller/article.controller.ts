@@ -413,7 +413,7 @@ export const deleteArticleByIdHandler = asyncHandler(
     if (article.media.length > 0) {
       for (const media of article.media) {
         await deleteFileByKey(media.key);
-        await invalidateCloudFrontCache(media.key);
+        // await invalidateCloudFrontCache(media.key);
       }
     }
 

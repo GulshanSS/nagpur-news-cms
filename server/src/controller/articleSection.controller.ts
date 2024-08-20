@@ -158,7 +158,7 @@ export const deleteArticleSectionByIdHandler = asyncHandler(
     if (articleSection.media.length > 0) {
       for (const media of articleSection.media) {
         await deleteFileByKey(media.key);
-        await invalidateCloudFrontCache(media.key);
+        // await invalidateCloudFrontCache(media.key);
       }
     }
 

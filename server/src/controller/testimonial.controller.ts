@@ -234,7 +234,7 @@ export const deleteTestimonialByIdHandler = asyncHandler(
     const mediaKey = testimonial.media!.key;
 
     await deleteFileByKey(mediaKey);
-    await invalidateCloudFrontCache(mediaKey);
+    // await invalidateCloudFrontCache(mediaKey);
 
     await deleteTestimonialById(testimonialId);
 
