@@ -57,4 +57,8 @@ export default {
   FACEBOOK_PAGE_ID: process.env.FACEBOOK_PAGE_ID as string,
   FACEBOOK_POST_BASE_URL: process.env.FACEBOOK_POST_BASE_URL as string,
   NAGPUR_NEWS_URI: process.env.NAGPUR_NEWS_URI as string,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
+  CLOUDINARY_API_URL: process.env.CLOUDINARY_API_URL as string,
 };

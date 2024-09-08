@@ -19,6 +19,7 @@ import { postToFacebookPage } from "../utils/facebook";
 import { postToTwitter } from "../utils/twitter";
 import { getArticleById } from "../service/article.service";
 import config from "../config";
+import { uploadOptimizedImage } from "../utils/cloudinary";
 
 export const getAllMediaHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -126,6 +127,10 @@ export const uploadMutipleFileForArticleHandler = asyncHandler(
 
     const articleId = req.body.articleId as string;
 
+    const data = await uploadOptimizedImage(files[0]);
+
+    console.log(data)
+
     for (const file of files) {
       const imageName = randomImageName();
       const result = await uploadSingleFile(file, imageName);
@@ -142,6 +147,8 @@ export const uploadMutipleFileForArticleHandler = asyncHandler(
         type: file.mimetype,
         key: imageName,
         articleId: parseInt(articleId),
+        cloudinaryPublicId: data?.publicId,
+        facebookTwitterCardsUrl: data?.url,
       });
     }
     const article = await getArticleById(articleId);

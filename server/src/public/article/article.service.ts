@@ -50,6 +50,14 @@ export const getLatestArticles = async () => {
         },
       ],
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
     include: {
       media: true,
     },

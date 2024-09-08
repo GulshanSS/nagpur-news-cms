@@ -22,6 +22,8 @@ export const createMedia = async (
         | "testimonialId"
         | "articleId"
         | "articleSectionId"
+        | "cloudinaryPublicId"
+        | "facebookTwitterCardsUrl"
       >
     >
 ) => {

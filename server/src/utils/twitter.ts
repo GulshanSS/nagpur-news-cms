@@ -21,13 +21,13 @@ export const postToTwitter = async (
   link: string,
   tweetText: string
 ) => {
-  const mediaId = await client.v1.uploadMedia(file.buffer, {
-    type: file.mimetype,
-  });
+  // const mediaId = await client.v1.uploadMedia(file.buffer, {
+  //   type: file.mimetype,
+  // });
   return await client.v2.tweet({
     text: `${tweetText} ${link}`,
-    media: {
-      media_ids: [mediaId],
-    },
+    // media: {
+    //   media_ids: [mediaId],
+    // },
   });
 };

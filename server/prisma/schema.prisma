@@ -8,146 +8,148 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String
-  email String @unique
-  password String @db.VarChar(255)
-  role Role @default(TEAM)
-  verified Boolean @default(false)
-  refreshTokens RefreshToken[]
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String
+  email           String            @unique
+  password        String            @db.VarChar(255)
+  role            Role              @default(TEAM)
+  verified        Boolean           @default(false)
+  refreshTokens   RefreshToken[]
   oneTimePasscode OneTimePasscode[]
-  token Token[]
-  active Boolean @default(true)
+  token           Token[]
+  active          Boolean           @default(true)
 }
 
 model RefreshToken {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   hashedToken String
-  revoked Boolean @default(false)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+  revoked     Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
 }
 
 model OneTimePasscode {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   hashedOTP String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int      @unique
 }
 
 model Token {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   hashedToken String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int      @unique
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String
-  slug String @unique
-  article Article[]
-  active Boolean @default(true)
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  slug      String    @unique
+  article   Article[]
+  active    Boolean   @default(true)
 }
 
 model Tag {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String
-  slug String @unique
-  setAsCategory Boolean @default(false)
-  article Article[]
-  active Boolean @default(true)
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  name          String
+  slug          String    @unique
+  setAsCategory Boolean   @default(false)
+  article       Article[]
+  active        Boolean   @default(true)
 }
 
 model Media {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  type String
-  key String @db.VarChar(255)
-  articleSection ArticleSection? @relation(fields: [articleSectionId], references: [id], onDelete: Cascade)
-  articleSectionId Int?
-  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId Int?
-  promotionaryArticle PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
-  promotionaryArticleId Int? @unique
-  testimonial Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade) 
-  testimonialId Int? @unique
+  id                      Int                  @id @default(autoincrement())
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+  type                    String
+  key                     String               @db.VarChar(255)
+  cloudinaryPublicId      String?              @default("")
+  facebookTwitterCardsUrl String?              @default("")
+  articleSection          ArticleSection?      @relation(fields: [articleSectionId], references: [id], onDelete: Cascade)
+  articleSectionId        Int?
+  article                 Article?             @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId               Int?
+  promotionaryArticle     PromotionaryArticle? @relation(fields: [promotionaryArticleId], references: [id], onDelete: Cascade)
+  promotionaryArticleId   Int?                 @unique
+  testimonial             Testimonial?         @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+  testimonialId           Int?                 @unique
 }
 
 model ArticleSection {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title String?
-  content String
-  sequence Int
-  media Media[]
-  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  title     String?
+  content   String
+  sequence  Int
+  media     Media[]
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId Int
 }
 
 model Article {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title String
-  slug String @unique
-  content String
-  location String
-  youtubeVideoUrl String? @default("")
-  twitterId String? @default("")
-  author String
-  publishedOn DateTime @default(now())
-  state String @default("DRAFT")
-  setAsBanner Boolean @default(false)
-  active Boolean @default(true)
-  postToSocialMedia Boolean? @default(false)
-  media Media[]
-  articleSection ArticleSection[]
-  tag Tag[]
-  category Category[]
+  id                Int              @id @default(autoincrement())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  title             String
+  slug              String           @unique
+  content           String
+  location          String
+  youtubeVideoUrl   String?          @default("")
+  twitterId         String?          @default("")
+  author            String
+  publishedOn       DateTime         @default(now())
+  state             String           @default("DRAFT")
+  setAsBanner       Boolean          @default(false)
+  active            Boolean          @default(true)
+  postToSocialMedia Boolean?         @default(false)
+  media             Media[]
+  articleSection    ArticleSection[]
+  tag               Tag[]
+  category          Category[]
 }
 
 model PromotionaryArticle {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  priority Int @default(0)
-  title String
-  slug String @unique
-  content String?
-  websiteLink String?
-  whatsAppLink String?
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  priority      Int      @default(0)
+  title         String
+  slug          String   @unique
+  content       String?
+  websiteLink   String?
+  whatsAppLink  String?
   instagramLink String?
-  address String?
-  contact String? @db.VarChar(10)
-  media Media?
-  setAsBanner Boolean @default(false)
-  active Boolean @default(true)
+  address       String?
+  contact       String?  @db.VarChar(10)
+  media         Media?
+  setAsBanner   Boolean  @default(false)
+  active        Boolean  @default(true)
 }
 
 model Testimonial {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  quote String?
-  quotedBy String?
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  quote       String?
+  quotedBy    String?
   designation String?
-  media Media?
-  active Boolean @default(true)
+  media       Media?
+  active      Boolean  @default(true)
 }
 
 enum Role {
