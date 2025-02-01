@@ -174,7 +174,7 @@ const PromotionaryArticleForm = ({
               <InputField
                 label="Contact Details"
                 name="contact"
-                type="type"
+                type="text"
                 value={promotionaryArticle ? promotionaryArticle.contact : ""}
                 placeholder="Enter Contact Details"
               />

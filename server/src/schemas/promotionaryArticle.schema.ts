@@ -1,4 +1,4 @@
-import { boolean, object, string, TypeOf } from "zod";
+import { boolean, object, string, TypeOf, literal } from "zod";
 
 const payload = {
   body: object({
@@ -13,7 +13,8 @@ const payload = {
     address: string().trim().optional(),
     contact: string()
       .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
-      .optional(),
+      .optional()
+      .or(literal("")),
     setAsBanner: boolean().optional(),
     active: boolean().optional(),
   }),

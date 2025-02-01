@@ -49,7 +49,8 @@ export const CreatePromotionaryArticleSchema = z.object({
   contact: z
     .string()
     .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   setAsBanner: z.boolean().optional(),
   active: z.boolean().optional(),
 });
@@ -90,8 +91,9 @@ export const UpdatePromotionaryArticleSchema = z.object({
   address: z.string().trim().optional(),
   contact: z
     .string()
-    .regex(new RegExp("\\d{10}"), "Contact number should contain 0-9 digits")
-    .optional(),
+    .regex(new RegExp("\\d{10}"), "Contact number should be of 10 digits")
+    .optional()
+    .or(z.literal("")),
   setAsBanner: z.boolean().optional(),
   active: z.boolean().optional(),
 });
